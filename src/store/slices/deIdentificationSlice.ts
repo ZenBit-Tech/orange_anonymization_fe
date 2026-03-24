@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { deIdentificationService } from '@/services/deIdentificationService';
-import type {
-  PresidioEntity,
-  AnonymizeResult,
-  DeIdentificationSettings,
-  Document,
-} from '@/types';
+import type { PresidioEntity, AnonymizeResult, DeIdentificationSettings, Document } from '@/types';
 import { HIPAA_ENTITIES } from '@/constants';
 
 interface DeIdentificationState {
@@ -51,10 +46,7 @@ const initialState: DeIdentificationState = {
 
 export const analyzeText = createAsyncThunk(
   'deIdentification/analyzeText',
-  async (
-    payload: { text: string; language: string; entities: string[] },
-    { rejectWithValue },
-  ) => {
+  async (payload: { text: string; language: string; entities: string[] }, { rejectWithValue }) => {
     try {
       return await deIdentificationService.analyzeText(payload);
     } catch (err: unknown) {
@@ -166,11 +158,10 @@ const deIdentificationSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    builder
-      .addCase(fetchDocuments.fulfilled, (state, action) => {
-        state.documents = action.payload.data;
-        state.totalDocuments = action.payload.total;
-      });
+    builder.addCase(fetchDocuments.fulfilled, (state, action) => {
+      state.documents = action.payload.data;
+      state.totalDocuments = action.payload.total;
+    });
   },
 });
 

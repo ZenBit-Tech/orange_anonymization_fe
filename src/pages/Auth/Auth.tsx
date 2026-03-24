@@ -63,7 +63,10 @@ function LoginView() {
           <Typography color="text.secondary" sx={{ mb: 3 }}>
             {t('auth.linkSent', { email: magicLinkEmail ?? getValues('email') })}
           </Typography>
-          <Button variant="outlined" onClick={() => sendMagicLink(magicLinkEmail ?? getValues('email'))}>
+          <Button
+            variant="outlined"
+            onClick={() => sendMagicLink(magicLinkEmail ?? getValues('email'))}
+          >
             {t('auth.resend')}
           </Button>
         </CardContent>
@@ -106,9 +109,7 @@ function LoginView() {
             size="large"
             fullWidth
             disabled={isLoading}
-            startIcon={
-              isLoading ? <CircularProgress size={20} color="inherit" /> : <EmailIcon />
-            }
+            startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <EmailIcon />}
           >
             {isLoading ? t('auth.requesting') : t('auth.requestLink')}
           </Button>
@@ -143,11 +144,7 @@ function VerifyView() {
             <Typography color="text.secondary">{t('common.loading')}</Typography>
           </>
         )}
-        {error && (
-          <Alert severity="error">
-            {t('auth.errors.verifyFailed')}
-          </Alert>
-        )}
+        {error && <Alert severity="error">{t('auth.errors.verifyFailed')}</Alert>}
       </CardContent>
     </Card>
   );

@@ -30,9 +30,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         </Typography>
       </Box>
 
-      <Container maxWidth="sm">
-        {children ?? <Outlet />}
-      </Container>
+      <Container maxWidth="sm">{children ?? <Outlet />}</Container>
     </Box>
   );
 }

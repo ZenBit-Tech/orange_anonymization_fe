@@ -115,9 +115,21 @@ export default function DeIdentify() {
             >
               {(
                 [
-                  { value: 'hipaa', labelKey: 'deIdentify.framework.hipaa.label', descKey: 'deIdentify.framework.hipaa.description' },
-                  { value: 'gdpr', labelKey: 'deIdentify.framework.gdpr.label', descKey: 'deIdentify.framework.gdpr.description' },
-                  { value: 'custom', labelKey: 'deIdentify.framework.custom.label', descKey: 'deIdentify.framework.custom.description' },
+                  {
+                    value: 'hipaa',
+                    labelKey: 'deIdentify.framework.hipaa.label',
+                    descKey: 'deIdentify.framework.hipaa.description',
+                  },
+                  {
+                    value: 'gdpr',
+                    labelKey: 'deIdentify.framework.gdpr.label',
+                    descKey: 'deIdentify.framework.gdpr.description',
+                  },
+                  {
+                    value: 'custom',
+                    labelKey: 'deIdentify.framework.custom.label',
+                    descKey: 'deIdentify.framework.custom.description',
+                  },
                 ] as const
               ).map((opt) => (
                 <Card
@@ -157,11 +169,7 @@ export default function DeIdentify() {
             <Typography variant="h6" sx={{ mb: 1 }}>
               {t('deIdentify.input.title')}
             </Typography>
-            <Button
-              size="small"
-              sx={{ mb: 2 }}
-              onClick={() => dispatch(setInputText(SAMPLE_TEXT))}
-            >
+            <Button size="small" sx={{ mb: 2 }} onClick={() => dispatch(setInputText(SAMPLE_TEXT))}>
               {t('deIdentify.input.sampleText')}
             </Button>
             <TextField
@@ -188,7 +196,11 @@ export default function DeIdentify() {
                 <Select
                   value={settings.strategy}
                   label={t('deIdentify.settings.strategy')}
-                  onChange={(e) => dispatch(updateSettings({ strategy: e.target.value as typeof settings.strategy }))}
+                  onChange={(e) =>
+                    dispatch(
+                      updateSettings({ strategy: e.target.value as typeof settings.strategy }),
+                    )
+                  }
                 >
                   {ANONYMIZATION_STRATEGIES.map((s) => (
                     <MenuItem key={s} value={s}>
@@ -260,7 +272,9 @@ export default function DeIdentify() {
           <Box>
             {processingTimeMs !== null && (
               <Typography variant="caption" color="text.secondary" sx={{ mb: 2, display: 'block' }}>
-                {t('deIdentify.results.stats.entitiesFound', { count: analysisResult?.length ?? 0 })}
+                {t('deIdentify.results.stats.entitiesFound', {
+                  count: analysisResult?.length ?? 0,
+                })}
                 {' · '}
                 {t('deIdentify.results.stats.processingTime', { time: processingTimeMs })}
               </Typography>
@@ -323,8 +337,12 @@ export default function DeIdentify() {
                   <TableRow>
                     <TableCell>{t('deIdentify.results.entityColumns.type')}</TableCell>
                     <TableCell>{t('deIdentify.results.entityColumns.text')}</TableCell>
-                    <TableCell align="right">{t('deIdentify.results.entityColumns.confidence')}</TableCell>
-                    <TableCell align="right">{t('deIdentify.results.entityColumns.position')}</TableCell>
+                    <TableCell align="right">
+                      {t('deIdentify.results.entityColumns.confidence')}
+                    </TableCell>
+                    <TableCell align="right">
+                      {t('deIdentify.results.entityColumns.position')}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -346,7 +364,10 @@ export default function DeIdentify() {
                         {inputText.slice(entity.start, entity.end)}
                       </TableCell>
                       <TableCell align="right">{formatScore(entity.score)}</TableCell>
-                      <TableCell align="right" sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+                      <TableCell
+                        align="right"
+                        sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
+                      >
                         {entity.start}–{entity.end}
                       </TableCell>
                     </TableRow>
@@ -359,10 +380,7 @@ export default function DeIdentify() {
               <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleDownload}>
                 {t('deIdentify.results.download')}
               </Button>
-              <Button
-                startIcon={<RefreshIcon />}
-                onClick={() => dispatch(resetWorkflow())}
-              >
+              <Button startIcon={<RefreshIcon />} onClick={() => dispatch(resetWorkflow())}>
                 {t('deIdentify.results.processAnother')}
               </Button>
             </Box>
@@ -403,17 +421,12 @@ export default function DeIdentify() {
       )}
 
       <Card>
-        <CardContent sx={{ p: 4 }}>
-          {renderStep()}
-        </CardContent>
+        <CardContent sx={{ p: 4 }}>{renderStep()}</CardContent>
       </Card>
 
       {currentStep < 3 && (
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-          <Button
-            disabled={currentStep === 0}
-            onClick={() => dispatch(prevStep())}
-          >
+          <Button disabled={currentStep === 0} onClick={() => dispatch(prevStep())}>
             {t('common.back')}
           </Button>
           <Button
@@ -424,7 +437,11 @@ export default function DeIdentify() {
                 ? () => void handleAnalyzeAndAnonymize()
                 : () => dispatch(nextStep())
             }
-            endIcon={(isAnalyzing || isAnonymizing) ? <CircularProgress size={18} color="inherit" /> : undefined}
+            endIcon={
+              isAnalyzing || isAnonymizing ? (
+                <CircularProgress size={18} color="inherit" />
+              ) : undefined
+            }
           >
             {currentStep === 2 ? t('deIdentify.steps.results') : t('common.next')}
           </Button>

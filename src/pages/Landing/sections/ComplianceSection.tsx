@@ -65,9 +65,7 @@ export function ComplianceSection() {
                 <Typography variant="h5" fontWeight={700} sx={{ mb: 1.5, color: 'white' }}>
                   {t(item.titleKey)}
                 </Typography>
-                <Typography sx={{ opacity: 0.85, lineHeight: 1.7 }}>
-                  {t(item.descKey)}
-                </Typography>
+                <Typography sx={{ opacity: 0.85, lineHeight: 1.7 }}>{t(item.descKey)}</Typography>
               </Paper>
             </Grid>
           ))}

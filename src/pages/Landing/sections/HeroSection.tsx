@@ -1,14 +1,6 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  Box,
-  Button,
-  Chip,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Chip, Container, Grid, Paper, Typography } from '@mui/material';
 import {
   ArrowForward as ArrowForwardIcon,
   MenuBook as MenuBookIcon,
@@ -74,12 +66,7 @@ export function HeroSection() {
               >
                 {t('landing.hero.cta.primary')}
               </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                startIcon={<MenuBookIcon />}
-                href="#features"
-              >
+              <Button variant="outlined" size="large" startIcon={<MenuBookIcon />} href="#features">
                 {t('landing.hero.cta.secondary')}
               </Button>
             </Box>

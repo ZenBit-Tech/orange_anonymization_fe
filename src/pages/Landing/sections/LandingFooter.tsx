@@ -6,7 +6,10 @@ export function LandingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider' }}>
+    <Box
+      component="footer"
+      sx={{ bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider' }}
+    >
       <Container maxWidth="xl">
         <Divider />
         <Box

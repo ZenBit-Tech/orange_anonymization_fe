@@ -1,10 +1,5 @@
 import api from './api';
-import type {
-  PresidioEntity,
-  AnonymizeResult,
-  Document,
-  PaginatedResponse,
-} from '@/types';
+import type { PresidioEntity, AnonymizeResult, Document, PaginatedResponse } from '@/types';
 
 export const deIdentificationService = {
   async analyzeText(payload: {

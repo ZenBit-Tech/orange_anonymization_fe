@@ -1,15 +1,3 @@
-/**
- * MainLayout
- *
- * The authenticated app shell: sidebar navigation + top app bar + content area.
- *
- * Structure:
- *   <Box sx={{ display: 'flex' }}>
- *     <Drawer>  ← persistent sidebar (collapsible on mobile)
- *     <Box>
- *       <AppBar>  ← top bar with breadcrumbs + user menu
- *       <main>    ← <Outlet /> renders the current page here
- */
 import { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -115,11 +103,7 @@ export function MainLayout() {
       <CssBaseline />
 
       {/* Top App Bar */}
-      <AppBar
-        position="fixed"
-        color="inherit"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
+      <AppBar position="fixed" color="inherit" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <IconButton
             color="inherit"

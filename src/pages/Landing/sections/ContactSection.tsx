@@ -85,18 +85,17 @@ export function ContactSection() {
           </Typography>
         </Box>
 
-        <Paper elevation={0} sx={{ p: { xs: 3, sm: 5 }, border: 1, borderColor: 'divider', borderRadius: 3 }}>
+        <Paper
+          elevation={0}
+          sx={{ p: { xs: 3, sm: 5 }, border: 1, borderColor: 'divider', borderRadius: 3 }}
+        >
           {submitted ? (
             <Box textAlign="center" py={4}>
               <CheckCircleIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
               <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
                 {t('landing.contact.form.success')}
               </Typography>
-              <Button
-                variant="outlined"
-                sx={{ mt: 2 }}
-                onClick={() => setSubmitted(false)}
-              >
+              <Button variant="outlined" sx={{ mt: 2 }} onClick={() => setSubmitted(false)}>
                 {t('common.reset')}
               </Button>
             </Box>
@@ -175,11 +174,7 @@ export function ContactSection() {
                     fullWidth
                     disabled={isSubmitting}
                     endIcon={
-                      isSubmitting ? (
-                        <CircularProgress size={20} color="inherit" />
-                      ) : (
-                        <SendIcon />
-                      )
+                      isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />
                     }
                   >
                     {isSubmitting

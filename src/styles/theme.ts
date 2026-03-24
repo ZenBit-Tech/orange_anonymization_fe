@@ -88,7 +88,7 @@ export const theme = createTheme({
   },
 
   spacing: 8,
-  
+
   components: {
     MuiButton: {
       styleOverrides: {

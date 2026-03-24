@@ -67,7 +67,14 @@ export default function SyntheticData() {
   };
 
   const handleDownloadCSV = () => {
-    const csv = toCSV(records.map((r) => ({ '#': r.id, 'Entity Type': r.entityType, 'Value': r.value, 'Locale': r.locale })));
+    const csv = toCSV(
+      records.map((r) => ({
+        '#': r.id,
+        'Entity Type': r.entityType,
+        Value: r.value,
+        Locale: r.locale,
+      })),
+    );
     downloadAsFile(csv, 'synthetic-data.csv', 'text/csv');
   };
 
@@ -78,7 +85,9 @@ export default function SyntheticData() {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" fontWeight={700}>{t('syntheticData.title')}</Typography>
+        <Typography variant="h4" fontWeight={700}>
+          {t('syntheticData.title')}
+        </Typography>
         <Typography color="text.secondary">{t('syntheticData.subtitle')}</Typography>
       </Box>
 
@@ -91,14 +100,20 @@ export default function SyntheticData() {
               </Typography>
 
               <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-                {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                {error && (
+                  <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                  </Alert>
+                )}
 
                 <TextField
                   label={t('syntheticData.settings.recordCount')}
                   type="number"
                   fullWidth
                   sx={{ mb: 3 }}
-                  helperText={errors.recordCount?.message ?? t('syntheticData.settings.recordCountHelper')}
+                  helperText={
+                    errors.recordCount?.message ?? t('syntheticData.settings.recordCountHelper')
+                  }
                   error={Boolean(errors.recordCount)}
                   {...register('recordCount', { valueAsNumber: true })}
                 />
@@ -157,9 +172,17 @@ export default function SyntheticData() {
                   fullWidth
                   size="large"
                   disabled={isGenerating}
-                  startIcon={isGenerating ? <CircularProgress size={20} color="inherit" /> : <AutoFixHighIcon />}
+                  startIcon={
+                    isGenerating ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : (
+                      <AutoFixHighIcon />
+                    )
+                  }
                 >
-                  {isGenerating ? t('syntheticData.settings.generating') : t('syntheticData.settings.generate')}
+                  {isGenerating
+                    ? t('syntheticData.settings.generating')
+                    : t('syntheticData.settings.generate')}
                 </Button>
               </Box>
             </CardContent>
@@ -169,7 +192,14 @@ export default function SyntheticData() {
         <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 3,
+                }}
+              >
                 <Typography variant="h6" fontWeight={600}>
                   {t('syntheticData.results.title')}
                   {records.length > 0 && (
@@ -191,7 +221,9 @@ export default function SyntheticData() {
               {records.length === 0 ? (
                 <Box textAlign="center" py={8}>
                   <AutoFixHighIcon sx={{ fontSize: 64, color: 'text.disabled', mb: 2 }} />
-                  <Typography color="text.secondary">{t('syntheticData.results.noData')}</Typography>
+                  <Typography color="text.secondary">
+                    {t('syntheticData.results.noData')}
+                  </Typography>
                 </Box>
               ) : (
                 <TableContainer sx={{ maxHeight: 500 }}>

@@ -74,6 +74,7 @@ Does this PR touch code that processes, stores, or transmits patient data?
 - [ ] Manual testing performed
 
 **Manual test steps:**
+
 1.
 2.
 3.

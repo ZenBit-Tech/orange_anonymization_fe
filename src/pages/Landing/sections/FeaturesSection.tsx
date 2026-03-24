@@ -44,7 +44,11 @@ export function FeaturesSection() {
           <Typography variant="h2" sx={{ mb: 2 }}>
             {t('landing.features.title')}
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 560, mx: 'auto', fontSize: '1.1rem' }}>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ maxWidth: 560, mx: 'auto', fontSize: '1.1rem' }}
+          >
             {t('landing.features.subtitle')}
           </Typography>
         </Box>

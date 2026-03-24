@@ -194,7 +194,12 @@ export default function Dashboard() {
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis type="number" tick={{ fontSize: 11 }} />
-                    <YAxis dataKey="entityType" type="category" tick={{ fontSize: 11 }} width={110} />
+                    <YAxis
+                      dataKey="entityType"
+                      type="category"
+                      tick={{ fontSize: 11 }}
+                      width={110}
+                    />
                     <Tooltip />
                     <Bar dataKey="count" fill="#1565C0" radius={[0, 4, 4, 0]} />
                   </BarChart>
@@ -216,7 +221,9 @@ export default function Dashboard() {
                 <TableRow>
                   <TableCell>{t('dashboard.recentActivity.columns.document')}</TableCell>
                   <TableCell>{t('dashboard.recentActivity.columns.status')}</TableCell>
-                  <TableCell align="right">{t('dashboard.recentActivity.columns.entities')}</TableCell>
+                  <TableCell align="right">
+                    {t('dashboard.recentActivity.columns.entities')}
+                  </TableCell>
                   <TableCell align="right">{t('dashboard.recentActivity.columns.date')}</TableCell>
                 </TableRow>
               </TableHead>
@@ -224,10 +231,18 @@ export default function Dashboard() {
                 {isLoading
                   ? Array.from({ length: 5 }).map((_, i) => (
                       <TableRow key={i}>
-                        <TableCell><Skeleton /></TableCell>
-                        <TableCell><Skeleton /></TableCell>
-                        <TableCell><Skeleton /></TableCell>
-                        <TableCell><Skeleton /></TableCell>
+                        <TableCell>
+                          <Skeleton />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton />
+                        </TableCell>
                       </TableRow>
                     ))
                   : (data?.recentDocuments ?? []).map((doc) => (
@@ -243,8 +258,8 @@ export default function Dashboard() {
                               doc.status === 'completed'
                                 ? 'success'
                                 : doc.status === 'failed'
-                                ? 'error'
-                                : 'default'
+                                  ? 'error'
+                                  : 'default'
                             }
                           />
                         </TableCell>

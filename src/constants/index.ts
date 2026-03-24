@@ -1,4 +1,5 @@
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? 'http://localhost:3000';
+export const API_BASE_URL =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? 'http://localhost:3000';
 export const AUTH_TOKEN_KEY = 'clinical_studio_token';
 export const AUTH_USER_KEY = 'clinical_studio_user';
 
@@ -30,7 +31,13 @@ export const PRESIDIO_ENTITIES = [
 
 export type PresidioEntityType = (typeof PRESIDIO_ENTITIES)[number];
 
-export const ANONYMIZATION_STRATEGIES = ['replace', 'redact', 'hash', 'encrypt', 'synthetic'] as const;
+export const ANONYMIZATION_STRATEGIES = [
+  'replace',
+  'redact',
+  'hash',
+  'encrypt',
+  'synthetic',
+] as const;
 export type AnonymizationStrategy = (typeof ANONYMIZATION_STRATEGIES)[number];
 
 export const HIPAA_ENTITIES: PresidioEntityType[] = [

@@ -53,12 +53,7 @@ export function LandingHeader() {
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 0.5, ml: 4 }}>
               {NAV_LINKS.map((link) => (
-                <Button
-                  key={link.href}
-                  href={link.href}
-                  color="inherit"
-                  sx={{ fontWeight: 500 }}
-                >
+                <Button key={link.href} href={link.href} color="inherit" sx={{ fontWeight: 500 }}>
                   {t(link.labelKey)}
                 </Button>
               ))}

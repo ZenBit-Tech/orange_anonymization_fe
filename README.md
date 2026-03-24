@@ -34,18 +34,21 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
 ## ⚙️ Getting Started
 
 1.  **Clone the repository:**
+
     ```bash
     git clone https://github.com/your-repo/orange-anonymization-fe.git
     cd orange-anonymization-fe
     ```
 
 2.  **Install dependencies:**
+
     ```bash
     npm install
     ```
 
 3.  **Set up environment variables:**
     Create a `.env` file in the root directory and add your API configuration:
+
     ```env
     VITE_API_URL=https://api.your-service.com
     ```
