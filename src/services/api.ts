@@ -1,6 +1,6 @@
 import axios, { type AxiosError } from 'axios';
 import { API_BASE_URL, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
-import type { ApiError } from '@/types';
+import type { ApiError } from '@/services/types';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

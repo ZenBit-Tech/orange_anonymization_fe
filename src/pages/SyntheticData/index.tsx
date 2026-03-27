@@ -29,7 +29,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { generateSyntheticData, updateSettings } from '@/store/slices/syntheticDataSlice';
 import { PRESIDIO_ENTITIES } from '@/constants';
 import { downloadAsFile, toCSV } from '@/utils';
-import type { SyntheticGenerationSettings } from '@/types';
+import type { SyntheticGenerationSettings } from './types';
 import { useForm, type SubmitHandler, Controller } from 'react-hook-form';
 
 const LOCALE_CODES = ['en_US', 'en_GB', 'es_ES', 'de_DE', 'fr_FR'] as const;

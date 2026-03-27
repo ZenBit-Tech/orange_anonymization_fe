@@ -29,8 +29,8 @@ import {
   Logout as LogoutIcon,
   AccountCircle as AccountCircleIcon,
 } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants';
+import { useAuth } from '@/pages/Auth/hooks/useAuth';
 
 const DRAWER_WIDTH = 260;
 

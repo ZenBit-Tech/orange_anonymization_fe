@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { syntheticDataService } from '@/services/syntheticDataService';
-import type { SyntheticRecord, SyntheticGenerationSettings } from '@/types';
+import type { SyntheticRecord, SyntheticGenerationSettings } from '@/pages/SyntheticData/types';
 
 interface SyntheticDataState {
   records: SyntheticRecord[];

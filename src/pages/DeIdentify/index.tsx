@@ -42,7 +42,7 @@ import {
 } from '@/store/slices/deIdentificationSlice';
 import { ANONYMIZATION_STRATEGIES, PRESIDIO_ENTITIES, PRESIDIO_LANGUAGES } from '@/constants';
 import { downloadAsFile, entityColor, formatScore } from '@/utils';
-import type { ComplianceFramework } from '@/types';
+import type { ComplianceFramework } from './types';
 
 const SAMPLE_TEXT = `Patient John Carter (DOB: 03/15/1982) was admitted on 12/10/2023 with chest pain.
 SSN: 523-45-6789. Address: 142 Maple Street, Austin TX 78701.

@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { deIdentificationService } from '@/services/deIdentificationService';
-import type { PresidioEntity, AnonymizeResult, DeIdentificationSettings, Document } from '@/types';
+import type {
+  PresidioEntity,
+  AnonymizeResult,
+  DeIdentificationSettings,
+  Document,
+} from '@/pages/DeIdentify/types';
 import { HIPAA_ENTITIES } from '@/constants';
 
 interface DeIdentificationState {

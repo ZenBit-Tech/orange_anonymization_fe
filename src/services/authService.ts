@@ -1,5 +1,5 @@
 import api from './api';
-import type { AuthTokenPayload } from '@/types';
+import type { AuthTokenPayload } from '@/pages/Auth/types';
 
 export const authService = {
   async requestMagicLink(email: string): Promise<void> {
