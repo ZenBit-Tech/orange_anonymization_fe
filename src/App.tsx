@@ -2,11 +2,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { store } from '@/store/store';
-import { loadFromStorage } from '@/store/slices/authSlice';
 import { theme } from '@/theme';
 import { AppRoutes } from '@/routes';
-
-store.dispatch(loadFromStorage());
 
 function App() {
   return (

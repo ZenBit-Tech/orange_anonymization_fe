@@ -1,18 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
-import authReducer from './slices/authSlice';
-import deIdentificationReducer from './slices/deIdentificationSlice';
-import syntheticDataReducer from './slices/syntheticDataSlice';
-import dashboardReducer from './slices/dashboardSlice';
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    deIdentification: deIdentificationReducer,
-    syntheticData: syntheticDataReducer,
-    dashboard: dashboardReducer,
-  },
+  reducer: {},
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
