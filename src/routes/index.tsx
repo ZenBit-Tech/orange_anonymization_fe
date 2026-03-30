@@ -5,6 +5,8 @@ import { ROUTES } from '@/constants';
 import Auth from '@/pages/Auth';
 import { ProtectedRoute } from './ProtectedRoute';
 import Dashboard from '@/pages/Dashboard';
+import MainLayout from '@/components/layouts/MainLayout';
+import AuthLayout from '@/components/layouts/AuthLayout';
 
 function PageLoader() {
   return (
@@ -18,10 +20,12 @@ export function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        <Route path="/auth/*" element={<Auth />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/auth/*" element={<Auth />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
-          <Route element={<></>}>
+          <Route element={<MainLayout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
           </Route>
         </Route>
