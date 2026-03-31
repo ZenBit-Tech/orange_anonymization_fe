@@ -9,18 +9,18 @@ const Sidebar = () => {
   return (
     <Box
       component="nav"
-      sx={{
+      sx={(theme) => ({
         width: LAYOUT.sidebar.width,
         minHeight: '100vh',
-        bgcolor: LAYOUT.sidebar.background,
+        bgcolor: theme.palette.sidebar.background,
         display: 'flex',
         flexDirection: 'column',
         pb: 3,
         position: 'fixed',
         top: 0,
         left: 0,
-        zIndex: (theme) => theme.zIndex.drawer,
-      }}
+        zIndex: theme.zIndex.drawer,
+      })}
     >
       <Box sx={{ px: 2.5, py: 3 }}>
         <Typography
@@ -52,12 +52,12 @@ const Sidebar = () => {
               sx={(theme) => ({
                 borderRadius: 1.5,
                 mb: 0.5,
-                bgcolor: active ? LAYOUT.sidebar.activeOverlay : 'transparent',
+                bgcolor: active ? theme.palette.sidebar.activeOverlay : 'transparent',
                 borderLeft: active
                   ? `${LAYOUT.sidebar.activeBorderWidth}px solid ${theme.palette.primary.light}`
                   : `${LAYOUT.sidebar.activeBorderWidth}px solid transparent`,
                 '&:hover': {
-                  bgcolor: LAYOUT.sidebar.hoverOverlay,
+                  bgcolor: theme.palette.sidebar.hoverOverlay,
                 },
               })}
             >
@@ -89,12 +89,12 @@ const Sidebar = () => {
       <Box sx={{ px: 1.5 }}>
         <ListItemButton
           onClick={handleSignOut}
-          sx={{
+          sx={(theme) => ({
             borderRadius: 1.5,
             '&:hover': {
-              bgcolor: LAYOUT.sidebar.hoverOverlay,
+              bgcolor: theme.palette.sidebar.hoverOverlay,
             },
-          }}
+          })}
         >
           <ListItemIcon
             sx={(theme) => ({
@@ -119,4 +119,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export { Sidebar };

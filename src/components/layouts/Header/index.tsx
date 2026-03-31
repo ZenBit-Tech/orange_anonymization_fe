@@ -75,4 +75,4 @@ const Header = ({ userEmail }: HeaderProps) => {
   );
 };
 
-export default Header;
+export { Header };

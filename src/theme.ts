@@ -1,11 +1,23 @@
 import { createTheme } from '@mui/material/styles';
 
+interface SidebarPalette {
+  background: string;
+  activeOverlay: string;
+  hoverOverlay: string;
+}
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    sidebar: SidebarPalette;
+  }
+  interface PaletteOptions {
+    sidebar?: SidebarPalette;
+  }
+}
+
 export const LAYOUT = {
   sidebar: {
     width: 260,
-    background: '#0A1628',
-    activeOverlay: 'rgba(255, 255, 255, 0.08)',
-    hoverOverlay: 'rgba(255, 255, 255, 0.06)',
     activeBorderWidth: 3,
     iconMinWidth: 40,
   },
@@ -82,6 +94,11 @@ export const theme = createTheme({
       disabled: BRAND.grey[400],
     },
     divider: BRAND.grey[200],
+    sidebar: {
+      background: '#0A1628',
+      activeOverlay: 'rgba(255, 255, 255, 0.08)',
+      hoverOverlay: 'rgba(255, 255, 255, 0.06)',
+    },
   },
 
   typography: {
