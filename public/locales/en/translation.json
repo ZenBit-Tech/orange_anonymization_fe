@@ -30,6 +30,25 @@
     "menuOpen": "Open navigation menu",
     "menuClose": "Close navigation menu"
   },
+  "sidebar": {
+    "brand": "De-ID Studio",
+    "brandSubtitle": "De-ID & Synthesis",
+    "signOut": "Sign out"
+  },
+  "header": {
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Track your de-identification activity"
+    },
+    "deIdentify": {
+      "title": "New Analysis",
+      "subtitle": "Configure your anonymization pipeline"
+    },
+    "syntheticData": {
+      "title": "Synthetic Data",
+      "subtitle": "Generate synthetic datasets"
+    }
+  },
   "landing": {
     "hero": {
       "badge": "HIPAA & GDPR Compliant",
