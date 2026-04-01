@@ -1,23 +1,29 @@
-import { Box, Typography, Avatar } from '@mui/material';
+import { Box, Typography, Avatar, IconButton } from '@mui/material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import MenuIcon from '@mui/icons-material/Menu';
 import { LAYOUT } from '@/theme';
 import { useHeader } from '@/components/layouts/Header/useHeader';
-import type { HeaderProps } from '@/components/layouts/Header/useHeader';
 
-export type { HeaderProps };
+export interface HeaderProps {
+  userEmail: string;
+  isMobile: boolean;
+  onMenuOpen: () => void;
+}
 
-const Header = ({ userEmail }: HeaderProps) => {
+const Header = ({ userEmail, isMobile, onMenuOpen }: HeaderProps) => {
   const { title, subtitle } = useHeader(userEmail);
 
   return (
     <Box
       component="header"
       sx={(theme) => ({
-        height: LAYOUT.header.height,
-        pt: `${LAYOUT.header.paddingTop}px`,
-        pr: `${LAYOUT.header.paddingRight}px`,
-        pb: `${LAYOUT.header.paddingBottom}px`,
-        pl: `${LAYOUT.header.paddingLeft}px`,
+        height: isMobile ? LAYOUT.header.mobileHeight : LAYOUT.header.height,
+        px: isMobile ? `${LAYOUT.header.mobilePaddingX}px` : undefined,
+        py: isMobile ? `${LAYOUT.header.mobilePaddingY}px` : undefined,
+        pt: isMobile ? undefined : `${LAYOUT.header.paddingTop}px`,
+        pr: isMobile ? undefined : `${LAYOUT.header.paddingRight}px`,
+        pb: isMobile ? undefined : `${LAYOUT.header.paddingBottom}px`,
+        pl: isMobile ? undefined : `${LAYOUT.header.paddingLeft}px`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -25,24 +31,39 @@ const Header = ({ userEmail }: HeaderProps) => {
         borderBottom: `1px solid ${theme.palette.divider}`,
       })}
     >
-      <Box>
-        <Typography
-          variant="h5"
-          sx={(theme) => ({
-            color: theme.palette.text.primary,
-            fontWeight: theme.typography.fontWeightBold,
-          })}
-        >
-          {title}
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={(theme) => ({
-            color: theme.palette.text.secondary,
-          })}
-        >
-          {subtitle}
-        </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        {isMobile && (
+          <IconButton
+            onClick={onMenuOpen}
+            aria-label={title}
+            sx={(theme) => ({
+              color: theme.palette.text.primary,
+            })}
+          >
+            <MenuIcon sx={{ fontSize: LAYOUT.header.menuIconSize }} />
+          </IconButton>
+        )}
+        <Box>
+          <Typography
+            variant={isMobile ? 'h6' : 'h5'}
+            sx={(theme) => ({
+              color: theme.palette.text.primary,
+              fontWeight: theme.typography.fontWeightBold,
+            })}
+          >
+            {title}
+          </Typography>
+          {!isMobile && (
+            <Typography
+              variant="body2"
+              sx={(theme) => ({
+                color: theme.palette.text.secondary,
+              })}
+            >
+              {subtitle}
+            </Typography>
+          )}
+        </Box>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -61,15 +82,17 @@ const Header = ({ userEmail }: HeaderProps) => {
             })}
           />
         </Avatar>
-        <Typography
-          variant="body2"
-          sx={(theme) => ({
-            color: theme.palette.text.primary,
-            fontWeight: theme.typography.fontWeightMedium,
-          })}
-        >
-          {userEmail}
-        </Typography>
+        {!isMobile && (
+          <Typography
+            variant="body2"
+            sx={(theme) => ({
+              color: theme.palette.text.primary,
+              fontWeight: theme.typography.fontWeightMedium,
+            })}
+          >
+            {userEmail}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

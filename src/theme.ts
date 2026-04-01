@@ -23,12 +23,16 @@ export const LAYOUT = {
   },
   header: {
     height: 98,
+    mobileHeight: 64,
     paddingTop: 40,
     paddingRight: 48,
     paddingBottom: 24,
     paddingLeft: 48,
+    mobilePaddingX: 16,
+    mobilePaddingY: 12,
     avatarSize: 36,
     avatarIconSize: 32,
+    menuIconSize: 28,
   },
 } as const;
 

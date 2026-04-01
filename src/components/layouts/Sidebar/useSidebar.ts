@@ -17,7 +17,7 @@ const NAV_ITEMS: NavItem[] = [
   { labelKey: 'nav.syntheticData', path: ROUTES.SYNTHETIC_DATA, icon: StorageOutlinedIcon },
 ];
 
-export function useSidebar() {
+export function useSidebar(onNavigate?: () => void) {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,10 +26,12 @@ export function useSidebar() {
 
   const handleNavigate = (path: string) => {
     navigate(path);
+    onNavigate?.();
   };
 
   const handleSignOut = () => {
     navigate(ROUTES.LOGIN);
+    onNavigate?.();
   };
 
   return {

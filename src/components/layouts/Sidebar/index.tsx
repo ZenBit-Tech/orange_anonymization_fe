@@ -1,14 +1,27 @@
-import { Box, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import {
+  Box,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { LAYOUT } from '@/theme';
 import { useSidebar } from '@/components/layouts/Sidebar/useSidebar';
 
-const Sidebar = () => {
-  const { t, navItems, isActive, handleNavigate, handleSignOut } = useSidebar();
+export interface SidebarProps {
+  isMobile: boolean;
+  drawerOpen: boolean;
+  onDrawerClose: () => void;
+}
+
+const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
+  const { t, navItems, isActive, handleNavigate, handleSignOut } = useSidebar(onDrawerClose);
 
   return (
     <Box
-      component="nav"
       sx={(theme) => ({
         width: LAYOUT.sidebar.width,
         minHeight: '100vh',
@@ -16,10 +29,6 @@ const Sidebar = () => {
         display: 'flex',
         flexDirection: 'column',
         pb: 3,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: theme.zIndex.drawer,
       })}
     >
       <Box sx={{ px: 2.5, py: 3 }}>
@@ -115,6 +124,42 @@ const Sidebar = () => {
           />
         </ListItemButton>
       </Box>
+    </Box>
+  );
+};
+
+const Sidebar = ({ isMobile, drawerOpen, onDrawerClose }: SidebarProps) => {
+  if (isMobile) {
+    return (
+      <Drawer
+        variant="temporary"
+        open={drawerOpen}
+        onClose={onDrawerClose}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: LAYOUT.sidebar.width,
+            border: 'none',
+          },
+        }}
+      >
+        <SidebarContent onDrawerClose={onDrawerClose} />
+      </Drawer>
+    );
+  }
+
+  return (
+    <Box
+      component="nav"
+      sx={(theme) => ({
+        width: LAYOUT.sidebar.width,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: theme.zIndex.drawer,
+      })}
+    >
+      <SidebarContent />
     </Box>
   );
 };

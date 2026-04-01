@@ -27,10 +27,6 @@ const DEFAULT_META: PageMeta = {
   subtitleKey: 'header.dashboard.subtitle',
 };
 
-export interface HeaderProps {
-  userEmail: string;
-}
-
 export function useHeader(userEmail: string) {
   const { t } = useTranslation();
   const location = useLocation();
