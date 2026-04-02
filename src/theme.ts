@@ -6,14 +6,44 @@ interface SidebarPalette {
   hoverOverlay: string;
 }
 
+interface LandingPalette {
+  bg: {
+    hero: string;
+    dark: string;
+    card: string;
+    cardActive: string;
+  };
+  accent: string;
+  accentDark: string;
+  accentContrast: string;
+  border: string;
+  divider: string;
+}
+
 declare module '@mui/material/styles' {
   interface Palette {
     sidebar: SidebarPalette;
+    landing: LandingPalette;
   }
   interface PaletteOptions {
     sidebar?: SidebarPalette;
+    landing?: LandingPalette;
   }
 }
+
+export const LANDING = {
+  bg: {
+    hero: '#071424',
+    dark: '#0A1628',
+    card: '#0D1C35',
+    cardActive: '#122240',
+  },
+  accent: '#4ECDC4',
+  accentDark: '#3DBDB5',
+  accentContrast: '#07111F',
+  border: 'rgba(255, 255, 255, 0.1)',
+  divider: 'rgba(255, 255, 255, 0.06)',
+} as const;
 
 export const LAYOUT = {
   sidebar: {
@@ -102,6 +132,14 @@ export const theme = createTheme({
       background: '#0A1628',
       activeOverlay: 'rgba(255, 255, 255, 0.08)',
       hoverOverlay: 'rgba(255, 255, 255, 0.06)',
+    },
+    landing: {
+      bg: { ...LANDING.bg },
+      accent: LANDING.accent,
+      accentDark: LANDING.accentDark,
+      accentContrast: LANDING.accentContrast,
+      border: LANDING.border,
+      divider: LANDING.divider,
     },
   },
 

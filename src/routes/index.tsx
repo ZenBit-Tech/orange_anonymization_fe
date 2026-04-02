@@ -8,6 +8,7 @@ import Dashboard from '@/pages/Dashboard';
 import MainLayout from '@/components/layouts/MainLayout';
 import AuthLayout from '@/components/layouts/AuthLayout';
 
+const Landing = lazy(() => import('@/pages/Landing'));
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
 
@@ -23,6 +24,8 @@ export function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
+        <Route path="/" element={<Landing />} />
+
         <Route element={<AuthLayout />}>
           <Route path="/auth/*" element={<Auth />} />
         </Route>
