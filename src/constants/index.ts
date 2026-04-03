@@ -4,7 +4,7 @@ export const AUTH_USER_KEY = 'clinical_studio_user';
 
 export const ROUTES = {
   LOGIN: '/auth/login',
-  DASHBOARD: '/app/dashboard',
+  DASHBOARD: '/app',
   DE_IDENTIFY: '/app/de-identify',
   SYNTHETIC_DATA: '/app/synthetic-data',
 } as const;
