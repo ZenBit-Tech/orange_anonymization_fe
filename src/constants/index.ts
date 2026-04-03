@@ -3,6 +3,8 @@ export const AUTH_TOKEN_KEY = 'clinical_studio_token';
 export const AUTH_USER_KEY = 'clinical_studio_user';
 
 export const ROUTES = {
+  LANDING: '/',
+  CONTACT: '/contact',
   LOGIN: '/auth/login',
   DASHBOARD: '/app',
   DE_IDENTIFY: '/app/de-identify',
