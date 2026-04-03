@@ -27,7 +27,7 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
         <Typography
           variant="h3"
           sx={(theme) => ({
-            color: '#FFFFFF',
+            color: theme.palette.common.white,
             fontWeight: theme.typography.fontWeightBold,
             fontSize: { xs: '1.5rem', md: '2rem' },
             mb: 2.5,

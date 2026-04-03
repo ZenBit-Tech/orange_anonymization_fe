@@ -27,7 +27,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
         <Typography
           variant="h1"
           sx={(theme) => ({
-            color: '#FFFFFF',
+            color: theme.palette.common.white,
             fontWeight: theme.typography.fontWeightBold,
             fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
             lineHeight: 1.15,

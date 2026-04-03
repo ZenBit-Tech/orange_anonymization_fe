@@ -31,6 +31,8 @@ declare module '@mui/material/styles' {
   }
 }
 
+const WHITE = '#FFFFFF';
+
 export const LANDING = {
   bg: {
     hero: '#071424',
@@ -72,29 +74,29 @@ const BRAND = {
     light: '#64B5F6',
     main: '#1565C0',
     dark: '#0D47A1',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   secondary: {
     lightest: '#E0F2F1',
     light: '#4DB6AC',
     main: '#00897B',
     dark: '#00695C',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   success: {
     main: '#2E7D32',
     light: '#4CAF50',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   warning: {
     main: '#F57F17',
     light: '#FFB300',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   error: {
     main: '#C62828',
     light: '#EF5350',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   grey: {
     50: '#F8FAFC',
@@ -120,7 +122,7 @@ export const theme = createTheme({
     error: BRAND.error,
     background: {
       default: BRAND.grey[50],
-      paper: '#FFFFFF',
+      paper: WHITE,
     },
     text: {
       primary: BRAND.grey[900],

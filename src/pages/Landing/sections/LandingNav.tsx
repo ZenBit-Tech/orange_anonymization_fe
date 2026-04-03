@@ -37,7 +37,7 @@ const LandingNav = ({ onGetStarted, onScrollToSection }: LandingNavProps) => {
             <Typography
               variant="h6"
               sx={(theme) => ({
-                color: '#FFFFFF',
+                color: theme.palette.common.white,
                 fontWeight: theme.typography.fontWeightBold,
                 letterSpacing: '-0.01em',
                 fontSize: isMobile ? '0.875rem' : undefined,

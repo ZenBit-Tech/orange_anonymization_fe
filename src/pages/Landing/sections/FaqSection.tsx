@@ -44,7 +44,7 @@ const FaqSection = ({ expandedFaq, onFaqChange }: FaqSectionProps) => {
           <Typography
             variant="h3"
             sx={(theme) => ({
-              color: '#FFFFFF',
+              color: theme.palette.common.white,
               fontWeight: theme.typography.fontWeightBold,
               fontSize: { xs: '1.5rem', md: '1.75rem' },
               flex: '0 0 auto',
@@ -98,7 +98,8 @@ const FaqSection = ({ expandedFaq, onFaqChange }: FaqSectionProps) => {
                 <Typography
                   variant="body1"
                   sx={(theme) => ({
-                    color: expandedFaq === key ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
+                    color:
+                      expandedFaq === key ? theme.palette.common.white : 'rgba(255,255,255,0.75)',
                     fontWeight: theme.typography.fontWeightMedium,
                   })}
                 >

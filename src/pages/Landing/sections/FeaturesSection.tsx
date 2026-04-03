@@ -43,7 +43,7 @@ const FeaturesSection = () => {
           <Typography
             variant="h3"
             sx={(theme) => ({
-              color: '#FFFFFF',
+              color: theme.palette.common.white,
               fontWeight: theme.typography.fontWeightBold,
               fontSize: { xs: '1.5rem', md: '1.75rem' },
               flex: 1,
@@ -124,7 +124,7 @@ const FeaturesSection = () => {
               <Typography
                 variant="h6"
                 sx={(theme) => ({
-                  color: '#FFFFFF',
+                  color: theme.palette.common.white,
                   fontWeight: theme.typography.fontWeightBold,
                   mt: 'auto',
                   fontSize: '1rem',
