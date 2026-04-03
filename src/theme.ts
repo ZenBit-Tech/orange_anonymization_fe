@@ -36,6 +36,45 @@ export const LAYOUT = {
   },
 } as const;
 
+export const COLORS = {
+  auth: {
+    background: '#FFFFFF',
+    title: '#111827',
+    subtitle: '#6B7280',
+    labelText: '#374151',
+    borderInput: '#E5E7EB',
+    borderInputHover: '#D1D5DB',
+    placeholder: '#9CA3AF',
+    placeholderFocus: '#111827',
+    borderInputError: '#DC2626',
+    backIcon: '#6B7280',
+    backText: '#6B7280',
+    button: {
+      disabled: '#E5E7EB',
+      disabledText: '#9CA3AF',
+      active: '#1B3A6B',
+      activeText: '#FFFFFF',
+      hover: '#162E56',
+    },
+  },
+} as const;
+
+export const SHADOWS = {
+  authCard: '0px 10px 30px rgba(0, 0, 0, 0.1)',
+} as const;
+
+export const GRADIENTS = {
+  authBackground: `
+    linear-gradient(
+      to bottom,
+      #01132F 0px,
+      #01132F 450px,
+      #F8FAFC 450px,
+      #F8FAFC 100%
+    )
+  `,
+} as const;
+
 const BRAND = {
   primary: {
     lightest: '#E3F2FD',
