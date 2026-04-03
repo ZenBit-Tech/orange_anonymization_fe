@@ -91,15 +91,15 @@ export const ContactForm = () => {
 
   const textFieldStyles = {
     '& .MuiInputBase-input': {
-      color: 'common.white',
+      color: 'white',
       '&:-webkit-autofill': {
         WebkitBoxShadow: '0 0 0 100px transparent inset',
-        WebkitTextFillColor: 'common.white',
+        WebkitTextFillColor: 'white',
         transition: 'background-color 5000s ease-in-out 0s',
       },
     },
     '& .MuiInputLabel-root.Mui-focused': {
-      color: 'common.white',
+      color: 'white',
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
