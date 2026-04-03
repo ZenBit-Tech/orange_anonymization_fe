@@ -1,7 +1,10 @@
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { InputAdornment } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { useNavigate } from 'react-router-dom';
+
 import { useAuthForm } from './useAuthForm';
 import { authText } from './constants';
 import {
@@ -25,10 +28,21 @@ import {
   BackContainer,
   BackIcon,
   BackText,
+  EmailSentContainer,
+  EmailSentIcon,
+  EmailSentTitle,
+  EmailSentMessage,
+  EmailSentNotice,
+  EmailSentDivider,
+  ResendLinkButton,
+  BackToSignInButton,
+  HighlightedEmail,
 } from './styled';
 
 const AuthForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [emailSent, setEmailSent] = useState(false);
 
   const {
     register,
@@ -37,11 +51,18 @@ const AuthForm = () => {
     onSubmit,
     clearErrors,
     trigger,
+    watch,
   } = useAuthForm();
 
+  const emailValue = watch('email');
   const hasError = !!errors.email;
   const isDisabled = !isValid || isSubmitting;
   const isActive = isValid && !isSubmitting;
+
+  const handleFormSubmit = async (data: { email: string }) => {
+    await onSubmit(data);
+    setEmailSent(true);
+  };
 
   return (
     <AuthPageContainer>
@@ -54,47 +75,82 @@ const AuthForm = () => {
       </LogoContainer>
 
       <AuthFormCard>
-        <FormTitle variant="h3">{t(authText.title)}</FormTitle>
-        <FormSubtitle variant="body2">{t(authText.subtitle)}</FormSubtitle>
+        {!emailSent ? (
+          <>
+            <FormTitle variant="h3">{t(authText.title)}</FormTitle>
+            <FormSubtitle variant="body2">{t(authText.subtitle)}</FormSubtitle>
 
-        <FormContainer onSubmit={handleSubmit(onSubmit)} noValidate>
-          <EmailFieldContainer>
-            <FieldLabel>
-              {t(authText.email)}
-              <RequiredAsterisk>*</RequiredAsterisk>
-            </FieldLabel>
+            <FormContainer onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+              <EmailFieldContainer>
+                <FieldLabel>
+                  {t(authText.email)}
+                  <RequiredAsterisk>*</RequiredAsterisk>
+                </FieldLabel>
 
-            <EmailInput
-              {...register('email', {
-                onBlur: () => trigger('email'),
-              })}
-              placeholder={t(authText.emailPlaceholder)}
+                <EmailInput
+                  {...register('email', { onBlur: () => trigger('email') })}
+                  placeholder={t(authText.emailPlaceholder)}
+                  fullWidth
+                  error={hasError}
+                  onFocus={() => clearErrors('email')}
+                  endAdornment={
+                    hasError && (
+                      <InputAdornment position="end">
+                        <ErrorIconContainer>
+                          <ErrorOutlineIcon />
+                        </ErrorIconContainer>
+                      </InputAdornment>
+                    )
+                  }
+                />
+
+                {hasError && <FieldError>{t(errors.email?.message || '')}</FieldError>}
+              </EmailFieldContainer>
+
+              <SubmitButton type="submit" fullWidth disabled={isDisabled} isActive={isActive}>
+                {isSubmitting ? t(authText.submitting) : t(authText.submit)}
+              </SubmitButton>
+            </FormContainer>
+
+            <BackContainer onClick={() => navigate(-1)}>
+              <BackIcon as={ArrowBackIcon} fontSize="small" />
+              <BackText>{t('auth.back')}</BackText>
+            </BackContainer>
+          </>
+        ) : (
+          <EmailSentContainer>
+            <EmailSentIcon />
+            <EmailSentTitle variant="h5">{t('auth.checkEmail')}</EmailSentTitle>
+
+            <EmailSentMessage variant="body1">
+              <Trans
+                i18nKey="auth.linkSent"
+                components={{ email: <HighlightedEmail /> }}
+                values={{ email: emailValue }}
+              />
+            </EmailSentMessage>
+
+            <EmailSentDivider />
+
+            <EmailSentNotice variant="body2">
+              {t('auth.didntReceive')}{' '}
+              <ResendLinkButton
+                variant="text"
+                onClick={() => handleFormSubmit({ email: emailValue })}
+              >
+                {t('auth.resend')}
+              </ResendLinkButton>
+            </EmailSentNotice>
+
+            <BackToSignInButton
+              startIcon={<ArrowBackIcon />}
+              onClick={() => setEmailSent(false)}
               fullWidth
-              error={!!errors.email}
-              onFocus={() => clearErrors('email')}
-              endAdornment={
-                errors.email && (
-                  <InputAdornment position="end">
-                    <ErrorIconContainer>
-                      <ErrorOutlineIcon />
-                    </ErrorIconContainer>
-                  </InputAdornment>
-                )
-              }
-            />
-
-            {hasError && <FieldError>{t(errors.email?.message || '')}</FieldError>}
-          </EmailFieldContainer>
-
-          <SubmitButton type="submit" fullWidth disabled={isDisabled} isActive={isActive}>
-            {isSubmitting ? t(authText.submitting) : t(authText.submit)}
-          </SubmitButton>
-        </FormContainer>
-
-        <BackContainer>
-          <BackIcon as={ArrowBackIcon} fontSize="small" />
-          <BackText>{t('auth.back')}</BackText>
-        </BackContainer>
+            >
+              {t('auth.backToSignIn')}
+            </BackToSignInButton>
+          </EmailSentContainer>
+        )}
       </AuthFormCard>
     </AuthPageContainer>
   );

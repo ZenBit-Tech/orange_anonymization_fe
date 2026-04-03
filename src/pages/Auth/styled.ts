@@ -1,4 +1,5 @@
-import { Box, Button, FormHelperText, OutlinedInput, Typography } from '@mui/material';
+import { Box, Button, Divider, FormHelperText, OutlinedInput, Typography } from '@mui/material';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { styled } from '@mui/material/styles';
 import { COLORS, SHADOWS, GRADIENTS } from '@/theme';
 
@@ -187,4 +188,85 @@ export const BackText = styled(Typography)({
   lineHeight: 1.4,
   textAlign: 'center',
   color: COLORS.auth.backText,
+});
+
+// ---------------------
+
+export const EmailSentContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+  width: '100%',
+});
+
+export const EmailSentIcon = styled(EmailOutlinedIcon)({
+  width: '48px',
+  height: '48px',
+  marginBottom: '24px',
+  color: COLORS.auth.emailSent.icon,
+});
+
+export const EmailSentTitle = styled(Typography)({
+  fontWeight: 600,
+  fontSize: '24px',
+  lineHeight: 1.1,
+  color: COLORS.auth.emailSent.title,
+  marginBottom: '8px',
+});
+
+export const EmailSentMessage = styled(Typography)({
+  marginBottom: '24px',
+  fontWeight: 400,
+  fontSize: '14px',
+  lineHeight: 1.4,
+  color: COLORS.auth.emailSent.message,
+});
+
+export const HighlightedEmail = styled('span')({
+  fontWeight: 500,
+  fontSize: '14px',
+  lineHeight: 1.4,
+  color: COLORS.auth.emailSent.highlight,
+});
+
+export const EmailSentDivider = styled(Divider)({
+  width: '100%',
+  marginBottom: '24px',
+  border: `1px solid ${COLORS.auth.emailSent.divider}`,
+});
+
+export const EmailSentNotice = styled(Typography)({
+  fontWeight: 400,
+  fontSize: '14px',
+  lineHeight: 1.4,
+  marginBottom: '24px',
+  color: COLORS.auth.emailSent.notice,
+});
+
+export const ResendLinkButton = styled(Button)({
+  fontWeight: 400,
+  fontSize: '14px',
+  lineHeight: 1.4,
+  color: COLORS.auth.emailSent.resendLink,
+  textTransform: 'none',
+  padding: 0,
+});
+
+export const BackToSignInButton = styled(Button)({
+  width: '100%',
+  fontWeight: 500,
+  fontSize: '14px',
+  lineHeight: 1.4,
+  color: COLORS.auth.emailSent.backButton.text,
+  backgroundColor: COLORS.auth.emailSent.backButton.background,
+  '&:hover': {
+    backgroundColor: COLORS.auth.emailSent.backButton.hover,
+  },
+  '& .MuiButton-startIcon': {
+    color: COLORS.auth.emailSent.backButton.text,
+  },
+  '& .MuiButton-startIcon svg': {
+    color: COLORS.auth.emailSent.backButton.text,
+  },
 });

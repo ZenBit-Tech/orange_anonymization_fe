@@ -56,6 +56,21 @@ export const COLORS = {
       activeText: '#FFFFFF',
       hover: '#162E56',
     },
+    emailSent: {
+      icon: '#00A68F',
+      title: '#111827',
+      message: '#6B7280',
+      highlight: '#111827',
+      divider: '#E5E7EB',
+      notice: '#6B7280',
+      resendLink: '#2563EB',
+      backButton: {
+        background: '#FFFFFF',
+        text: '#6B7280',
+        border: '#E5E7EB',
+        hover: '#F9FAFB',
+      },
+    },
   },
 } as const;
 
