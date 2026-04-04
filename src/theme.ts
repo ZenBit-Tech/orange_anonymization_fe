@@ -6,14 +6,46 @@ interface SidebarPalette {
   hoverOverlay: string;
 }
 
+interface LandingPalette {
+  bg: {
+    hero: string;
+    dark: string;
+    card: string;
+    cardActive: string;
+  };
+  accent: string;
+  accentDark: string;
+  accentContrast: string;
+  border: string;
+  divider: string;
+}
+
 declare module '@mui/material/styles' {
   interface Palette {
     sidebar: SidebarPalette;
+    landing: LandingPalette;
   }
   interface PaletteOptions {
     sidebar?: SidebarPalette;
+    landing?: LandingPalette;
   }
 }
+
+const WHITE = '#FFFFFF';
+
+export const LANDING = {
+  bg: {
+    hero: '#071424',
+    dark: '#0A1628',
+    card: '#0D1C35',
+    cardActive: '#122240',
+  },
+  accent: '#4ECDC4',
+  accentDark: '#3DBDB5',
+  accentContrast: '#07111F',
+  border: 'rgba(255, 255, 255, 0.1)',
+  divider: 'rgba(255, 255, 255, 0.06)',
+} as const;
 
 export const LAYOUT = {
   sidebar: {
@@ -42,29 +74,29 @@ const BRAND = {
     light: '#64B5F6',
     main: '#1565C0',
     dark: '#0D47A1',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   secondary: {
     lightest: '#E0F2F1',
     light: '#4DB6AC',
     main: '#00897B',
     dark: '#00695C',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   success: {
     main: '#2E7D32',
     light: '#4CAF50',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   warning: {
     main: '#F57F17',
     light: '#FFB300',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   error: {
     main: '#C62828',
     light: '#EF5350',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   grey: {
     50: '#F8FAFC',
@@ -90,7 +122,7 @@ export const theme = createTheme({
     error: BRAND.error,
     background: {
       default: BRAND.grey[50],
-      paper: '#FFFFFF',
+      paper: WHITE,
     },
     text: {
       primary: BRAND.grey[900],
@@ -102,6 +134,14 @@ export const theme = createTheme({
       background: '#0A1628',
       activeOverlay: 'rgba(255, 255, 255, 0.08)',
       hoverOverlay: 'rgba(255, 255, 255, 0.06)',
+    },
+    landing: {
+      bg: { ...LANDING.bg },
+      accent: LANDING.accent,
+      accentDark: LANDING.accentDark,
+      accentContrast: LANDING.accentContrast,
+      border: LANDING.border,
+      divider: LANDING.divider,
     },
   },
 
