@@ -8,7 +8,6 @@ import { LAYOUT } from '@/theme';
 const PLACEHOLDER_EMAIL = 'demo@clinic.com';
 
 const MainLayout = () => {
-  // TODO: replace with actual user email from auth state
   const userEmail = PLACEHOLDER_EMAIL;
   const { isMobile, drawerOpen, handleDrawerOpen, handleDrawerClose } = useMainLayout();
 

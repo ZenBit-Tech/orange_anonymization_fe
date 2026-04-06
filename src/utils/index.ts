@@ -1,3 +1,5 @@
+import { theme } from '@/theme';
+
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength)}…`;
@@ -8,19 +10,9 @@ export function formatScore(score: number): string {
 }
 
 export function entityColor(entityType: string): string {
-  const colors: Record<string, string> = {
-    PERSON: '#1565C0',
-    EMAIL_ADDRESS: '#6A1B9A',
-    PHONE_NUMBER: '#00695C',
-    US_SSN: '#B71C1C',
-    LOCATION: '#E65100',
-    DATE_TIME: '#283593',
-    CREDIT_CARD: '#880E4F',
-    IP_ADDRESS: '#1B5E20',
-    MEDICAL_LICENSE: '#0D47A1',
-    URL: '#4E342E',
-  };
-  return colors[entityType] ?? '#37474F';
+  return (
+    (theme.palette.entities as Record<string, string>)[entityType] ?? theme.palette.entities.DEFAULT
+  );
 }
 
 export function extractSpan(text: string, start: number, end: number): string {

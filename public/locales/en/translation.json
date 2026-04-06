@@ -18,6 +18,7 @@
   },
   "nav": {
     "brand": "Clinical Data Studio",
+    "landing-brand": "De-ID Studio",
     "solutions": "Solutions",
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
@@ -129,32 +130,75 @@
       "subtitle": "Start de-identifying and synthesizing healthcare data in minutes with our enterprise-grade platform",
       "button": "Get started"
     },
-    "faq": {
-      "title": "Frequently Asked Questions",
-      "subtitle": "Got questions? We've got answers. Find everything you need to know about using our platform, plans, and features.",
-      "items": {
-        "industries": {
-          "question": "What industries do you serve?",
-          "answer": "We primarily serve healthcare organizations, pharmaceutical companies, research institutions, and healthcare technology providers."
-        },
-        "customSolutions": {
-          "question": "Do you offer custom solutions?",
-          "answer": "Yes, we offer custom solutions tailored to your organization's specific compliance requirements and data processing needs."
-        },
-        "support": {
-          "question": "What support do you provide?",
-          "answer": "We provide 24/7 technical support, dedicated account management, and comprehensive documentation to ensure your success."
-        },
-        "implementation": {
-          "question": "How long does implementation take?",
-          "answer": "Most organizations are up and running within minutes using our self-service platform. Enterprise implementations with custom configurations typically take 1-2 weeks."
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Have questions? We'd love to hear from you.",
+      "info": {
+        "question": "Have questions about data anonymization or compliance?",
+        "hereToHelp": "We're here to help.",
+        "description": "Our team of experts is ready to help you navigate HIPAA, GDPR, and other privacy regulations.",
+        "responseTime": "We respond within 24 hours",
+        "email": "info@deid.studio"
+      },
+      "form": {
+        "title": "Send us a message",
+        "description": "We'll get back to you within 24 hours",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email Address",
+        "organization": "Organization",
+        "message": "Message",
+        "messagePlaceholder": "Tell us about your use case...",
+        "submit": "Send Message",
+        "submitting": "Sending...",
+        "success": "Thank you for reaching out",
+        "sent": "Message sent!",
+        "successSubtitle": "We'll get back to you within 24 hours.",
+        "backToForm": "Back to form",
+        "validation": {
+          "firstNameRequired": "First name is required",
+          "lastNameRequired": "Last name is required",
+          "emailRequired": "Email address is required",
+          "emailInvalid": "Please enter a valid email address",
+          "messageRequired": "Message is required",
+          "messageMin": "Message must be at least 20 characters"
         }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "q1": "How accurate is the PII detection?",
+        "a1": "Our system uses Microsoft Presidio which provides 99%+ accuracy for common PII types across various medical document formats.",
+        "q2": "Is my data stored on your servers?",
+        "a2": "No, we process data in real-time. For on-premise deployments, data never leaves your infrastructure.",
+        "q3": "Does it support non-English text?",
+        "a3": "Currently we support English, with Spanish and French support in beta.",
+        "q4": "How do I get an API key?",
+        "a4": "Contact our sales team using the form above to request an enterprise API trial."
       }
     },
     "footer": {
-      "copyright": "© {{year}} De-ID Studio. All rights reserved.",
+      "copyright": "© 2026 Clinical Data Studio. All rights reserved.",
+      "description": "Enterprise-grade clinical data de-identification and synthetic data generation platform",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "sections": {
+        "product": "PRODUCT",
+        "resources": "RESOURCES",
+        "company": "COMPANY"
+      },
+      "links": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "integrations": "Integrations",
+        "documentation": "Documentation",
+        "guides": "Guides",
+        "blog": "Blog",
+        "support": "Support",
+        "about": "About",
+        "careers": "Careers",
+        "contact": "Contact",
+        "legal": "Legal"
+      }
     }
   },
   "auth": {
