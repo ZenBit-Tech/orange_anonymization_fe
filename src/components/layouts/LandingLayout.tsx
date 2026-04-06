@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { Box, Toolbar } from '@mui/material'; // Додали Toolbar
+import { Box, Toolbar } from '@mui/material';
 import { LandingHeader } from '@/pages/Landing/sections/LandingHeader';
 import { LandingFooter } from '@/pages/Landing/sections/LandingFooter';
 

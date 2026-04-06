@@ -4,19 +4,15 @@ import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import svgr from 'vite-plugin-svgr';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), svgr()],
   resolve: {
     alias: {
-      // Allows imports like: import { theme } from '@/styles/theme'
       '@': path.resolve(__dirname, './src'),
     },
   },
   server: {
     port: 5173,
-    // Proxy API calls to NestJS backend during development
-    // This avoids CORS issues in dev mode
     proxy: {
       '/api': {
         target: 'http://localhost:3000',

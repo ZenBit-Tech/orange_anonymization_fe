@@ -2,6 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { TaskAlt as TaskAltIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import type { FC } from 'react';
+import { FONT_SIZES } from '@/constants';
 
 interface IProps {
   setSubmitted: (submitted: boolean) => void;
@@ -29,14 +30,17 @@ export const SubmittedState: FC<IProps> = ({ setSubmitted }) => {
           justifyContent: 'center',
         }}
       >
-        <TaskAltIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
-        <Typography fontWeight={700} sx={{ mb: 1, color: 'common.white', fontSize: '24px' }}>
+        <TaskAltIcon sx={{ fontSize: FONT_SIZES.huge, color: 'success.main', mb: 2 }} />
+        <Typography
+          fontWeight="fontWeightBold"
+          sx={{ mb: 1, color: 'common.white', fontSize: FONT_SIZES.xxl }}
+        >
           {t('landing.contact.form.sent')}
         </Typography>
-        <Typography sx={{ color: 'neutral.500', fontSize: '14px', mb: 2 }}>
+        <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm, mb: 2 }}>
           {t('landing.contact.form.success')}
         </Typography>
-        <Typography sx={{ color: 'neutral.500', fontSize: '14px' }}>
+        <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
           {t('landing.contact.form.successSubtitle')}
         </Typography>
       </Box>

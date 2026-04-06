@@ -20,7 +20,7 @@ import {
   Close as CloseIcon,
   ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
-import { ROUTES } from '@/constants';
+import { ROUTES, FONT_SIZES } from '@/constants';
 import AppLogo from '@/assets/icons/landingLogo.svg?react';
 
 interface NavItem {
@@ -47,7 +47,7 @@ export function LandingHeader() {
         position="fixed"
         color="inherit"
         elevation={0}
-        sx={{ borderBottom: 1, borderColor: 'greenOpacity', bgcolor: 'dark' }}
+        sx={{ borderBottom: 1, borderColor: 'greenOpacity', bgcolor: 'primary.800' }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -65,12 +65,9 @@ export function LandingHeader() {
               <SvgIcon component={AppLogo} inheritViewBox sx={{ color: 'common.white' }} />
               <Typography
                 variant="h6"
-                fontWeight={600}
+                fontWeight="fontWeightSemiBold"
                 color="common.white"
-                sx={{
-                  fontSize: '20px',
-                  lineHeight: '28px',
-                }}
+                sx={{ fontSize: FONT_SIZES.xl }}
               >
                 {t('nav.landing-brand')}
               </Typography>
@@ -92,8 +89,7 @@ export function LandingHeader() {
                   to={item.to}
                   sx={{
                     color: isActive(item.to) ? 'accent.500' : 'common.white',
-                    fontSize: '14px',
-                    lineHeight: '20px',
+                    fontSize: FONT_SIZES.sm,
                     minWidth: 'auto',
                     '&:hover': { backgroundColor: 'transparent', opacity: 0.8 },
                   }}
@@ -121,9 +117,9 @@ export function LandingHeader() {
                   display: { xs: 'none', md: 'flex' },
                   paddingX: '24px',
                   paddingY: '12px',
-                  fontSize: '14px',
-                  lineHeight: '20px',
+                  fontSize: FONT_SIZES.sm,
                   textTransform: 'none',
+                  color: 'primary.800',
                   bgcolor: 'accent.400',
                   background: (theme) => theme.palette.accent[400],
                   '&:hover': {
@@ -172,8 +168,7 @@ export function LandingHeader() {
                 onClick={() => setDrawerOpen(false)}
                 sx={{
                   color: isActive(item.to) ? 'accent.500' : 'common.white',
-                  fontSize: '14px',
-                  lineHeight: '20px',
+                  fontSize: FONT_SIZES.sm,
                   minWidth: 'auto',
                   borderRadius: 1,
                   '&:hover': { backgroundColor: 'transparent', opacity: 0.8 },
@@ -194,8 +189,7 @@ export function LandingHeader() {
                 sx={{
                   paddingX: '24px',
                   paddingY: '12px',
-                  fontSize: '14px',
-                  lineHeight: '20px',
+                  fontSize: FONT_SIZES.sm,
                   textTransform: 'none',
                   background: (theme) => theme.palette.accent[400],
                   '&:hover': {

@@ -80,6 +80,10 @@ declare module '@mui/material/styles' {
       61: string;
     };
     entities: Record<string, string>;
+    gradients: {
+      primaryAccent: string;
+    };
+    sidebar: SidebarPalette;
   }
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
@@ -92,6 +96,10 @@ declare module '@mui/material/styles' {
       61?: string;
     };
     entities?: Record<string, string>;
+    gradients?: {
+      primaryAccent?: string;
+    };
+    sidebar?: SidebarPalette;
   }
   interface PaletteColor {
     400?: string;
@@ -108,6 +116,18 @@ declare module '@mui/material/styles' {
     800?: string;
     900?: string;
     hover?: string;
+  }
+  interface Typography {
+    fontWeightSemiBold: number;
+    fontWeightExtraBold: number;
+  }
+  interface TypographyOptions {
+    fontWeightSemiBold?: number;
+    fontWeightExtraBold?: number;
+  }
+  interface TypographyVariantsOptions {
+    fontWeightSemiBold?: number;
+    fontWeightExtraBold?: number;
   }
 }
 
@@ -218,6 +238,9 @@ export const theme = createTheme({
       disabled: BRAND.grey[400],
     },
     divider: BRAND.grey[200],
+    gradients: {
+      primaryAccent: `linear-gradient( 95deg, ${BRAND.primary[500]} 0%, ${BRAND.accent[500]} 100%)`,
+    },
     sidebar: {
       background: '#0A1628',
       activeOverlay: 'rgba(255, 255, 255, 0.08)',
@@ -239,6 +262,8 @@ export const theme = createTheme({
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 700,
+    fontWeightSemiBold: 600,
+    fontWeightExtraBold: 800,
 
     h1: { fontSize: '3rem', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.02em' },
     h2: { fontSize: '2.25rem', fontWeight: 700, lineHeight: 1.3, letterSpacing: '-0.015em' },
@@ -250,7 +275,7 @@ export const theme = createTheme({
     body2: { fontSize: '0.875rem', lineHeight: 1.57 },
     caption: { fontSize: '0.75rem', lineHeight: 1.5 },
     button: { fontWeight: 600, letterSpacing: '0.02em', textTransform: 'none' },
-  },
+  } as import('@mui/material/styles').TypographyOptions,
 
   shape: {
     borderRadius: 10,
@@ -271,7 +296,7 @@ export const theme = createTheme({
         containedPrimary: {
           background: `linear-gradient(135deg, ${BRAND.primary.main} 0%, ${BRAND.primary.dark} 100%)`,
           '&:hover': {
-            background: `linear-gradient(135deg, ${BRAND.primary.dark} 0%, ${BRAND.primary.hover} 100%)`,
+            background: `linear-gradient(135deg, ${BRAND.primary.dark} 0%, ${BRAND.primary.main} 100%)`,
           },
         },
       },

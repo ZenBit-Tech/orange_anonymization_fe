@@ -4,6 +4,7 @@ import { MailOutline as MailOutlineIcon } from '@mui/icons-material';
 import AppLogo from '@/assets/icons/landingLogo.svg?react';
 import AdminPanelSettings from '@/assets/icons/admin_panel_settings.svg?react';
 import { ContactForm } from '@/components/business/contact/ContactForm';
+import { FONT_SIZES } from '@/constants';
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -31,9 +32,8 @@ export default function Contact() {
             <Typography
               variant="h1"
               sx={{
-                fontWeight: 700,
-                fontSize: { xs: '32px', md: '48px' },
-                lineHeight: { xs: '40px', md: '56px' },
+                fontWeight: 'fontWeightBold',
+                fontSize: { xs: FONT_SIZES.xxxl, md: FONT_SIZES.h1 },
                 color: 'common.white',
               }}
             >
@@ -70,19 +70,24 @@ export default function Contact() {
               <Box sx={{ flexGrow: 1, pt: { xs: 3, sm: 5 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, pb: '43px' }}>
                   <SvgIcon component={AppLogo} inheritViewBox />
-                  <Typography fontWeight={600} sx={{ fontSize: '20px' }}>
+                  <Typography fontWeight="fontWeightSemiBold" sx={{ fontSize: FONT_SIZES.xl }}>
                     {t('nav.landing-brand')}
                   </Typography>
                 </Box>
-                <Typography fontWeight={600} sx={{ fontSize: '20px', mb: '12px' }}>
+                <Typography
+                  fontWeight="fontWeightSemiBold"
+                  sx={{ fontSize: FONT_SIZES.xl, mb: '12px' }}
+                >
                   {t('landing.contact.info.question')}
                 </Typography>
-                <Typography sx={{ fontSize: '14px', opacity: 0.8, color: 'neutral.500', mb: 5 }}>
+                <Typography
+                  sx={{ fontSize: FONT_SIZES.sm, opacity: 0.8, color: 'neutral.500', mb: 5 }}
+                >
                   {t('landing.contact.info.description')}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <MailOutlineIcon sx={{ color: 'secondary.main' }} />
-                  <Typography sx={{ fontSize: '14px' }}>
+                  <Typography sx={{ fontSize: FONT_SIZES.sm }}>
                     {t('landing.contact.info.email')}
                   </Typography>
                 </Box>
@@ -95,7 +100,7 @@ export default function Contact() {
                   inheritViewBox
                   sx={{ color: 'secondary.main' }}
                 />
-                <Typography sx={{ fontSize: '14px', opacity: 0.7 }}>
+                <Typography sx={{ fontSize: FONT_SIZES.sm, opacity: 0.7 }}>
                   {t('landing.contact.info.responseTime')}
                 </Typography>
               </Box>

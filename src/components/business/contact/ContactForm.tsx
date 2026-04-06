@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import type { ContactFormValues } from '@/pages/Contact/types';
 import { SubmittedState } from './SubmittedState';
+import { FONT_SIZES } from '@/constants';
 
 function buildSchema(t: (key: string) => string) {
   return yup.object({
@@ -86,25 +87,26 @@ export const ContactForm = () => {
     left: 0,
     margin: 0,
     whiteSpace: 'nowrap',
-    fontSize: '12px',
+    fontSize: FONT_SIZES.xs,
   };
 
   const textFieldStyles = {
     '& .MuiInputBase-input': {
-      color: 'white',
+      color: 'common.white',
       '&:-webkit-autofill': {
         WebkitBoxShadow: '0 0 0 100px transparent inset',
-        WebkitTextFillColor: 'white',
+        WebkitTextFillColor: (theme: import('@mui/material/styles').Theme) =>
+          theme.palette.common.white,
         transition: 'background-color 5000s ease-in-out 0s',
       },
     },
     '& .MuiInputLabel-root.Mui-focused': {
-      color: 'white',
+      color: 'common.white',
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
         backgroundColor: 'whiteOpacity.8',
-        borderRadius: '10px',
+        borderRadius: 1,
         borderColor: 'neutral.500',
       },
       '&:hover fieldset': {
@@ -138,10 +140,13 @@ export const ContactForm = () => {
           <SubmittedState setSubmitted={setSubmitted} />
         ) : (
           <>
-            <Typography fontWeight={600} sx={{ fontSize: '20px', color: 'common.white' }}>
+            <Typography
+              fontWeight="fontWeightSemiBold"
+              sx={{ fontSize: FONT_SIZES.xl, color: 'common.white' }}
+            >
               {t('landing.contact.form.title')}
             </Typography>
-            <Typography sx={{ mb: '40px', fontSize: '14px', color: 'neutral.500' }}>
+            <Typography sx={{ mb: '40px', fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
               {t('landing.contact.form.description')}
             </Typography>
 
@@ -271,8 +276,10 @@ export const ContactForm = () => {
                       px: '24px',
                       py: '12px',
                       textTransform: 'none',
-                      fontWeight: 600,
+                      fontWeight: 'fontWeightSemiBold',
+                      color: 'primary.800',
                       background: (theme) => theme.palette.accent[400],
+
                       '&:hover': {
                         background: (theme) => theme.palette.accent[500],
                       },
