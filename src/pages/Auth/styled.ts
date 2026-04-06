@@ -30,7 +30,7 @@ export const BrandingContainer = styled(Box)({
 });
 
 export const BrandName = styled(Typography)(({ theme }) => ({
-  ...theme.typography.h6,
+  ...theme.typography.h4,
   color: theme.palette.auth.button.activeText,
 }));
 
@@ -62,13 +62,13 @@ export const AuthFormCard = styled(Box)(({ theme }) => ({
 }));
 
 export const FormTitle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.h5,
+  ...theme.typography.authTitle,
   marginBottom: theme.spacing(1),
   color: theme.palette.auth.title,
 }));
 
 export const FormSubtitle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.body2,
+  ...theme.typography.authSubtitle,
   marginBottom: theme.spacing(3),
   color: theme.palette.auth.subtitle,
 }));
@@ -175,6 +175,7 @@ export const BackContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  height: LAYOUT.authPage.backButton.height,
   marginTop: theme.spacing(3),
   cursor: 'pointer',
 }));
@@ -209,7 +210,7 @@ export const EmailSentIcon = styled(EmailOutlinedIcon)(({ theme }) => ({
 }));
 
 export const EmailSentTitle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.h5,
+  ...theme.typography.h4,
   marginBottom: theme.spacing(1),
   color: theme.palette.auth.emailSent.title,
 }));
@@ -233,6 +234,9 @@ export const EmailSentDivider = styled(Divider)(({ theme }) => ({
 
 export const EmailSentNotice = styled(Typography)(({ theme }) => ({
   ...theme.typography.body2,
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(0.5),
   marginBottom: theme.spacing(3),
   color: theme.palette.auth.emailSent.notice,
 }));
@@ -245,14 +249,16 @@ export const ResendLinkButton = styled(Button)(({ theme }) => ({
 }));
 
 export const BackToSignInButton = styled(Button)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   width: '100%',
-
+  height: theme.spacing(5),
+  padding: 0,
   ...theme.typography.body2,
   fontWeight: theme.typography.fontWeightMedium,
-
   color: theme.palette.auth.emailSent.backButton.text,
   backgroundColor: theme.palette.auth.emailSent.backButton.background,
-  border: `1px solid ${theme.palette.auth.emailSent.backButton.border}`,
 
   '&:hover': {
     backgroundColor: theme.palette.auth.emailSent.backButton.hover,

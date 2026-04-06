@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, type CSSProperties } from '@mui/material/styles';
 
 interface SidebarPalette {
   background: string;
@@ -74,6 +74,18 @@ declare module '@mui/material/styles' {
     sidebar?: SidebarPalette;
     landing?: LandingPalette;
   }
+
+  interface TypographyVariants {
+    authTitle: CSSProperties;
+    authSubtitle: CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    authTitle: true;
+    authSubtitle: true;
+  }
 }
 
 const WHITE = '#FFFFFF';
@@ -135,6 +147,10 @@ export const LAYOUT = {
     },
     submitButton: {
       height: 48,
+      borderRadius: 6,
+    },
+    backButton: {
+      height: 40,
       borderRadius: 6,
     },
     input: {
@@ -409,6 +425,18 @@ export const theme = createTheme({
     body2: { fontSize: '0.875rem', lineHeight: 1.57 },
     caption: { fontSize: '0.75rem', lineHeight: 1.5 },
     button: { fontWeight: 600, letterSpacing: '0.02em', textTransform: 'none' },
+
+    authTitle: {
+      fontSize: 24,
+      lineHeight: 1.1,
+      fontWeight: 600,
+    },
+
+    authSubtitle: {
+      fontSize: 14,
+      lineHeight: 1.4,
+      fontWeight: 400,
+    },
   } as import('@mui/material/styles').TypographyOptions,
 
   shape: {
