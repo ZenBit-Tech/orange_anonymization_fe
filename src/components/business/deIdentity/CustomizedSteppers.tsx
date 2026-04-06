@@ -20,8 +20,6 @@ import {
 import { type StepIconProps } from '@mui/material/StepIcon';
 import { StepContent } from './StepContent';
 
-// --- СТИЛІЗОВАНІ КОМПОНЕНТИ (Colorlib) ---
-
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22,

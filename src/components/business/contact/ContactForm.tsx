@@ -19,6 +19,46 @@ import type { ContactFormValues } from '@/pages/Contact/types';
 import { SubmittedState } from './SubmittedState';
 import { FONT_SIZES } from '@/constants';
 
+const helperTextStyles = {
+  position: 'absolute',
+  bottom: '-22px',
+  left: 0,
+  margin: 0,
+  whiteSpace: 'nowrap',
+  fontSize: FONT_SIZES.xs,
+};
+
+const textFieldStyles = {
+  '& .MuiInputBase-input': {
+    color: 'common.white',
+    '&:-webkit-autofill': {
+      WebkitBoxShadow: '0 0 0 100px transparent inset',
+      WebkitTextFillColor: (theme: import('@mui/material/styles').Theme) =>
+        theme.palette.common.white,
+      transition: 'background-color 5000s ease-in-out 0s',
+    },
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: 'common.white',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      backgroundColor: 'whiteOpacity.8',
+      borderRadius: 1,
+      borderColor: 'neutral.500',
+    },
+    '&:hover fieldset': {
+      borderColor: 'neutral.500',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'common.white',
+    },
+  },
+  '& .MuiOutlinedInput-root.Mui-error fieldset': {
+    borderColor: 'error.main',
+  },
+};
+
 function buildSchema(t: (key: string) => string) {
   return yup.object({
     firstName: yup.string().required(t('landing.contact.form.validation.firstNameRequired')),
@@ -79,46 +119,6 @@ export const ContactForm = () => {
     } catch {
       setSubmitError(t('errors.generic'));
     }
-  };
-
-  const helperTextStyles = {
-    position: 'absolute',
-    bottom: '-22px',
-    left: 0,
-    margin: 0,
-    whiteSpace: 'nowrap',
-    fontSize: FONT_SIZES.xs,
-  };
-
-  const textFieldStyles = {
-    '& .MuiInputBase-input': {
-      color: 'common.white',
-      '&:-webkit-autofill': {
-        WebkitBoxShadow: '0 0 0 100px transparent inset',
-        WebkitTextFillColor: (theme: import('@mui/material/styles').Theme) =>
-          theme.palette.common.white,
-        transition: 'background-color 5000s ease-in-out 0s',
-      },
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: 'common.white',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        backgroundColor: 'whiteOpacity.8',
-        borderRadius: 1,
-        borderColor: 'neutral.500',
-      },
-      '&:hover fieldset': {
-        borderColor: 'neutral.500',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'common.white',
-      },
-    },
-    '& .MuiOutlinedInput-root.Mui-error fieldset': {
-      borderColor: 'error.main',
-    },
   };
 
   return (
