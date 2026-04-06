@@ -63,6 +63,7 @@ interface LandingPalette {
 declare module '@mui/material/styles' {
   interface Palette {
     sidebar: SidebarPalette;
+    landing: LandingPalette;
     auth: AuthPalette;
   }
   interface PaletteOptions {
