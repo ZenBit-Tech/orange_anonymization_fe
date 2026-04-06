@@ -6,12 +6,54 @@ interface SidebarPalette {
   hoverOverlay: string;
 }
 
+interface AuthButtonPalette {
+  disabled: string;
+  disabledText: string;
+  active: string;
+  activeText: string;
+  hover: string;
+}
+
+interface AuthEmailSentPalette {
+  icon: string;
+  title: string;
+  message: string;
+  highlight: string;
+  divider: string;
+  notice: string;
+  resendLink: string;
+  backButton: {
+    background: string;
+    text: string;
+    border: string;
+    hover: string;
+  };
+}
+
+interface AuthPalette {
+  background: string;
+  title: string;
+  subtitle: string;
+  labelText: string;
+  borderInput: string;
+  borderInputHover: string;
+  placeholder: string;
+  placeholderFocus: string;
+  borderInputError: string;
+  backIcon: string;
+  backText: string;
+  button: AuthButtonPalette;
+  emailSent: AuthEmailSentPalette;
+}
+
 declare module '@mui/material/styles' {
   interface Palette {
     sidebar: SidebarPalette;
+    auth: AuthPalette;
   }
   interface PaletteOptions {
     sidebar?: SidebarPalette;
+    auth?: AuthPalette;
   }
 }
 
@@ -34,42 +76,38 @@ export const LAYOUT = {
     avatarIconSize: 32,
     menuIconSize: 28,
   },
-} as const;
-
-export const COLORS = {
-  auth: {
-    background: '#FFFFFF',
-    title: '#111827',
-    subtitle: '#6B7280',
-    labelText: '#374151',
-    borderInput: '#E5E7EB',
-    borderInputHover: '#D1D5DB',
-    placeholder: '#9CA3AF',
-    placeholderFocus: '#111827',
-    borderInputError: '#DC2626',
-    backIcon: '#6B7280',
-    backText: '#6B7280',
-    button: {
-      disabled: '#E5E7EB',
-      disabledText: '#9CA3AF',
-      active: '#1B3A6B',
-      activeText: '#FFFFFF',
-      hover: '#162E56',
+  authPage: {
+    logo: {
+      width: 32,
+      height: 34,
     },
-    emailSent: {
-      icon: '#00A68F',
-      title: '#111827',
-      message: '#6B7280',
-      highlight: '#111827',
-      divider: '#E5E7EB',
-      notice: '#6B7280',
-      resendLink: '#2563EB',
-      backButton: {
-        background: '#FFFFFF',
-        text: '#6B7280',
-        border: '#E5E7EB',
-        hover: '#F9FAFB',
-      },
+    formCard: {
+      smWidth: 440,
+      borderRadius: 16,
+      topPosition: 450,
+    },
+    emailSentIcon: {
+      width: 48,
+      height: 48,
+    },
+    errorIcon: {
+      width: 20,
+      height: 20,
+    },
+    backIcon: {
+      width: 24,
+      height: 24,
+    },
+    submitButton: {
+      height: 48,
+      borderRadius: 6,
+    },
+    input: {
+      borderRadius: 8,
+      borderWidth: 1.5,
+      paddingX: 14,
+      paddingY: 10,
+      paddingAdornedRight: 14,
     },
   },
 } as const;
@@ -156,6 +194,44 @@ export const theme = createTheme({
       background: '#0A1628',
       activeOverlay: 'rgba(255, 255, 255, 0.08)',
       hoverOverlay: 'rgba(255, 255, 255, 0.06)',
+    },
+
+    auth: {
+      background: '#FFFFFF',
+      title: '#111827',
+      subtitle: '#6B7280',
+      labelText: '#374151',
+      borderInput: '#E5E7EB',
+      borderInputHover: '#D1D5DB',
+      placeholder: '#9CA3AF',
+      placeholderFocus: '#111827',
+      borderInputError: '#DC2626',
+      backIcon: '#6B7280',
+      backText: '#6B7280',
+
+      button: {
+        disabled: '#E5E7EB',
+        disabledText: '#9CA3AF',
+        active: '#1B3A6B',
+        activeText: '#FFFFFF',
+        hover: '#162E56',
+      },
+
+      emailSent: {
+        icon: '#00A68F',
+        title: '#111827',
+        message: '#6B7280',
+        highlight: '#111827',
+        divider: '#E5E7EB',
+        notice: '#6B7280',
+        resendLink: '#2563EB',
+        backButton: {
+          background: '#FFFFFF',
+          text: '#6B7280',
+          border: '#E5E7EB',
+          hover: '#F9FAFB',
+        },
+      },
     },
   },
 

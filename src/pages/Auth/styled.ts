@@ -1,7 +1,7 @@
 import { Box, Button, Divider, FormHelperText, OutlinedInput, Typography } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { styled } from '@mui/material/styles';
-import { COLORS, SHADOWS, GRADIENTS } from '@/theme';
+import { LAYOUT, SHADOWS, GRADIENTS } from '@/theme';
 
 export const AuthPageContainer = styled(Box)({
   minHeight: '100vh',
@@ -9,19 +9,19 @@ export const AuthPageContainer = styled(Box)({
   background: GRADIENTS.authBackground,
 });
 
-export const LogoContainer = styled(Box)({
+export const LogoContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: 48,
+  top: theme.spacing(6),
   left: '50%',
   transform: 'translateX(-50%)',
   display: 'flex',
   alignItems: 'center',
-  gap: '12px',
-});
+  gap: theme.spacing(1.5),
+}));
 
 export const LogoImage = styled('img')({
-  width: 32,
-  height: 34,
+  width: LAYOUT.authPage.logo.width,
+  height: LAYOUT.authPage.logo.height,
 });
 
 export const BrandingContainer = styled(Box)({
@@ -29,51 +29,48 @@ export const BrandingContainer = styled(Box)({
   flexDirection: 'column',
 });
 
-export const BrandName = styled(Typography)({
-  fontWeight: 600,
-  fontSize: '24px',
-  lineHeight: 1.2,
-  color: '#FFFFFF',
-});
+export const BrandName = styled(Typography)(({ theme }) => ({
+  ...theme.typography.h6,
+  color: theme.palette.auth.button.activeText,
+}));
 
-export const BrandTagline = styled(Typography)({
-  fontWeight: 500,
-  fontSize: '12px',
-  lineHeight: 1.3,
-  color: '#FFFFFF',
-});
+export const BrandTagline = styled(Typography)(({ theme }) => ({
+  ...theme.typography.caption,
+  fontWeight: theme.typography.fontWeightMedium,
+  color: theme.palette.auth.button.activeText,
+}));
 
 export const AuthFormCard = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: '450px',
+  top: LAYOUT.authPage.formCard.topPosition,
   left: '50%',
   transform: 'translate(-50%, -50%)',
+
   width: '90%',
   [theme.breakpoints.up('sm')]: {
-    width: 440,
+    width: LAYOUT.authPage.formCard.smWidth,
   },
-  borderRadius: '16px',
+
+  borderRadius: LAYOUT.authPage.formCard.borderRadius,
   padding: theme.spacing(6),
-  backgroundColor: COLORS.auth.background,
+  backgroundColor: theme.palette.auth.background,
+
   display: 'flex',
   flexDirection: 'column',
+
   boxShadow: SHADOWS.authCard,
 }));
 
-export const FormTitle = styled(Typography)({
-  fontWeight: 600,
-  fontSize: 24,
-  lineHeight: 1.2,
-  marginBottom: '8px',
-  color: COLORS.auth.title,
-});
+export const FormTitle = styled(Typography)(({ theme }) => ({
+  ...theme.typography.h5,
+  marginBottom: theme.spacing(1),
+  color: theme.palette.auth.title,
+}));
 
 export const FormSubtitle = styled(Typography)(({ theme }) => ({
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: 14,
-  lineHeight: 1.4,
-  marginBottom: '24px',
-  color: COLORS.auth.subtitle,
+  ...theme.typography.body2,
+  marginBottom: theme.spacing(3),
+  color: theme.palette.auth.subtitle,
 }));
 
 export const FormContainer = styled('form')({
@@ -81,116 +78,120 @@ export const FormContainer = styled('form')({
   flexDirection: 'column',
 });
 
-export const EmailFieldContainer = styled(Box)({
+export const EmailFieldContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  padding: '10px',
-});
+  padding: theme.spacing(1.25),
+}));
 
-export const FieldLabel = styled(Typography)({
-  fontWeight: 500,
-  fontSize: '14px',
-  lineHeight: 1.4,
-  marginBottom: '4px',
-  color: COLORS.auth.labelText,
-});
+export const FieldLabel = styled(Typography)(({ theme }) => ({
+  ...theme.typography.body2,
+  fontWeight: theme.typography.fontWeightMedium,
+  marginBottom: theme.spacing(0.5),
+  color: theme.palette.auth.labelText,
+}));
 
-export const RequiredAsterisk = styled('span')({
-  color: COLORS.auth.borderInputError,
-});
+export const RequiredAsterisk = styled('span')(({ theme }) => ({
+  color: theme.palette.auth.borderInputError,
+}));
 
-export const EmailInput = styled(OutlinedInput)({
-  borderRadius: '8px',
+export const EmailInput = styled(OutlinedInput)(({ theme }) => ({
+  borderRadius: LAYOUT.authPage.input.borderRadius,
+
   '& .MuiOutlinedInput-input': {
-    padding: '10px 8px 10px 14px',
+    padding: `${LAYOUT.authPage.input.paddingY}px ${LAYOUT.authPage.input.paddingX - 6}px ${LAYOUT.authPage.input.paddingY}px ${LAYOUT.authPage.input.paddingX}px`,
+
     '&::placeholder': {
-      fontWeight: 400,
-      fontSize: '14px',
-      lineHeight: 1.4,
-      color: COLORS.auth.placeholder,
+      ...theme.typography.body2,
+      color: theme.palette.auth.placeholder,
     },
   },
+
   '&.MuiOutlinedInput-adornedEnd .MuiOutlinedInput-input': {
-    paddingRight: '14px',
+    paddingRight: LAYOUT.authPage.input.paddingAdornedRight,
   },
+
   '& .MuiOutlinedInput-notchedOutline': {
-    borderWidth: '1.5px',
+    borderWidth: LAYOUT.authPage.input.borderWidth,
     borderStyle: 'solid',
-    borderColor: COLORS.auth.borderInput,
+    borderColor: theme.palette.auth.borderInput,
   },
+
   '&:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: COLORS.auth.borderInputHover,
+    borderColor: theme.palette.auth.borderInputHover,
   },
+
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderColor: COLORS.auth.borderInputHover,
+    borderColor: theme.palette.auth.borderInputHover,
   },
+
   '&.Mui-error .MuiOutlinedInput-notchedOutline': {
-    borderColor: COLORS.auth.borderInputError,
+    borderColor: theme.palette.auth.borderInputError,
   },
+
   '&.Mui-focused .MuiOutlinedInput-input::placeholder': {
-    color: COLORS.auth.placeholderFocus,
-  },
-});
-
-export const FieldError = styled(FormHelperText)({
-  marginTop: '4px',
-  fontWeight: 400,
-  fontSize: '12px',
-  lineHeight: 1.3,
-  color: COLORS.auth.borderInputError,
-});
-
-export const ErrorIconContainer = styled(Box)({
-  '& svg': {
-    width: '20px',
-    height: '20px',
-    color: COLORS.auth.borderInputError,
-  },
-});
-
-export const SubmitButton = styled(Button)<{ isActive?: boolean }>(({ isActive }) => ({
-  height: '48px',
-  borderRadius: '6px',
-  marginTop: '24px',
-  fontWeight: 500,
-  fontSize: '16px',
-  lineHeight: 1.5,
-  textAlign: 'center',
-  backgroundColor: isActive ? COLORS.auth.button.active : COLORS.auth.button.disabled,
-  color: isActive ? COLORS.auth.button.activeText : COLORS.auth.button.disabledText,
-  '&:hover': {
-    backgroundColor: isActive ? COLORS.auth.button.hover : COLORS.auth.button.disabled,
-  },
-  '&.Mui-disabled': {
-    backgroundColor: COLORS.auth.button.disabled,
-    color: COLORS.auth.button.disabledText,
+    color: theme.palette.auth.placeholderFocus,
   },
 }));
 
-export const BackContainer = styled(Box)({
+export const FieldError = styled(FormHelperText)(({ theme }) => ({
+  marginTop: theme.spacing(0.5),
+  ...theme.typography.caption,
+  color: theme.palette.auth.borderInputError,
+}));
+
+export const ErrorIconContainer = styled(Box)(({ theme }) => ({
+  '& svg': {
+    width: LAYOUT.authPage.errorIcon.width,
+    height: LAYOUT.authPage.errorIcon.height,
+    color: theme.palette.auth.borderInputError,
+  },
+}));
+
+export const SubmitButton = styled(Button)<{ isActive?: boolean }>(({ isActive, theme }) => ({
+  height: LAYOUT.authPage.submitButton.height,
+  borderRadius: LAYOUT.authPage.submitButton.borderRadius,
+  marginTop: theme.spacing(3),
+
+  ...theme.typography.button,
+
+  backgroundColor: isActive ? theme.palette.auth.button.active : theme.palette.auth.button.disabled,
+
+  color: isActive ? theme.palette.auth.button.activeText : theme.palette.auth.button.disabledText,
+
+  '&:hover': {
+    backgroundColor: isActive
+      ? theme.palette.auth.button.hover
+      : theme.palette.auth.button.disabled,
+  },
+
+  '&.Mui-disabled': {
+    backgroundColor: theme.palette.auth.button.disabled,
+    color: theme.palette.auth.button.disabledText,
+  },
+}));
+
+export const BackContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  marginTop: '24px',
+  marginTop: theme.spacing(3),
   cursor: 'pointer',
-});
+}));
 
-export const BackIcon = styled('svg')({
-  width: 24,
-  height: 24,
-  color: COLORS.auth.backIcon,
-});
+export const BackIcon = styled('svg')(({ theme }) => ({
+  width: LAYOUT.authPage.backIcon.width,
+  height: LAYOUT.authPage.backIcon.height,
+  color: theme.palette.auth.backIcon,
+}));
 
-export const BackText = styled(Typography)({
-  marginLeft: 8,
-  fontWeight: 500,
-  fontSize: 14,
-  lineHeight: 1.4,
+export const BackText = styled(Typography)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  ...theme.typography.body2,
+  fontWeight: theme.typography.fontWeightMedium,
   textAlign: 'center',
-  color: COLORS.auth.backText,
-});
-
-// ---------------------
+  color: theme.palette.auth.backText,
+}));
 
 export const EmailSentContainer = styled(Box)({
   display: 'flex',
@@ -200,73 +201,64 @@ export const EmailSentContainer = styled(Box)({
   width: '100%',
 });
 
-export const EmailSentIcon = styled(EmailOutlinedIcon)({
-  width: '48px',
-  height: '48px',
-  marginBottom: '24px',
-  color: COLORS.auth.emailSent.icon,
-});
+export const EmailSentIcon = styled(EmailOutlinedIcon)(({ theme }) => ({
+  width: LAYOUT.authPage.emailSentIcon.width,
+  height: LAYOUT.authPage.emailSentIcon.height,
+  marginBottom: theme.spacing(3),
+  color: theme.palette.auth.emailSent.icon,
+}));
 
-export const EmailSentTitle = styled(Typography)({
-  fontWeight: 600,
-  fontSize: '24px',
-  lineHeight: 1.1,
-  color: COLORS.auth.emailSent.title,
-  marginBottom: '8px',
-});
+export const EmailSentTitle = styled(Typography)(({ theme }) => ({
+  ...theme.typography.h5,
+  marginBottom: theme.spacing(1),
+  color: theme.palette.auth.emailSent.title,
+}));
 
-export const EmailSentMessage = styled(Typography)({
-  marginBottom: '24px',
-  fontWeight: 400,
-  fontSize: '14px',
-  lineHeight: 1.4,
-  color: COLORS.auth.emailSent.message,
-});
+export const EmailSentMessage = styled(Typography)(({ theme }) => ({
+  ...theme.typography.body2,
+  marginBottom: theme.spacing(3),
+  color: theme.palette.auth.emailSent.message,
+}));
 
-export const HighlightedEmail = styled('span')({
-  fontWeight: 500,
-  fontSize: '14px',
-  lineHeight: 1.4,
-  color: COLORS.auth.emailSent.highlight,
-});
+export const HighlightedEmail = styled('span')(({ theme }) => ({
+  fontWeight: theme.typography.fontWeightMedium,
+  color: theme.palette.auth.emailSent.highlight,
+}));
 
-export const EmailSentDivider = styled(Divider)({
+export const EmailSentDivider = styled(Divider)(({ theme }) => ({
   width: '100%',
-  marginBottom: '24px',
-  border: `1px solid ${COLORS.auth.emailSent.divider}`,
-});
+  marginBottom: theme.spacing(3),
+  border: `1px solid ${theme.palette.auth.emailSent.divider}`,
+}));
 
-export const EmailSentNotice = styled(Typography)({
-  fontWeight: 400,
-  fontSize: '14px',
-  lineHeight: 1.4,
-  marginBottom: '24px',
-  color: COLORS.auth.emailSent.notice,
-});
+export const EmailSentNotice = styled(Typography)(({ theme }) => ({
+  ...theme.typography.body2,
+  marginBottom: theme.spacing(3),
+  color: theme.palette.auth.emailSent.notice,
+}));
 
-export const ResendLinkButton = styled(Button)({
-  fontWeight: 400,
-  fontSize: '14px',
-  lineHeight: 1.4,
-  color: COLORS.auth.emailSent.resendLink,
+export const ResendLinkButton = styled(Button)(({ theme }) => ({
+  ...theme.typography.body2,
+  color: theme.palette.auth.emailSent.resendLink,
   textTransform: 'none',
   padding: 0,
-});
+}));
 
-export const BackToSignInButton = styled(Button)({
+export const BackToSignInButton = styled(Button)(({ theme }) => ({
   width: '100%',
-  fontWeight: 500,
-  fontSize: '14px',
-  lineHeight: 1.4,
-  color: COLORS.auth.emailSent.backButton.text,
-  backgroundColor: COLORS.auth.emailSent.backButton.background,
+
+  ...theme.typography.body2,
+  fontWeight: theme.typography.fontWeightMedium,
+
+  color: theme.palette.auth.emailSent.backButton.text,
+  backgroundColor: theme.palette.auth.emailSent.backButton.background,
+  border: `1px solid ${theme.palette.auth.emailSent.backButton.border}`,
+
   '&:hover': {
-    backgroundColor: COLORS.auth.emailSent.backButton.hover,
+    backgroundColor: theme.palette.auth.emailSent.backButton.hover,
   },
+
   '& .MuiButton-startIcon': {
-    color: COLORS.auth.emailSent.backButton.text,
+    color: theme.palette.auth.emailSent.backButton.text,
   },
-  '& .MuiButton-startIcon svg': {
-    color: COLORS.auth.emailSent.backButton.text,
-  },
-});
+}));
