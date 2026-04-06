@@ -7,6 +7,9 @@ import { ProtectedRoute } from '@/routes/ProtectedRoute';
 import Dashboard from '@/pages/Dashboard';
 import MainLayout from '@/components/layouts/MainLayout';
 import AuthLayout from '@/components/layouts/AuthLayout';
+import { LandingLayout } from '@/components/layouts/LandingLayout';
+import Contact from '@/pages/Contact';
+import Landing from '@/pages/Landing';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
@@ -23,6 +26,11 @@ export function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
+        <Route element={<LandingLayout />}>
+          <Route path={ROUTES.CONTACT} element={<Contact />} />
+          <Route path={ROUTES.LANDING} element={<Landing />} />
+        </Route>
+
         <Route element={<AuthLayout />}>
           <Route path="/auth/*" element={<Auth />} />
         </Route>

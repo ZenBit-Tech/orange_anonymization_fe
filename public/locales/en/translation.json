@@ -18,6 +18,7 @@
   },
   "nav": {
     "brand": "Clinical Data Studio",
+    "landing-brand": "De-ID Studio",
     "solutions": "Solutions",
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
@@ -50,88 +51,98 @@
     }
   },
   "landing": {
-    "hero": {
-      "badge": "HIPAA & GDPR Compliant",
-      "title": "Protect Patient Privacy with Intelligent De-Identification",
-      "subtitle": "Transform clinical text containing sensitive patient data into fully anonymized, HIPAA-compliant records — powered by Microsoft Presidio.",
-      "cta": {
-        "primary": "Start De-Identifying",
-        "secondary": "View Documentation"
-      },
-      "codeChrome": "clinical_note.txt → presidio analyzer"
+    "nav": {
+      "brand": "De-ID Studio",
+      "solutions": "Solutions",
+      "contactUs": "Contact Us",
+      "getStarted": "Get started"
     },
-    "trust": {
-      "title": "Trusted by Healthcare Organizations",
-      "hipaa": {
-        "label": "HIPAA Compliant",
-        "description": "Full HIPAA Safe Harbor compliance"
-      },
-      "gdpr": {
-        "label": "GDPR Certified",
-        "description": "EU data protection standards"
-      },
-      "accuracy": {
-        "label": "99.9% Accuracy",
-        "description": "Industry-leading PII detection"
-      },
-      "uptime": {
-        "label": "99.99% Uptime",
-        "description": "Enterprise-grade reliability"
+    "hero": {
+      "title": "Clinical Data De-Identification & Synthesis Studio",
+      "subtitle": "Enterprise-grade PII detection and anonymization for healthcare organizations",
+      "cta": "Get started",
+      "trustBadges": {
+        "hipaa": "HIPAA Compliant",
+        "gdpr": "GDPR Certified",
+        "accuracy": "99.9% Accuracy"
       }
     },
+    "stats": {
+      "accuracy": { "value": "99.9%", "label": "Detection Accuracy" },
+      "identifiers": { "value": "18", "label": "HIPAA Identifiers Covered" },
+      "processingTime": { "value": "< 1 min", "label": "Average Processing Time" },
+      "compliance": { "value": "100%", "label": "Compliance Coverage" }
+    },
     "features": {
-      "title": "Protect Patient Privacy",
-      "subtitle": "Enterprise-grade tools for healthcare data anonymization",
+      "title": "Protect Patient Privacy Without Compromising Data Value",
+      "subtitle": "Comprehensive tools for healthcare organizations to securely manage clinical data",
       "cards": {
         "detection": {
-          "title": "Intelligent PII Detection",
-          "description": "Automatically detect names, SSNs, addresses, diagnoses, and 20+ other PII entity types using Microsoft Presidio's ML-powered analyzer."
-        },
-        "anonymization": {
-          "title": "Flexible Anonymization",
-          "description": "Replace, redact, hash, or encrypt sensitive entities. Configure anonymization strategies per entity type for granular control."
+          "title": "Deep Signal Detection",
+          "description": "Align with global regulations through a single adaptive compliance layer."
         },
         "synthetic": {
-          "title": "Synthetic Data Generation",
-          "description": "Generate realistic replacement data that preserves statistical properties of the original dataset for research and testing."
+          "title": "Synthetic Intelligence Layer",
+          "description": "Generate high-fidelity synthetic datasets that preserve patterns — without exposing real identities."
         },
-        "audit": {
-          "title": "Full Audit Trail",
-          "description": "Every de-identification operation is logged with timestamps, user details, and transformation records for compliance reporting."
+        "compliance": {
+          "title": "Unified Compliance Engine",
+          "description": "Align with global regulations through a single adaptive compliance layer."
+        },
+        "privacy": {
+          "title": "Adaptive Privacy Shield",
+          "description": "Continuously anonymize and protect data while maintaining analytical value."
         }
       }
     },
-    "compliance": {
+    "dataIntelligence": {
+      "title": "From Data Intelligence to Compliance",
+      "subtitle": "Seamlessly transition from data intelligence to regulatory compliance with built-in frameworks tailored to your industry."
+    },
+    "complianceFrameworks": {
       "title": "Built for Compliance",
-      "subtitle": "Meet the strictest healthcare data regulations",
-      "hipaa": {
-        "title": "HIPAA Safe Harbor",
-        "description": "Remove all 18 HIPAA identifiers automatically. Our system maps directly to PHI categories defined in 45 CFR § 164.514(b)."
-      },
-      "gdpr": {
-        "title": "GDPR Article 89",
-        "description": "Pseudonymization and anonymization techniques aligned with GDPR research exemptions and data minimization principles."
-      },
-      "hitech": {
-        "title": "HITECH Act",
-        "description": "Breach notification compliance and enhanced privacy protections for electronic health information."
+      "subtitle": "Choose from industry-standard regulatory frameworks or create your own custom compliance profile",
+      "frameworks": {
+        "gdpr": {
+          "badge": "EU GDPR",
+          "title": "General Data Protection Regulation",
+          "entities": "11 entity types"
+        },
+        "hipaa": {
+          "badge": "HIPAA",
+          "title": "Health Insurance Portability and Accountability Act",
+          "entities": "17 entity types"
+        },
+        "ukDpa": {
+          "badge": "UK DPA",
+          "title": "UK Data Protection and Investigatory Powers",
+          "entities": "9 entity types"
+        },
+        "swissDsg": {
+          "badge": "Swiss DSG",
+          "title": "Swiss Federal Act on Data Protection",
+          "entities": "8 entity types"
+        }
       }
     },
-    "about": {
-      "title": "About Clinical Data Studio",
-      "subtitle": "Built by healthcare data engineers, for healthcare data engineers",
-      "description": "Clinical Data Studio solves the real challenge of working with sensitive patient data in research and development environments. We combine the power of Microsoft Presidio with an intuitive interface to make HIPAA compliance achievable for every healthcare organization.",
-      "stats": {
-        "documents": "Documents Processed",
-        "entities": "PII Entities Detected",
-        "organizations": "Organizations Trust Us",
-        "compliance": "Compliance Rate"
-      }
+    "cta": {
+      "title": "Ready to Protect Your Clinical Data?",
+      "subtitle": "Start de-identifying and synthesizing healthcare data in minutes with our enterprise-grade platform",
+      "button": "Get started"
     },
     "contact": {
       "title": "Contact Us",
       "subtitle": "Have questions? We'd love to hear from you.",
+      "info": {
+        "question": "Have questions about data anonymization or compliance?",
+        "hereToHelp": "We're here to help.",
+        "description": "Our team of experts is ready to help you navigate HIPAA, GDPR, and other privacy regulations.",
+        "responseTime": "We respond within 24 hours",
+        "email": "info@deid.studio"
+      },
       "form": {
+        "title": "Send us a message",
+        "description": "We'll get back to you within 24 hours",
         "firstName": "First Name",
         "lastName": "Last Name",
         "email": "Email Address",
@@ -140,7 +151,10 @@
         "messagePlaceholder": "Tell us about your use case...",
         "submit": "Send Message",
         "submitting": "Sending...",
-        "success": "Thank you! We'll be in touch soon.",
+        "success": "Thank you for reaching out",
+        "sent": "Message sent!",
+        "successSubtitle": "We'll get back to you within 24 hours.",
+        "backToForm": "Back to form",
         "validation": {
           "firstNameRequired": "First name is required",
           "lastNameRequired": "Last name is required",
@@ -149,12 +163,42 @@
           "messageRequired": "Message is required",
           "messageMin": "Message must be at least 20 characters"
         }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "q1": "How accurate is the PII detection?",
+        "a1": "Our system uses Microsoft Presidio which provides 99%+ accuracy for common PII types across various medical document formats.",
+        "q2": "Is my data stored on your servers?",
+        "a2": "No, we process data in real-time. For on-premise deployments, data never leaves your infrastructure.",
+        "q3": "Does it support non-English text?",
+        "a3": "Currently we support English, with Spanish and French support in beta.",
+        "q4": "How do I get an API key?",
+        "a4": "Contact our sales team using the form above to request an enterprise API trial."
       }
     },
     "footer": {
-      "copyright": "© {{year}} Clinical Data Studio. All rights reserved.",
+      "copyright": "© 2026 Clinical Data Studio. All rights reserved.",
+      "description": "Enterprise-grade clinical data de-identification and synthetic data generation platform",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "sections": {
+        "product": "PRODUCT",
+        "resources": "RESOURCES",
+        "company": "COMPANY"
+      },
+      "links": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "integrations": "Integrations",
+        "documentation": "Documentation",
+        "guides": "Guides",
+        "blog": "Blog",
+        "support": "Support",
+        "about": "About",
+        "careers": "Careers",
+        "contact": "Contact",
+        "legal": "Legal"
+      }
     }
   },
   "auth": {

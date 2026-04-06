@@ -46,6 +46,20 @@ interface AuthPalette {
   emailSent: AuthEmailSentPalette;
 }
 
+interface LandingPalette {
+  bg: {
+    hero: string;
+    dark: string;
+    card: string;
+    cardActive: string;
+  };
+  accent: string;
+  accentDark: string;
+  accentContrast: string;
+  border: string;
+  divider: string;
+}
+
 declare module '@mui/material/styles' {
   interface Palette {
     sidebar: SidebarPalette;
@@ -54,8 +68,29 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     sidebar?: SidebarPalette;
     auth?: AuthPalette;
+    landing?: LandingPalette;
+  }
+  interface PaletteOptions {
+    sidebar?: SidebarPalette;
+    landing?: LandingPalette;
   }
 }
+
+const WHITE = '#FFFFFF';
+
+export const LANDING = {
+  bg: {
+    hero: '#071424',
+    dark: '#0A1628',
+    card: '#0D1C35',
+    cardActive: '#122240',
+  },
+  accent: '#4ECDC4',
+  accentDark: '#3DBDB5',
+  accentContrast: '#07111F',
+  border: 'rgba(255, 255, 255, 0.1)',
+  divider: 'rgba(255, 255, 255, 0.06)',
+} as const;
 
 export const LAYOUT = {
   sidebar: {
@@ -128,35 +163,131 @@ export const GRADIENTS = {
   `,
 } as const;
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    accent: Palette['primary'];
+    neutral: Palette['primary'];
+    dark: string;
+    greenOpacity: string;
+    whiteOpacity: {
+      8: string;
+      38: string;
+      61: string;
+    };
+    entities: Record<string, string>;
+    gradients: {
+      primaryAccent: string;
+    };
+    sidebar: SidebarPalette;
+  }
+  interface PaletteOptions {
+    accent?: PaletteOptions['primary'];
+    neutral?: PaletteOptions['primary'];
+    dark?: string;
+    greenOpacity?: string;
+    whiteOpacity?: {
+      8?: string;
+      38?: string;
+      61?: string;
+    };
+    entities?: Record<string, string>;
+    gradients?: {
+      primaryAccent?: string;
+    };
+    sidebar?: SidebarPalette;
+  }
+  interface PaletteColor {
+    400?: string;
+    500?: string;
+    700?: string;
+    800?: string;
+    900?: string;
+    hover?: string;
+  }
+  interface SimplePaletteColorOptions {
+    400?: string;
+    500?: string;
+    700?: string;
+    800?: string;
+    900?: string;
+    hover?: string;
+  }
+  interface Typography {
+    fontWeightSemiBold: number;
+    fontWeightExtraBold: number;
+  }
+  interface TypographyOptions {
+    fontWeightSemiBold?: number;
+    fontWeightExtraBold?: number;
+  }
+  interface TypographyVariantsOptions {
+    fontWeightSemiBold?: number;
+    fontWeightExtraBold?: number;
+  }
+}
+
 const BRAND = {
+  white: '#FFFFFF',
+  whiteOpacity: {
+    8: '#FFFFFF08',
+    38: '#FFFFFF61',
+    61: '#FFFFFF9C',
+  },
+  dark: '#021430',
+  greenOpacity: '#66D9C84D',
+  accent: {
+    400: '#00BFA5',
+    500: '#00A68F',
+  },
+  neutral: {
+    400: '#9CA3AF',
+    500: '#6B7280',
+    700: '#374151',
+    900: '#111827',
+  },
   primary: {
+    500: '#1B3A6B',
+    800: '#01132F',
     lightest: '#E3F2FD',
     light: '#64B5F6',
     main: '#1565C0',
     dark: '#0D47A1',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
+  },
+  entities: {
+    PERSON: '#1565C0',
+    EMAIL_ADDRESS: '#6A1B9A',
+    PHONE_NUMBER: '#00695C',
+    US_SSN: '#B71C1C',
+    LOCATION: '#E65100',
+    DATE_TIME: '#283593',
+    CREDIT_CARD: '#880E4F',
+    IP_ADDRESS: '#1B5E20',
+    MEDICAL_LICENSE: '#0D47A1',
+    URL: '#4E342E',
+    DEFAULT: '#37474F',
   },
   secondary: {
     lightest: '#E0F2F1',
     light: '#4DB6AC',
     main: '#00897B',
     dark: '#00695C',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   success: {
     main: '#2E7D32',
     light: '#4CAF50',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   warning: {
     main: '#F57F17',
     light: '#FFB300',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   error: {
-    main: '#C62828',
+    main: '#f44336',
     light: '#EF5350',
-    contrastText: '#FFFFFF',
+    contrastText: WHITE,
   },
   grey: {
     50: '#F8FAFC',
@@ -175,14 +306,26 @@ const BRAND = {
 export const theme = createTheme({
   palette: {
     mode: 'light',
+    dark: BRAND.dark,
+    greenOpacity: BRAND.greenOpacity,
+    whiteOpacity: BRAND.whiteOpacity,
+    accent: {
+      main: BRAND.accent[500],
+      ...BRAND.accent,
+    },
+    neutral: {
+      main: BRAND.neutral[700],
+      ...BRAND.neutral,
+    },
     primary: BRAND.primary,
     secondary: BRAND.secondary,
+    entities: BRAND.entities,
     success: BRAND.success,
     warning: BRAND.warning,
     error: BRAND.error,
     background: {
       default: BRAND.grey[50],
-      paper: '#FFFFFF',
+      paper: WHITE,
     },
     text: {
       primary: BRAND.grey[900],
@@ -190,6 +333,9 @@ export const theme = createTheme({
       disabled: BRAND.grey[400],
     },
     divider: BRAND.grey[200],
+    gradients: {
+      primaryAccent: `linear-gradient( 95deg, ${BRAND.primary[500]} 0%, ${BRAND.accent[500]} 100%)`,
+    },
     sidebar: {
       background: '#0A1628',
       activeOverlay: 'rgba(255, 255, 255, 0.08)',
@@ -233,6 +379,15 @@ export const theme = createTheme({
         },
       },
     },
+
+    landing: {
+      bg: { ...LANDING.bg },
+      accent: LANDING.accent,
+      accentDark: LANDING.accentDark,
+      accentContrast: LANDING.accentContrast,
+      border: LANDING.border,
+      divider: LANDING.divider,
+    },
   },
 
   typography: {
@@ -241,6 +396,8 @@ export const theme = createTheme({
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 700,
+    fontWeightSemiBold: 600,
+    fontWeightExtraBold: 800,
 
     h1: { fontSize: '3rem', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.02em' },
     h2: { fontSize: '2.25rem', fontWeight: 700, lineHeight: 1.3, letterSpacing: '-0.015em' },
@@ -252,7 +409,7 @@ export const theme = createTheme({
     body2: { fontSize: '0.875rem', lineHeight: 1.57 },
     caption: { fontSize: '0.75rem', lineHeight: 1.5 },
     button: { fontWeight: 600, letterSpacing: '0.02em', textTransform: 'none' },
-  },
+  } as import('@mui/material/styles').TypographyOptions,
 
   shape: {
     borderRadius: 10,
@@ -273,7 +430,7 @@ export const theme = createTheme({
         containedPrimary: {
           background: `linear-gradient(135deg, ${BRAND.primary.main} 0%, ${BRAND.primary.dark} 100%)`,
           '&:hover': {
-            background: `linear-gradient(135deg, ${BRAND.primary.dark} 0%, #0A3880 100%)`,
+            background: `linear-gradient(135deg, ${BRAND.primary.dark} 0%, ${BRAND.primary.main} 100%)`,
           },
         },
       },

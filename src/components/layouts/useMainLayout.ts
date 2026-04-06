@@ -4,7 +4,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function useMainLayout() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isSmallWidth = useMediaQuery(theme.breakpoints.down('lg'));
+  const isLandscapePhone = useMediaQuery('(orientation: landscape) and (max-height: 600px)');
+  const isMobile = isSmallWidth || isLandscapePhone;
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleDrawerOpen = useCallback(() => {
