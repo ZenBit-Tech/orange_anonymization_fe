@@ -122,6 +122,7 @@ declare module '@mui/material/styles' {
     sidebar?: SidebarPalette;
   }
   interface PaletteColor {
+    300?: string;
     400?: string;
     500?: string;
     700?: string;
@@ -130,6 +131,7 @@ declare module '@mui/material/styles' {
     hover?: string;
   }
   interface SimplePaletteColorOptions {
+    300?: string;
     400?: string;
     500?: string;
     700?: string;
