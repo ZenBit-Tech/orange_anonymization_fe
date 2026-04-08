@@ -23,15 +23,7 @@ const FaqSection = ({ expandedFaq, onFaqChange }: FaqSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <Box
-      component="section"
-      id="contact"
-      sx={(theme) => ({
-        bgcolor: theme.palette.landing.bg.hero,
-        py: { xs: 8, md: 10 },
-        borderTop: `1px solid ${theme.palette.landing.divider}`,
-      })}
-    >
+    <Box component="section" id="contact" sx={{ py: { xs: 8, md: 10 } }}>
       <Container maxWidth="lg">
         <Box
           sx={{

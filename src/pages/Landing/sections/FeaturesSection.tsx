@@ -23,14 +23,7 @@ const FeaturesSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box
-      component="section"
-      id="solutions"
-      sx={(theme) => ({
-        bgcolor: theme.palette.landing.bg.dark,
-        py: { xs: 8, md: 10 },
-      })}
-    >
+    <Box component="section" id="solutions" sx={{ py: { xs: 8, md: 10 } }}>
       <Container maxWidth="lg">
         <Box
           sx={{

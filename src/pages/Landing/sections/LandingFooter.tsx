@@ -32,7 +32,6 @@ const LandingFooter = () => {
       component="footer"
       sx={(theme) => ({
         bgcolor: theme.palette.primary[800],
-        borderTop: `1px solid ${theme.palette.landing.divider}`,
         py: 3,
       })}
     >

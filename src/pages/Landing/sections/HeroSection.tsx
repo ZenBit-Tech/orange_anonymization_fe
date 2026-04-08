@@ -2,7 +2,7 @@ import { Box, ButtonBase, Container, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import { useTranslation } from 'react-i18next';
-import { NetworkWave } from '@/components/NetworkWave';
+import { LandingSectionDecoration } from '@/components/LandingSectionDecoration';
 
 export interface HeroSectionProps {
   onGetStarted: () => void;
@@ -15,13 +15,12 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
     <Box
       id="hero"
       component="section"
-      sx={(theme) => ({
+      sx={{
         position: 'relative',
-        bgcolor: theme.palette.landing.bg.hero,
         pt: { xs: 12, md: 18 },
         pb: { xs: 18, md: 28 },
         overflow: 'hidden',
-      })}
+      }}
     >
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
         <Typography
@@ -96,7 +95,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
         </Box>
       </Container>
 
-      <NetworkWave seed={42} idPrefix="hero" />
+      <LandingSectionDecoration variant="hero" />
     </Box>
   );
 };
