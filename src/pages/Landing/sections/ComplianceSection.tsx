@@ -18,13 +18,7 @@ const ComplianceSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box
-      component="section"
-      sx={(theme) => ({
-        bgcolor: theme.palette.landing.bg.hero,
-        py: { xs: 8, md: 10 },
-      })}
-    >
+    <Box component="section" sx={{ py: { xs: 8, md: 10 } }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
           <Typography

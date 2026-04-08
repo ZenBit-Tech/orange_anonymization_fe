@@ -1,7 +1,7 @@
 import { Box, ButtonBase, Container, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useTranslation } from 'react-i18next';
-import { NetworkWave } from '@/components/NetworkWave';
+import { LandingSectionDecoration } from '@/components/LandingSectionDecoration';
 
 export interface CtaSectionProps {
   onGetStarted: () => void;
@@ -13,15 +13,14 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
   return (
     <Box
       component="section"
-      sx={(theme) => ({
+      sx={{
         position: 'relative',
-        bgcolor: theme.palette.landing.bg.dark,
         pt: { xs: 10, md: 14 },
         pb: { xs: 16, md: 22 },
         overflow: 'hidden',
-      })}
+      }}
     >
-      <NetworkWave seed={137} idPrefix="cta" />
+      <LandingSectionDecoration variant="cta" />
 
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
         <Typography

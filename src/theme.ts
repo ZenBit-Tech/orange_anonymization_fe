@@ -35,8 +35,8 @@ const WHITE = '#FFFFFF';
 
 export const LANDING = {
   bg: {
-    hero: '#071424',
-    dark: '#0A1628',
+    hero: '#01132F',
+    dark: '#01132F',
     card: '#0D1C35',
     cardActive: '#122240',
   },

@@ -20,7 +20,7 @@ const LandingNav = ({ onGetStarted, onScrollToSection }: LandingNavProps) => {
         position: 'sticky',
         top: 0,
         zIndex: theme.zIndex.appBar,
-        bgcolor: theme.palette.landing.bg.hero,
+        bgcolor: theme.palette.primary[800],
         borderBottom: `1px solid ${theme.palette.landing.divider}`,
         py: isMobile ? 1 : 1.5,
       })}

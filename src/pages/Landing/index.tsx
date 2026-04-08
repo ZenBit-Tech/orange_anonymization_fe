@@ -11,7 +11,7 @@ const Landing = () => {
   const { expandedFaq, handleFaqChange, handleGetStarted } = useLanding();
 
   return (
-    <Box sx={(theme) => ({ bgcolor: theme.palette.landing.bg.hero, minHeight: '100vh' })}>
+    <Box sx={(theme) => ({ bgcolor: theme.palette.primary[800], minHeight: '100vh' })}>
       <HeroSection onGetStarted={handleGetStarted} />
       <StatsSection />
       <FeaturesSection />
