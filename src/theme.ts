@@ -1,49 +1,9 @@
-import { createTheme, type CSSProperties } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 interface SidebarPalette {
   background: string;
   activeOverlay: string;
   hoverOverlay: string;
-}
-
-interface AuthButtonPalette {
-  disabled: string;
-  disabledText: string;
-  active: string;
-  activeText: string;
-  hover: string;
-}
-
-interface AuthEmailSentPalette {
-  icon: string;
-  title: string;
-  message: string;
-  highlight: string;
-  divider: string;
-  notice: string;
-  resendLink: string;
-  backButton: {
-    background: string;
-    text: string;
-    border: string;
-    hover: string;
-  };
-}
-
-interface AuthPalette {
-  background: string;
-  title: string;
-  subtitle: string;
-  labelText: string;
-  borderInput: string;
-  borderInputHover: string;
-  placeholder: string;
-  placeholderFocus: string;
-  borderInputError: string;
-  backIcon: string;
-  backText: string;
-  button: AuthButtonPalette;
-  emailSent: AuthEmailSentPalette;
 }
 
 interface LandingPalette {
@@ -64,28 +24,14 @@ declare module '@mui/material/styles' {
   interface Palette {
     sidebar: SidebarPalette;
     landing: LandingPalette;
-    auth: AuthPalette;
-  }
-  interface PaletteOptions {
-    sidebar?: SidebarPalette;
-    auth?: AuthPalette;
-    landing?: LandingPalette;
   }
   interface PaletteOptions {
     sidebar?: SidebarPalette;
     landing?: LandingPalette;
   }
-
-  interface TypographyVariants {
-    authTitle: CSSProperties;
-    authSubtitle: CSSProperties;
-  }
-}
-
-declare module '@mui/material/Typography' {
-  interface TypographyPropsVariantOverrides {
-    authTitle: true;
-    authSubtitle: true;
+  interface PaletteOptions {
+    sidebar?: SidebarPalette;
+    landing?: LandingPalette;
   }
 }
 
@@ -124,48 +70,10 @@ export const LAYOUT = {
     avatarIconSize: 32,
     menuIconSize: 28,
   },
-  authPage: {
-    logo: {
-      width: 32,
-      height: 34,
-    },
-    formCard: {
-      smWidth: 440,
-      borderRadius: 16,
-      topPosition: 450,
-    },
-    emailSentIcon: {
-      width: 48,
-      height: 48,
-    },
-    errorIcon: {
-      width: 20,
-      height: 20,
-    },
-    backIcon: {
-      width: 24,
-      height: 24,
-    },
-    submitButton: {
-      height: 48,
-      borderRadius: 6,
-    },
-    backButton: {
-      height: 40,
-      borderRadius: 6,
-    },
-    input: {
-      borderRadius: 8,
-      borderWidth: 1.5,
-      paddingX: 14,
-      paddingY: 10,
-      paddingAdornedRight: 14,
-    },
-  },
 } as const;
 
 export const SHADOWS = {
-  authCard: '0px 10px 30px rgba(0, 0, 0, 0.1)',
+  card: '0px 10px 30px rgba(0, 0, 0, 0.1)',
 } as const;
 
 export const GRADIENTS = {
@@ -233,10 +141,17 @@ declare module '@mui/material/styles' {
     fontWeightSemiBold: number;
     fontWeightExtraBold: number;
   }
+
   interface TypographyOptions {
     fontWeightSemiBold?: number;
     fontWeightExtraBold?: number;
   }
+
+  interface TypographyVariants {
+    fontWeightSemiBold: number;
+    fontWeightExtraBold: number;
+  }
+
   interface TypographyVariantsOptions {
     fontWeightSemiBold?: number;
     fontWeightExtraBold?: number;
@@ -302,7 +217,7 @@ const BRAND = {
     contrastText: WHITE,
   },
   error: {
-    main: '#f44336',
+    main: '#DC2626',
     light: '#EF5350',
     contrastText: WHITE,
   },
@@ -358,45 +273,6 @@ export const theme = createTheme({
       activeOverlay: 'rgba(255, 255, 255, 0.08)',
       hoverOverlay: 'rgba(255, 255, 255, 0.06)',
     },
-
-    auth: {
-      background: '#FFFFFF',
-      title: '#111827',
-      subtitle: '#6B7280',
-      labelText: '#374151',
-      borderInput: '#E5E7EB',
-      borderInputHover: '#D1D5DB',
-      placeholder: '#9CA3AF',
-      placeholderFocus: '#111827',
-      borderInputError: '#DC2626',
-      backIcon: '#6B7280',
-      backText: '#6B7280',
-
-      button: {
-        disabled: '#E5E7EB',
-        disabledText: '#9CA3AF',
-        active: '#1B3A6B',
-        activeText: '#FFFFFF',
-        hover: '#162E56',
-      },
-
-      emailSent: {
-        icon: '#00A68F',
-        title: '#111827',
-        message: '#6B7280',
-        highlight: '#111827',
-        divider: '#E5E7EB',
-        notice: '#6B7280',
-        resendLink: '#2563EB',
-        backButton: {
-          background: '#FFFFFF',
-          text: '#6B7280',
-          border: '#E5E7EB',
-          hover: '#F9FAFB',
-        },
-      },
-    },
-
     landing: {
       bg: { ...LANDING.bg },
       accent: LANDING.accent,
@@ -426,18 +302,6 @@ export const theme = createTheme({
     body2: { fontSize: '0.875rem', lineHeight: 1.57 },
     caption: { fontSize: '0.75rem', lineHeight: 1.5 },
     button: { fontWeight: 600, letterSpacing: '0.02em', textTransform: 'none' },
-
-    authTitle: {
-      fontSize: 24,
-      lineHeight: 1.1,
-      fontWeight: 600,
-    },
-
-    authSubtitle: {
-      fontSize: 14,
-      lineHeight: 1.4,
-      fontWeight: 400,
-    },
   } as import('@mui/material/styles').TypographyOptions,
 
   shape: {
