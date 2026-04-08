@@ -9,15 +9,7 @@ const StatsSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box
-      component="section"
-      sx={(theme) => ({
-        bgcolor: theme.palette.landing.bg.dark,
-        py: { xs: 6, md: 8 },
-        borderTop: `1px solid ${theme.palette.landing.divider}`,
-        borderBottom: `1px solid ${theme.palette.landing.divider}`,
-      })}
-    >
+    <Box component="section" sx={{ py: { xs: 6, md: 8 } }}>
       <Container maxWidth="lg">
         <Box
           sx={{
