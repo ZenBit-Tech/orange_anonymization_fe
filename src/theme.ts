@@ -29,6 +29,10 @@ declare module '@mui/material/styles' {
     sidebar?: SidebarPalette;
     landing?: LandingPalette;
   }
+  interface PaletteOptions {
+    sidebar?: SidebarPalette;
+    landing?: LandingPalette;
+  }
 }
 
 const WHITE = '#FFFFFF';
@@ -66,6 +70,22 @@ export const LAYOUT = {
     avatarIconSize: 32,
     menuIconSize: 28,
   },
+} as const;
+
+export const SHADOWS = {
+  card: '0px 10px 30px rgba(0, 0, 0, 0.1)',
+} as const;
+
+export const GRADIENTS = {
+  authBackground: `
+    linear-gradient(
+      to bottom,
+      #01132F 0px,
+      #01132F 450px,
+      #F8FAFC 450px,
+      #F8FAFC 100%
+    )
+  `,
 } as const;
 
 declare module '@mui/material/styles' {
@@ -123,10 +143,17 @@ declare module '@mui/material/styles' {
     fontWeightSemiBold: number;
     fontWeightExtraBold: number;
   }
+
   interface TypographyOptions {
     fontWeightSemiBold?: number;
     fontWeightExtraBold?: number;
   }
+
+  interface TypographyVariants {
+    fontWeightSemiBold: number;
+    fontWeightExtraBold: number;
+  }
+
   interface TypographyVariantsOptions {
     fontWeightSemiBold?: number;
     fontWeightExtraBold?: number;
@@ -192,7 +219,7 @@ const BRAND = {
     contrastText: WHITE,
   },
   error: {
-    main: '#f44336',
+    main: '#DC2626',
     light: '#EF5350',
     contrastText: WHITE,
   },

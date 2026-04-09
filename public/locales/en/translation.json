@@ -202,17 +202,24 @@
     }
   },
   "auth": {
-    "title": "Welcome Back",
-    "subtitle": "Sign in to Clinical Data Studio",
-    "email": "Email Address",
-    "emailPlaceholder": "you@organization.com",
+    "title": "Sign in to De-ID Studio",
+    "subtitle": "Enter your email to receive a sign-in link",
+    "email": "Email address",
+    "emailPlaceholder": "you@company.com",
     "requestLink": "Send Magic Link",
     "requesting": "Sending...",
-    "checkEmail": "Check your email",
-    "linkSent": "We've sent a magic link to {{email}}. Click the link to sign in.",
+    "checkEmail": "Check your inbox",
+    "linkSent": "We sent a sign-in link to <email>{{email}}</email>",
+    "didntReceive": "Didn't receive it? Check spam or",
     "resend": "Resend link",
+    "backToSignIn": "Back to Sign in",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis"
+    },
+    "back": "Back",
     "validation": {
-      "emailRequired": "Email address is required",
+      "emailRequired": "Enter valid email",
       "emailInvalid": "Please enter a valid email address"
     },
     "errors": {
