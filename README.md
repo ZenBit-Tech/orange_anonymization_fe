@@ -46,12 +46,14 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
     npm install
     ```
 
-3.  **Set up environment variables:**
-    Create a `.env` file in the root directory and add your API configuration:
+3.  **Set up environment variables (optional for local development):**
+    Create a `.env` file in the root directory to override the API base URL:
 
     ```env
-    VITE_API_URL=https://api.your-service.com
+    VITE_API_BASE_URL=http://localhost:3000/api
     ```
+
+    In production, API calls default to `/api` (same-origin relative path), so no env var is needed when NestJS serves the SPA. In local development, the Vite dev server proxies `/api` requests to `localhost:3000` automatically.
 
 4.  **Run the development server:**
     ```bash
