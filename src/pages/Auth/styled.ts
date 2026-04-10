@@ -84,18 +84,23 @@ export const FormContainer = styled('form')({
   flexDirection: 'column',
 });
 
-export const EmailFieldContainer = styled(Box)(({ theme }) => ({
+export const EmailFieldContainer = styled(Box)({
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
-  padding: theme.spacing(1.25),
-}));
+});
 
 export const FieldLabel = styled(Typography)(({ theme }) => ({
+  position: 'absolute',
   fontWeight: theme.typography.fontWeightMedium,
-  fontSize: fontSizes.small,
-  lineHeight: lineHeights.small,
-  marginBottom: theme.spacing(0.5),
-  color: theme.palette.neutral[700],
+  fontSize: fontSizes.xsmall,
+  lineHeight: lineHeights.xsmall,
+  color: theme.palette.neutral[500],
+  backgroundColor: theme.palette.background.paper,
+  top: `${sizes.label.topOffset}px`,
+  left: `${sizes.label.leftOffset}px`,
+  padding: `0 ${sizes.label.paddingX}px`,
+  zIndex: sizes.label.zIndex,
 }));
 
 export const RequiredAsterisk = styled('span')(({ theme }) => ({
@@ -130,6 +135,9 @@ export const EmailInput = styled(OutlinedInput)(({ theme }) => ({
   },
   '&.Mui-error .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.error.main,
+  },
+  '&.Mui-error .MuiOutlinedInput-input': {
+    caretColor: theme.palette.error.main,
   },
   '&.Mui-focused .MuiOutlinedInput-input::placeholder': {
     color: theme.palette.grey[900],

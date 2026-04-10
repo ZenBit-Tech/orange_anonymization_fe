@@ -4,7 +4,6 @@ import { InputAdornment } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useNavigate } from 'react-router-dom';
-
 import { useAuthForm } from './useAuthForm';
 import { authText } from './constants';
 import {
@@ -112,7 +111,7 @@ const AuthForm = () => {
               </SubmitButton>
             </FormContainer>
 
-            <BackContainer onClick={() => navigate(-1)}>
+            <BackContainer onClick={() => navigate('/')}>
               <BackIcon as={ArrowBackIcon} fontSize="small" />
               <BackText>{t('auth.back')}</BackText>
             </BackContainer>

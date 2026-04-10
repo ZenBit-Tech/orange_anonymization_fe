@@ -204,8 +204,8 @@
   "auth": {
     "title": "Sign in to De-ID Studio",
     "subtitle": "Enter your email to receive a sign-in link",
-    "email": "Email address",
-    "emailPlaceholder": "you@company.com",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
     "requestLink": "Send Magic Link",
     "requesting": "Sending...",
     "checkEmail": "Check your inbox",
@@ -219,8 +219,7 @@
     },
     "back": "Back",
     "validation": {
-      "emailRequired": "Enter valid email",
-      "emailInvalid": "Please enter a valid email address"
+      "emailRequired": "Enter valid email"
     },
     "errors": {
       "requestFailed": "Failed to send magic link. Please try again.",

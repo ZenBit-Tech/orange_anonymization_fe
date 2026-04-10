@@ -15,7 +15,13 @@ export const validationMessages = {
 export const sizes = {
   logo: { width: 32, height: 34 },
   formCard: { width: 440, borderRadius: 16, topOffset: 450 },
-  input: { height: 40, borderRadius: 8, borderWidth: 1.5, paddingX: 14, paddingY: 10 },
+  label: {
+    topOffset: -8,
+    leftOffset: 12,
+    paddingX: 4,
+    zIndex: 1,
+  },
+  input: { height: 56, borderRadius: 8, borderWidth: 1.5, paddingX: 14, paddingY: 16 },
   button: { height: 48, borderRadius: 6 },
   backButton: { height: 40 },
   icons: { sm: 20, md: 24, lg: 48 },
