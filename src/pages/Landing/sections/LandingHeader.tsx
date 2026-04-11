@@ -88,7 +88,8 @@ export function LandingHeader() {
                   component={RouterLink}
                   to={item.to}
                   sx={{
-                    color: isActive(item.to) ? 'accent.500' : 'common.white',
+                    color: 'common.white',
+                    bgcolor: isActive(item.to) ? 'sidebar.activeOverlay' : 'transparent',
                     fontSize: FONT_SIZES.sm,
                     minWidth: 'auto',
                     '&:hover': { backgroundColor: 'transparent', opacity: 0.8 },
