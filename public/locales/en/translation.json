@@ -28,6 +28,13 @@
     "syntheticData": "Synthetic Data",
     "settings": "Settings",
     "logout": "Logout",
+    "logoutDialog": {
+      "title": "Sign out?",
+      "message": "You will be signed out of your account.",
+      "reassurance": "You can sign back in at any time.",
+      "cancel": "Cancel",
+      "confirm": "Sign out"
+    },
     "menuOpen": "Open navigation menu",
     "menuClose": "Close navigation menu"
   },

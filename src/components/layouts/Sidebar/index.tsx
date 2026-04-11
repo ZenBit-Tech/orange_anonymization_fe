@@ -10,6 +10,8 @@ import {
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { LAYOUT } from '@/theme';
 import { useSidebar } from '@/components/layouts/Sidebar/useSidebar';
+import { useState } from 'react';
+import LogoutPopup from '@/components/popups/LogoutPopup';
 
 export interface SidebarProps {
   isMobile: boolean;
@@ -19,6 +21,7 @@ export interface SidebarProps {
 
 const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
   const { t, navItems, isActive, handleNavigate, handleSignOut } = useSidebar(onDrawerClose);
+  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
 
   return (
     <Box
@@ -97,7 +100,7 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
 
       <Box sx={{ px: 1.5 }}>
         <ListItemButton
-          onClick={handleSignOut}
+          onClick={() => setIsLogoutPopupOpen(true)}
           sx={(theme) => ({
             borderRadius: 1.5,
             '&:hover': {
@@ -124,6 +127,12 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
           />
         </ListItemButton>
       </Box>
+
+      <LogoutPopup
+        isVisible={isLogoutPopupOpen}
+        onClose={() => setIsLogoutPopupOpen(false)}
+        onLogout={handleSignOut}
+      />
     </Box>
   );
 };

@@ -6,6 +6,7 @@ export const ROUTES = {
   LANDING: '/',
   CONTACT: '/contact',
   LOGIN: '/auth/login',
+  TOKEN: '/auth/verify/token/:token',
   DASHBOARD: '/app',
   DE_IDENTIFY: '/app/de-identify',
   SYNTHETIC_DATA: '/app/synthetic-data',

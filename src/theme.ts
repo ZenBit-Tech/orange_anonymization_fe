@@ -93,6 +93,7 @@ declare module '@mui/material/styles' {
     accent: Palette['primary'];
     neutral: Palette['primary'];
     dark: string;
+    backdrop: string;
     greenOpacity: string;
     whiteOpacity: {
       8: string;
@@ -109,6 +110,7 @@ declare module '@mui/material/styles' {
     accent?: PaletteOptions['primary'];
     neutral?: PaletteOptions['primary'];
     dark?: string;
+    backdrop?: string;
     greenOpacity?: string;
     whiteOpacity?: {
       8?: string;
@@ -162,6 +164,7 @@ declare module '@mui/material/styles' {
 
 const BRAND = {
   white: '#FFFFFF',
+  backdrop: '#01132F80',
   whiteOpacity: {
     8: '#FFFFFF08',
     38: '#FFFFFF61',
@@ -214,7 +217,7 @@ const BRAND = {
     contrastText: WHITE,
   },
   warning: {
-    main: '#F57F17',
+    main: '#B45309',
     light: '#FFB300',
     contrastText: WHITE,
   },
@@ -241,6 +244,7 @@ export const theme = createTheme({
   palette: {
     mode: 'light',
     dark: BRAND.dark,
+    backdrop: BRAND.backdrop,
     greenOpacity: BRAND.greenOpacity,
     whiteOpacity: BRAND.whiteOpacity,
     accent: {

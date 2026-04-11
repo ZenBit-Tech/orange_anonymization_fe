@@ -15,3 +15,7 @@ export const login = async (email: string): Promise<void> => {
   localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
   localStorage.setItem('user', JSON.stringify(data.user));
 };
+
+export const verify = async (token: string) => {
+  return await api.get<AuthResponse>(`/auth/verify?token=${token}`);
+};
