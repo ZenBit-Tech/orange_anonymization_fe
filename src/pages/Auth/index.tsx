@@ -111,7 +111,7 @@ const AuthForm = () => {
               </SubmitButton>
             </FormContainer>
 
-            <BackContainer onClick={() => navigate('/')}>
+            <BackContainer onClick={() => navigate('/', { replace: true })}>
               <BackIcon as={ArrowBackIcon} fontSize="small" />
               <BackText>{t('auth.back')}</BackText>
             </BackContainer>
