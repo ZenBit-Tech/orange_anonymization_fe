@@ -108,12 +108,7 @@ export const ContactForm = () => {
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
     setSubmitError(null);
     try {
-      await emailService.sendContactUsEmail({
-        name: `${data.firstName} ${data.lastName}`,
-        email: data.email,
-        company: data.company,
-        message: data.message,
-      });
+      await emailService.sendContactUsEmail(data);
       setSubmitted(true);
       reset();
     } catch {

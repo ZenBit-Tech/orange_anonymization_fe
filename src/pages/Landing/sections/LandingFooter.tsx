@@ -35,7 +35,7 @@ const LandingFooter = () => {
         py: 3,
       })}
     >
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="lg" disableGutters sx={{ px: '20px' }}>
         <Grid container spacing={{ xs: 4, md: 8 }} sx={{ mb: 4 }}>
           <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: '20px' }}>
