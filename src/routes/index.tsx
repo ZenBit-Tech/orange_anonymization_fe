@@ -3,13 +3,14 @@ import { Routes, Route } from 'react-router-dom';
 import { CircularProgress, Box } from '@mui/material';
 import { ROUTES } from '@/constants';
 import Auth from '@/pages/Auth';
-import { ProtectedRoute } from '@/routes/ProtectedRoute';
+import { ProtectedRoute, PublicRoute } from '@/routes/ProtectedRoute';
 import Dashboard from '@/pages/Dashboard';
 import MainLayout from '@/components/layouts/MainLayout';
 import AuthLayout from '@/components/layouts/AuthLayout';
 import { LandingLayout } from '@/components/layouts/LandingLayout';
 import Contact from '@/pages/Contact';
 import Landing from '@/pages/Landing';
+import TokenPage from '@/pages/TokenPage';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
@@ -31,8 +32,12 @@ export function AppRoutes() {
           <Route path={ROUTES.LANDING} element={<Landing />} />
         </Route>
 
-        <Route element={<AuthLayout />}>
-          <Route path="/auth/*" element={<Auth />} />
+        <Route path={ROUTES.TOKEN} element={<TokenPage />} />
+
+        <Route element={<PublicRoute />}>
+          <Route element={<AuthLayout />}>
+            <Route path="/auth/*" element={<Auth />} />
+          </Route>
         </Route>
 
         <Route element={<ProtectedRoute />}>
