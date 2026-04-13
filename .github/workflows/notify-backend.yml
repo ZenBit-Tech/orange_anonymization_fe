@@ -14,5 +14,5 @@ jobs:
           curl -sf -X POST \
             -H "Authorization: token ${{ secrets.GH_PAT }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/IhnatVelykoivan/orange_anonymization_be/actions/workflows/unified-build.yml/dispatches" \
+            "https://api.github.com/repos/ZenBit-Tech/orange_anonymization_be/actions/workflows/unified-build.yml/dispatches" \
             -d '{"ref":"dev"}'
