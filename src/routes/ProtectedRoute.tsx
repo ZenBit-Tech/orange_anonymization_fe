@@ -1,11 +1,11 @@
-import { AUTH_TOKEN_KEY } from '@/constants';
-import { Navigate, Outlet } from 'react-router-dom';
+import { AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export function ProtectedRoute() {
   const token = localStorage.getItem(AUTH_TOKEN_KEY);
 
   if (!token) {
-    return <Navigate to="/auth/login" replace />;
+    return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
   return <Outlet />;
@@ -13,6 +13,13 @@ export function ProtectedRoute() {
 
 export const PublicRoute = () => {
   const token = localStorage.getItem(AUTH_TOKEN_KEY);
-  if (token) return <Navigate to="/app" replace />;
+  const location = useLocation();
+
+  const isVerifyRoute = location.pathname.startsWith(ROUTES.VERIFY_BASE);
+
+  if (token && !isVerifyRoute) {
+    return <Navigate to={ROUTES.DASHBOARD} replace />;
+  }
+
   return <Outlet />;
 };
