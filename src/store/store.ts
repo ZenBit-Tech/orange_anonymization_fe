@@ -3,10 +3,12 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import authReducer from './auth/auth.slice';
 import { AUTH_THUNK_TYPES } from './auth/auth.constants';
+import jobsSlice from './slices/jobsSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    jobs: jobsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

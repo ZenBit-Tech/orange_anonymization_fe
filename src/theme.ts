@@ -124,6 +124,8 @@ declare module '@mui/material/styles' {
     sidebar?: SidebarPalette;
   }
   interface PaletteColor {
+    50?: string;
+    200?: string;
     300?: string;
     400?: string;
     500?: string;
@@ -133,6 +135,8 @@ declare module '@mui/material/styles' {
     hover?: string;
   }
   interface SimplePaletteColorOptions {
+    50?: string;
+    200?: string;
     300?: string;
     400?: string;
     500?: string;
@@ -177,12 +181,16 @@ const BRAND = {
     500: '#00A68F',
   },
   neutral: {
+    100: '#F3F4F6',
+    200: '#E5E7EB',
     400: '#9CA3AF',
     500: '#6B7280',
     700: '#374151',
     900: '#111827',
   },
   primary: {
+    50: '#E8EFF7',
+    300: '#4F7FB8',
     500: '#1B3A6B',
     800: '#01132F',
     lightest: '#E3F2FD',
@@ -212,7 +220,7 @@ const BRAND = {
     contrastText: WHITE,
   },
   success: {
-    main: '#2E7D32',
+    main: '#16A34A',
     light: '#4CAF50',
     contrastText: WHITE,
   },
