@@ -1,0 +1,122 @@
+import type { SxProps, Theme } from '@mui/material';
+
+const FIGMA_CANVAS_WIDTH = 1440;
+const FIGMA_CANVAS_HEIGHT = 900;
+
+export const inactivityStyles: Record<string, SxProps<Theme>> = {
+  root: {
+    minHeight: { xs: '100dvh', md: `${FIGMA_CANVAS_HEIGHT}px` },
+    bgcolor: '#01132F',
+    color: 'common.white',
+    width: '100%',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  container: {
+    width: '100%',
+    maxWidth: `${FIGMA_CANVAS_WIDTH}px`,
+    minHeight: { xs: '100dvh', md: `${FIGMA_CANVAS_HEIGHT}px` },
+    mx: 'auto',
+    position: 'relative',
+    px: { xs: 2, sm: 0 },
+  },
+  logoRow: {
+    position: 'absolute',
+    top: 'clamp(4px, 2.4dvh, 28px)',
+    left: 0,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoImage: {
+    width: 'min(100%, 1440px)',
+    height: 'auto',
+    display: { xs: 'none', md: 'block' },
+    objectFit: 'contain',
+  },
+  logoTextBlock: {
+    display: { xs: 'flex', md: 'none' },
+    flexDirection: 'column',
+    alignItems: 'center',
+    lineHeight: 1,
+  },
+  logoTitle: {
+    fontSize: 24,
+    lineHeight: '28px',
+    fontWeight: 700,
+    color: '#FFFFFF',
+  },
+  logoSubtitle: {
+    fontSize: 12,
+    lineHeight: '16px',
+    fontWeight: 600,
+    color: '#FFFFFF',
+  },
+  illustrationWrapper: {
+    position: 'absolute',
+    left: '50%',
+    top: { xs: '32%', sm: '33%', md: '34%' },
+    transform: 'translate(-50%, -50%)',
+    width: { xs: 'min(70vw, 210px)', sm: 'min(50vw, 280px)', md: 'min(31vw, 330px)' },
+    height: 'auto',
+  },
+  illustration: {
+    width: '100%',
+    height: 'auto',
+    objectFit: 'contain',
+    display: 'block',
+  },
+  content: {
+    position: 'absolute',
+    left: '50%',
+    top: { xs: '67%', sm: '69%', md: '69%' },
+    transform: 'translate(-50%, -50%)',
+    width: { xs: 'min(92vw, 320px)', sm: 410, md: 480 },
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: { xs: '10px', sm: '12px', md: '16px' },
+  },
+  title: {
+    fontSize: { xs: 26, sm: 30, md: 36 },
+    lineHeight: { xs: '30px', sm: '34px', md: '42px' },
+    fontWeight: 700,
+    color: '#B2EDE5',
+  },
+  description: {
+    fontSize: { xs: 12, sm: 13, md: 14 },
+    lineHeight: { xs: '18px', sm: '20px', md: '21px' },
+    fontWeight: 500,
+    color: '#9CA3AF',
+  },
+  signInLink: {
+    minWidth: '100px',
+    height: { xs: 30, sm: 32, md: 36 },
+    borderRadius: '6px',
+    px: { xs: '14px', sm: '16px', md: '20px' },
+    py: { xs: '6px', sm: '7px', md: '8px' },
+    textDecoration: 'none',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: { xs: 11, sm: 12, md: 13 },
+    lineHeight: { xs: '14px', sm: '16px', md: '18px' },
+    fontWeight: 500,
+    color: '#0F213D',
+    bgcolor: '#00BFA5',
+    transition: 'background-color 120ms ease',
+    '&:hover': {
+      bgcolor: '#00A68F',
+    },
+  },
+  mobileGradient: {
+    display: { xs: 'block', lg: 'none' },
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+    background:
+      'linear-gradient(180deg, rgba(1,19,47,0) 0%, rgba(1,19,47,0.25) 35%, rgba(1,19,47,0.45) 100%)',
+  },
+};

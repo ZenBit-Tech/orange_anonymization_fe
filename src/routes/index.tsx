@@ -12,6 +12,7 @@ import Contact from '@/pages/Contact';
 import Landing from '@/pages/Landing';
 import TokenPage from '@/pages/TokenPage';
 import NotFound from '@/pages/NotFound';
+import Inactivity from '@/pages/Inactivity';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
@@ -34,6 +35,7 @@ export function AppRoutes() {
         </Route>
 
         <Route path={ROUTES.TOKEN} element={<TokenPage />} />
+        <Route path={ROUTES.SESSION_EXPIRED} element={<Inactivity />} />
 
         <Route element={<PublicRoute />}>
           <Route element={<AuthLayout />}>

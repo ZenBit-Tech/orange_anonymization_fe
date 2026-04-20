@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import FindReplaceOutlinedIcon from '@mui/icons-material/FindReplaceOutlined';
 import StorageOutlinedIcon from '@mui/icons-material/StorageOutlined';
-import { AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import { AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
 
 interface NavItem {
   labelKey: string;
@@ -31,6 +31,7 @@ export function useSidebar(onNavigate?: () => void) {
 
   const handleSignOut = () => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
     navigate(ROUTES.LOGIN);
     onNavigate?.();
   };

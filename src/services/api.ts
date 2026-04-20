@@ -1,5 +1,11 @@
 import axios, { type AxiosError } from 'axios';
-import { API_BASE_URL, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import {
+  API_BASE_URL,
+  AUTH_SESSION_STARTED_AT_KEY,
+  AUTH_TOKEN_KEY,
+  AUTH_USER_KEY,
+  ROUTES,
+} from '@/constants';
 import type { ApiError } from '@/services/types';
 
 export const api = axios.create({
@@ -26,7 +32,9 @@ api.interceptors.response.use(
   (error: AxiosError<ApiError>) => {
     if (error.response?.status === 401) {
       localStorage.removeItem(AUTH_TOKEN_KEY);
-      window.location.href = ROUTES.LOGIN;
+      localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
+      window.location.href = ROUTES.SESSION_EXPIRED;
       return Promise.reject(new Error('Session expired. Please sign in again.'));
     }
 
