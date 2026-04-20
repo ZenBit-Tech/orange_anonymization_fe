@@ -1,10 +1,13 @@
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '@/constants';
 import { notFoundImages } from '@/assets/images/not-found';
 import { notFoundStyles } from './styles';
 
 const NotFound = () => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={notFoundStyles.root}>
       <Box sx={notFoundStyles.container}>
@@ -12,12 +15,14 @@ const NotFound = () => {
           <Box
             component="img"
             src={notFoundImages.logo}
-            alt="De-ID Studio logo"
+            alt={t('notFound.branding.logoAlt')}
             sx={notFoundStyles.logoImage}
           />
           <Box sx={notFoundStyles.logoTextBlock}>
-            <Typography sx={notFoundStyles.logoTitle}>De-ID Studio</Typography>
-            <Typography sx={notFoundStyles.logoSubtitle}>De-ID & Synthesis</Typography>
+            <Typography sx={notFoundStyles.logoTitle}>{t('notFound.branding.name')}</Typography>
+            <Typography sx={notFoundStyles.logoSubtitle}>
+              {t('notFound.branding.tagline')}
+            </Typography>
           </Box>
         </Box>
 
@@ -25,22 +30,18 @@ const NotFound = () => {
           <Box
             component="img"
             src={notFoundImages.error}
-            alt="404"
+            alt={t('notFound.branding.illustrationAlt')}
             sx={notFoundStyles.illustrationCenter}
           />
         </Box>
 
         <Box sx={notFoundStyles.content}>
-          <Typography sx={notFoundStyles.title}>Page not found</Typography>
+          <Typography sx={notFoundStyles.title}>{t('notFound.title')}</Typography>
 
-          <Typography sx={notFoundStyles.description}>
-            The page you&apos;re looking for doesn&apos;t exist
-            <br />
-            or may have been moved.
-          </Typography>
+          <Typography sx={notFoundStyles.description}>{t('notFound.description')}</Typography>
 
           <Box component={RouterLink} to={ROUTES.LANDING} sx={notFoundStyles.homeLink}>
-            Go to home
+            {t('notFound.home')}
           </Box>
         </Box>
       </Box>
