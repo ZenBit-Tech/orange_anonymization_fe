@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material';
+import { NOT_FOUND_COLORS, NOT_FOUND_TYPOGRAPHY } from './constants';
 
 const FIGMA_CANVAS_WIDTH = 1440;
 const FIGMA_ILLUSTRATION_WIDTH = 533.426;
@@ -7,7 +8,7 @@ const FIGMA_ILLUSTRATION_HEIGHT = 247.787;
 export const notFoundStyles: Record<string, SxProps<Theme>> = {
   root: {
     minHeight: '100dvh',
-    bgcolor: '#01132F',
+    bgcolor: NOT_FOUND_COLORS.pageBackground,
     color: 'common.white',
     width: '100%',
     position: 'relative',
@@ -43,16 +44,16 @@ export const notFoundStyles: Record<string, SxProps<Theme>> = {
     lineHeight: 1,
   },
   logoTitle: {
-    fontSize: 24,
-    lineHeight: '28px',
+    fontSize: NOT_FOUND_TYPOGRAPHY.logoTitle.fontSize,
+    lineHeight: NOT_FOUND_TYPOGRAPHY.logoTitle.lineHeight,
     fontWeight: 700,
-    color: '#FFFFFF',
+    color: NOT_FOUND_COLORS.logoText,
   },
   logoSubtitle: {
-    fontSize: 12,
-    lineHeight: '16px',
+    fontSize: NOT_FOUND_TYPOGRAPHY.logoSubtitle.fontSize,
+    lineHeight: NOT_FOUND_TYPOGRAPHY.logoSubtitle.lineHeight,
     fontWeight: 600,
-    color: '#FFFFFF',
+    color: NOT_FOUND_COLORS.logoText,
   },
   illustrationWrapper: {
     position: 'absolute',
@@ -87,16 +88,16 @@ export const notFoundStyles: Record<string, SxProps<Theme>> = {
     gap: { xs: '21px', md: '33px' },
   },
   title: {
-    fontSize: { xs: 38, sm: 40, md: 36 },
-    lineHeight: { xs: '44px', sm: '46px', md: '44px' },
+    fontSize: NOT_FOUND_TYPOGRAPHY.title.fontSize,
+    lineHeight: NOT_FOUND_TYPOGRAPHY.title.lineHeight,
     fontWeight: 700,
-    color: '#B2EDE5',
+    color: NOT_FOUND_COLORS.title,
   },
   description: {
-    fontSize: 16,
-    lineHeight: '24px',
+    fontSize: NOT_FOUND_TYPOGRAPHY.description.fontSize,
+    lineHeight: NOT_FOUND_TYPOGRAPHY.description.lineHeight,
     fontWeight: 500,
-    color: '#9CA3AF',
+    color: NOT_FOUND_COLORS.description,
   },
   homeLink: {
     minWidth: '132px',
@@ -108,14 +109,14 @@ export const notFoundStyles: Record<string, SxProps<Theme>> = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 14,
-    lineHeight: '20px',
+    fontSize: NOT_FOUND_TYPOGRAPHY.homeLink.fontSize,
+    lineHeight: NOT_FOUND_TYPOGRAPHY.homeLink.lineHeight,
     fontWeight: 500,
-    color: '#0F213D',
-    bgcolor: '#00BFA5',
+    color: NOT_FOUND_COLORS.buttonText,
+    bgcolor: NOT_FOUND_COLORS.buttonBg,
     transition: 'background-color 120ms ease',
     '&:hover': {
-      bgcolor: '#00A68F',
+      bgcolor: NOT_FOUND_COLORS.buttonBgHover,
     },
   },
   mobileGradient: {
@@ -123,7 +124,6 @@ export const notFoundStyles: Record<string, SxProps<Theme>> = {
     position: 'absolute',
     inset: 0,
     pointerEvents: 'none',
-    background:
-      'linear-gradient(180deg, rgba(1,19,47,0) 0%, rgba(1,19,47,0.25) 35%, rgba(1,19,47,0.45) 100%)',
+    background: NOT_FOUND_COLORS.mobileGradient,
   },
 };
