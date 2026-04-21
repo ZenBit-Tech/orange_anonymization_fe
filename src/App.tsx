@@ -1,9 +1,21 @@
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { store } from '@/store/store';
+import { store, useAppDispatch } from '@/store/store';
 import { theme } from '@/theme';
 import { AppRoutes } from '@/routes';
+import { useEffect } from 'react';
+import { initializeAuth } from '@/store/auth';
+
+function AppContent() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+
+  return <AppRoutes />;
+}
 
 function App() {
   return (
@@ -11,7 +23,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          <AppRoutes />
+          <AppContent />
         </BrowserRouter>
       </ThemeProvider>
     </Provider>

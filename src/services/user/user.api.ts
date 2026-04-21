@@ -1,4 +1,4 @@
-import api from '@/services/api';
+import { api } from '@/services/api';
 import type { UserResponse } from './user.types';
 import { API_ROUTES } from '@/constants/api-routes';
 

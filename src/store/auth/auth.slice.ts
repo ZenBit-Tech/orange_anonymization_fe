@@ -4,10 +4,12 @@ import type { User } from '@/services/user/user.types';
 
 interface AuthState {
   user: User | null;
+  initialized: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
+  initialized: false,
 };
 
 const authSlice = createSlice({
@@ -20,8 +22,11 @@ const authSlice = createSlice({
     clearUser(state) {
       state.user = null;
     },
+    setInitialized(state, action: PayloadAction<boolean>) {
+      state.initialized = action.payload;
+    },
   },
 });
 
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, setInitialized } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,48 +1,18 @@
-import { AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import { ROUTES } from '@/constants';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useAppDispatch } from '@/store/store';
-import { setUser, clearUser } from '@/store/auth.slice';
-import { getCurrentUser } from '@/services/user/user.api';
+import { useAppSelector } from '@/store/store';
 import { PageLoader } from '@/components/common/PageLoader';
+import { selectAuthInitialized, selectIsAuthenticated } from '@/store/auth';
 
 export function ProtectedRoute() {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
-  const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const initialized = useAppSelector(selectAuthInitialized);
 
-  useEffect(() => {
-    const initAuth = async () => {
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const user = await getCurrentUser();
-
-        dispatch(
-          setUser({
-            id: user.id,
-            email: user.email,
-          }),
-        );
-      } catch {
-        dispatch(clearUser());
-        localStorage.removeItem(AUTH_TOKEN_KEY);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initAuth();
-  }, [dispatch, token]);
-
-  if (isLoading) {
+  if (!initialized) {
     return <PageLoader />;
   }
 
-  if (!token) {
+  if (!isAuthenticated) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
@@ -50,12 +20,17 @@ export function ProtectedRoute() {
 }
 
 export const PublicRoute = () => {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const initialized = useAppSelector(selectAuthInitialized);
   const location = useLocation();
 
   const isVerifyRoute = location.pathname.startsWith(ROUTES.VERIFY_BASE);
 
-  if (token && !isVerifyRoute) {
+  if (!initialized) {
+    return <PageLoader />;
+  }
+
+  if (isAuthenticated && !isVerifyRoute) {
     return <Navigate to={ROUTES.DASHBOARD} replace />;
   }
 
