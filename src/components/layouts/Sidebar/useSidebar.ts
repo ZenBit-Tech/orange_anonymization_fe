@@ -4,6 +4,8 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import FindReplaceOutlinedIcon from '@mui/icons-material/FindReplaceOutlined';
 import StorageOutlinedIcon from '@mui/icons-material/StorageOutlined';
 import { AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import { useAppDispatch } from '@/store/store';
+import { clearUser } from '@/store/auth.slice';
 
 interface NavItem {
   labelKey: string;
@@ -21,6 +23,7 @@ export function useSidebar(onNavigate?: () => void) {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const isActive = (path: string): boolean => location.pathname === path;
 
@@ -30,6 +33,7 @@ export function useSidebar(onNavigate?: () => void) {
   };
 
   const handleSignOut = () => {
+    dispatch(clearUser());
     localStorage.removeItem(AUTH_TOKEN_KEY);
     navigate(ROUTES.LOGIN);
     onNavigate?.();

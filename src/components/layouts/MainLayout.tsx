@@ -4,11 +4,10 @@ import { Sidebar } from '@/components/layouts/Sidebar';
 import { Header } from '@/components/layouts/Header';
 import { useMainLayout } from '@/components/layouts/useMainLayout';
 import { LAYOUT } from '@/theme';
-
-const PLACEHOLDER_EMAIL = 'demo@clinic.com';
+import { useAppSelector } from '@/store/store';
 
 const MainLayout = () => {
-  const userEmail = PLACEHOLDER_EMAIL;
+  const userEmail = useAppSelector((state) => state.auth.user?.email ?? '');
   const { isMobile, drawerOpen, handleDrawerOpen, handleDrawerClose } = useMainLayout();
 
   return (
