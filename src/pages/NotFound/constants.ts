@@ -13,14 +13,6 @@ export const NOT_FOUND_COLORS = {
 } as const;
 
 export const NOT_FOUND_TYPOGRAPHY = {
-  logoTitle: {
-    fontSize: FONT_SIZES.xxl,
-    lineHeight: `${LINE_HEIGHTS.lg}px`,
-  },
-  logoSubtitle: {
-    fontSize: FONT_SIZES.xs,
-    lineHeight: `${LINE_HEIGHTS.xs}px`,
-  },
   title: {
     fontSize: { xs: 38, sm: 40, md: FONT_SIZES.h2 },
     lineHeight: { xs: '44px', sm: '46px', md: '44px' },

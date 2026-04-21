@@ -32,28 +32,21 @@ export const notFoundStyles: Record<string, SxProps<Theme>> = {
     alignItems: 'center',
   },
   logoImage: {
-    width: 'min(100%, 1440px)',
+    width: {
+      xs: '250%',
+      sm: '250%',
+      md: 'min(100%, 1440px)',
+    },
+    maxWidth: 'none',
     height: 'auto',
-    display: { xs: 'none', md: 'block' },
+    display: 'block',
     objectFit: 'contain',
   },
   logoTextBlock: {
-    display: { xs: 'flex', md: 'none' },
+    display: 'none',
     flexDirection: 'column',
     alignItems: 'center',
     lineHeight: 1,
-  },
-  logoTitle: {
-    fontSize: NOT_FOUND_TYPOGRAPHY.logoTitle.fontSize,
-    lineHeight: NOT_FOUND_TYPOGRAPHY.logoTitle.lineHeight,
-    fontWeight: 700,
-    color: NOT_FOUND_COLORS.logoText,
-  },
-  logoSubtitle: {
-    fontSize: NOT_FOUND_TYPOGRAPHY.logoSubtitle.fontSize,
-    lineHeight: NOT_FOUND_TYPOGRAPHY.logoSubtitle.lineHeight,
-    fontWeight: 600,
-    color: NOT_FOUND_COLORS.logoText,
   },
   illustrationWrapper: {
     position: 'absolute',
