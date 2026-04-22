@@ -2,10 +2,12 @@ import { Typography, type TypographyProps } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { LANDING_COLORS, LANDING_TYPOGRAPHY } from './constants';
 
-const mergeSx = (base: SxProps<Theme>, override: SxProps<Theme> | undefined): SxProps<Theme> => [
-  base,
-  ...(Array.isArray(override) ? override : override ? [override] : []),
-];
+const mergeSx = (base: SxProps<Theme>, override: SxProps<Theme> | undefined): SxProps<Theme> => {
+  const baseArray = Array.isArray(base) ? base : [base];
+  if (!override) return baseArray;
+  const overrideArray = Array.isArray(override) ? override : [override];
+  return [...baseArray, ...overrideArray];
+};
 
 const H1_SX: SxProps<Theme> = {
   fontSize: LANDING_TYPOGRAPHY.h1.fontSize,

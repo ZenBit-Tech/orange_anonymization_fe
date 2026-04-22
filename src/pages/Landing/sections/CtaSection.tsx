@@ -56,7 +56,7 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
               borderRadius: LANDING_SIZES.cardRadius,
               padding: LANDING_SIZES.ctaPanelBorderWidth,
               background: LANDING_GRADIENTS.ctaPanelBorder,
-              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+              mask: `linear-gradient(${LANDING_COLORS.maskOpaque} 0 0) content-box, linear-gradient(${LANDING_COLORS.maskOpaque} 0 0)`,
               maskComposite: 'exclude',
               WebkitMaskComposite: 'xor',
               pointerEvents: 'none',
@@ -69,7 +69,7 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
             variant="body1"
             sx={{
               color: LANDING_COLORS.mutedWhite,
-              maxWidth: 480,
+              maxWidth: LANDING_SIZES.ctaSubtitleMaxWidth,
               lineHeight: LANDING_TYPOGRAPHY.looseLineHeight,
             }}
           >

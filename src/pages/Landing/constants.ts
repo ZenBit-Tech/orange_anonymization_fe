@@ -80,6 +80,7 @@ export const LANDING_COLORS = {
   chipBorder: 'rgba(78, 205, 196, 0.27)',
   chipText: 'rgba(15, 33, 61, 1)',
   accentText: 'rgba(0, 191, 165, 1)',
+  maskOpaque: '#fff',
 } as const;
 
 export const LANDING_GRADIENTS = {
@@ -98,6 +99,8 @@ export const LANDING_SHADOWS = {
 export const LANDING_TRANSITIONS = {
   cardHover: 'transform 200ms ease-out, border-color 200ms ease-out, box-shadow 200ms ease-out',
   colorFast: 'color 200ms ease-out',
+  colorQuick: 'color 150ms ease-in-out',
+  transformQuick: 'transform 150ms ease-in-out',
 } as const;
 
 export const LANDING_TRANSFORMS = {
@@ -129,6 +132,8 @@ export const LANDING_SIZES = {
   ctaPanelMaxWidth: 860,
   ctaPanelBlur: '0.9px',
   ctaPanelBorderWidth: '1px',
+  ctaSubtitleMaxWidth: 480,
+  faqSubtitleMaxWidth: 520,
 } as const;
 
 export const SECTION_IDS = {

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   LANDING_COLORS,
   LANDING_SIZES,
+  LANDING_TRANSITIONS,
   LANDING_TYPOGRAPHY,
   SECTION_IDS,
 } from '@/pages/Landing/constants';
@@ -34,9 +35,9 @@ const FaqItem = memo(({ faqKey, isExpanded, onClick }: FaqItemProps) => {
           justifyContent: 'flex-start',
           textTransform: 'none',
           color: isExpanded ? 'white' : LANDING_COLORS.questionWhite,
-          fontSize: '1rem',
-          fontWeight: 500,
-          transition: 'color 150ms ease-in-out',
+          fontSize: LANDING_TYPOGRAPHY.label.fontSize,
+          fontWeight: LANDING_TYPOGRAPHY.label.fontWeight,
+          transition: LANDING_TRANSITIONS.colorQuick,
           '&:hover': {
             bgcolor: 'transparent',
             color: 'white',
@@ -64,7 +65,7 @@ const FaqItem = memo(({ faqKey, isExpanded, onClick }: FaqItemProps) => {
               fontSize: LANDING_SIZES.iconMd,
               color: isExpanded ? 'landing.accent' : LANDING_COLORS.subtleWhite,
               transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 150ms ease-in-out',
+              transition: LANDING_TRANSITIONS.transformQuick,
               flexShrink: 0,
             }}
           />
@@ -121,7 +122,7 @@ const FaqSection = () => {
           </LandingH2>
           <LandingH4
             sx={{
-              maxWidth: { md: 520 },
+              maxWidth: { md: LANDING_SIZES.faqSubtitleMaxWidth },
               textAlign: { xs: 'left', md: 'right' },
               alignSelf: { md: 'flex-end' },
               ml: { md: 'auto' },
