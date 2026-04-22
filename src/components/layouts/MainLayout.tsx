@@ -13,6 +13,7 @@ import {
 } from '@/constants';
 import { LAYOUT } from '@/theme';
 import { useAppSelector } from '@/store/store';
+import { API_TIMEOUT } from '@/constants/api-config';
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const MainLayout = () => {
     };
 
     checkSessionExpiration();
-    const intervalId = window.setInterval(checkSessionExpiration, 30_000);
+    const intervalId = window.setInterval(checkSessionExpiration, API_TIMEOUT);
 
     return () => window.clearInterval(intervalId);
   }, [navigate]);
