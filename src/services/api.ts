@@ -1,5 +1,5 @@
 import axios, { type AxiosError } from 'axios';
-import { API_BASE_URL, AUTH_TOKEN_KEY } from '@/constants';
+import { API_BASE_URL, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
 import type { ApiError } from '@/services/types';
 import { API_TIMEOUT } from '@/constants/api-config';
 import { store } from '@/store/store';
@@ -33,8 +33,9 @@ api.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === HTTP_STATUS.UNAUTHORIZED) {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
       store.dispatch(logout());
+      window.location.href = ROUTES.SESSION_EXPIRED;
+      return Promise.reject(new Error('Session expired. Please sign in again.'));
     }
 
     const serverMessage = error.response?.data?.message;

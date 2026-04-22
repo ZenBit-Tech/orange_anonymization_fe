@@ -11,6 +11,7 @@ import Contact from '@/pages/Contact';
 import Landing from '@/pages/Landing';
 import TokenPage from '@/pages/TokenPage';
 import NotFound from '@/pages/NotFound';
+import Inactivity from '@/pages/Inactivity';
 import { PageLoader } from '@/components/common/PageLoader';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
@@ -26,6 +27,7 @@ export function AppRoutes() {
         </Route>
 
         <Route path={ROUTES.TOKEN} element={<TokenPage />} />
+        <Route path={ROUTES.SESSION_EXPIRED} element={<Inactivity />} />
 
         <Route element={<PublicRoute />}>
           <Route element={<AuthLayout />}>

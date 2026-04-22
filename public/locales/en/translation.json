@@ -233,6 +233,18 @@
       "verifyFailed": "Invalid or expired magic link."
     }
   },
+  "inactivity": {
+    "title": "Your session has expired",
+    "descriptionLineOne": "Your session timed out due to inactivity.",
+    "descriptionLineTwo": "Please sign in again to continue.",
+    "signInAgain": "Sign in again",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis",
+      "logoAlt": "De-ID Studio logo",
+      "illustrationAlt": "Session expired"
+    }
+  },
   "notFound": {
     "title": "Page not found",
     "description": "The page you're looking for doesn't exist or may have been moved.",

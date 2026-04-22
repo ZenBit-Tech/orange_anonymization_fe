@@ -1,6 +1,6 @@
 import { FONT_SIZES, LINE_HEIGHTS } from '@/constants';
 
-export const NOT_FOUND_COLORS = {
+export const INACTIVITY_COLORS = {
   pageBackground: '#01132F',
   logoText: '#FFFFFF',
   title: '#B2EDE5',
@@ -12,7 +12,7 @@ export const NOT_FOUND_COLORS = {
     'linear-gradient(180deg, rgba(1,19,47,0) 0%, rgba(1,19,47,0.25) 35%, rgba(1,19,47,0.45) 100%)',
 } as const;
 
-export const NOT_FOUND_TYPOGRAPHY = {
+export const INACTIVITY_TYPOGRAPHY = {
   logoTitle: {
     fontSize: FONT_SIZES.xxl,
     lineHeight: `${LINE_HEIGHTS.lg}px`,
@@ -29,7 +29,7 @@ export const NOT_FOUND_TYPOGRAPHY = {
     fontSize: FONT_SIZES.md,
     lineHeight: `${LINE_HEIGHTS.md}px`,
   },
-  homeLink: {
+  signInLink: {
     fontSize: FONT_SIZES.sm,
     lineHeight: `${LINE_HEIGHTS.sm}px`,
   },

@@ -1,6 +1,8 @@
 export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '/api';
 export const AUTH_TOKEN_KEY = 'clinical_studio_token';
 export const AUTH_USER_KEY = 'clinical_studio_user';
+export const AUTH_SESSION_STARTED_AT_KEY = 'clinical_studio_session_started_at';
+export const AUTH_SESSION_MAX_AGE_MS = 60 * 60 * 1000;
 
 export const ROUTES = {
   LANDING: '/',
@@ -8,6 +10,7 @@ export const ROUTES = {
   LOGIN: '/auth/login',
   AUTH: '/auth/*',
   VERIFY_BASE: '/auth/verify',
+  SESSION_EXPIRED: '/session-expired',
   TOKEN: '/auth/verify/token/:token',
   DASHBOARD: '/app',
   DE_IDENTIFY: '/app/de-identify',

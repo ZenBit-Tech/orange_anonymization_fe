@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AUTH_TOKEN_KEY } from '@/constants';
+import { AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
 import { getCurrentUser } from '@/services/user/user.api';
 import { verify } from '@/services/auth/auth.api';
 import { setUser, clearUser, setInitialized } from './auth.slice';
@@ -36,6 +36,7 @@ export const verifyMagicLink = createAsyncThunk(
     const data = await verify(token);
 
     localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
+    localStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, Date.now().toString());
 
     const userResponse = await getCurrentUser();
 
@@ -47,6 +48,7 @@ export const verifyMagicLink = createAsyncThunk(
 
 export const logout = createAsyncThunk(AUTH_THUNK_TYPES.LOGOUT, async (_, { dispatch }) => {
   localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
   dispatch(clearUser());
   dispatch(setInitialized(true));
 });
