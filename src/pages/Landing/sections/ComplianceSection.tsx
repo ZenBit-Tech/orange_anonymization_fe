@@ -17,7 +17,10 @@ const ComplianceSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" sx={{ py: { xs: 8, md: 10 } }}>
+    <Box
+      component="section"
+      sx={{ py: { xs: LANDING_SIZES.sectionPyXs, md: LANDING_SIZES.sectionPyMd } }}
+    >
       <Container maxWidth="lg">
         <Divider
           sx={{
@@ -28,8 +31,8 @@ const ComplianceSection = () => {
         <Box
           sx={{
             textAlign: 'center',
-            py: { xs: 6, md: LANDING_SIZES.complianceSectionPy },
-            mb: { xs: 6, md: 8 },
+            py: { xs: LANDING_SIZES.complianceInnerPyXs, md: LANDING_SIZES.complianceSectionPy },
+            mb: { xs: LANDING_SIZES.sectionHeaderMbXs, md: LANDING_SIZES.sectionHeaderMbMd },
           }}
         >
           <LandingH1
@@ -55,12 +58,17 @@ const ComplianceSection = () => {
             flexDirection: { xs: 'column', md: 'row' },
             justifyContent: 'space-between',
             alignItems: { xs: 'flex-start', md: 'flex-end' },
-            gap: 2,
-            mb: 4,
+            gap: LANDING_SIZES.complianceFrameworksHeaderGap,
+            mb: LANDING_SIZES.complianceFrameworksHeaderMb,
           }}
         >
           <LandingH2 component="h3">{t('landing.complianceFrameworks.title')}</LandingH2>
-          <LandingH4 sx={{ maxWidth: { md: 480 }, textAlign: { xs: 'left', md: 'right' } }}>
+          <LandingH4
+            sx={{
+              maxWidth: { md: LANDING_SIZES.complianceFrameworksSubtitleMaxWidth },
+              textAlign: { xs: 'left', md: 'right' },
+            }}
+          >
             {t('landing.complianceFrameworks.subtitle')}
           </LandingH4>
         </Box>
@@ -69,7 +77,7 @@ const ComplianceSection = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-            gap: 2,
+            gap: LANDING_SIZES.complianceGridGap,
             alignItems: 'start',
           }}
         >

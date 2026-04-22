@@ -57,7 +57,7 @@ const CARD_BG = {
 
 const CARD_BORDER = {
   gradient: 'none',
-  solid: `1.25px solid ${LANDING_COLORS.cardBorderTeal}`,
+  solid: `${LANDING_SIZES.cardBorderWidth} ${LANDING_SIZES.cardBorderStyle} ${LANDING_COLORS.cardBorderTeal}`,
 } as const;
 
 const FeatureCardItem = ({ card }: { card: FeatureCard }) => {
@@ -72,10 +72,10 @@ const FeatureCardItem = ({ card }: { card: FeatureCard }) => {
         background: CARD_BG[variant],
         border: CARD_BORDER[variant],
         borderRadius: LANDING_SIZES.cardRadius,
-        p: '16px',
+        p: LANDING_SIZES.featureCardPadding,
         display: 'flex',
         flexDirection: 'column',
-        gap: '36px',
+        gap: LANDING_SIZES.featureCardInnerGap,
         height: { md: LANDING_SIZES.featureCardHeight },
       }}
     >
@@ -93,7 +93,7 @@ const FeatureCardItem = ({ card }: { card: FeatureCard }) => {
             color: LANDING_COLORS.iconAccent,
             fontSize: LANDING_SIZES.iconLg,
             flexShrink: 0,
-            ml: 2,
+            ml: LANDING_SIZES.featureCardIconMl,
           }}
         />
       </Box>
@@ -109,7 +109,11 @@ const FeaturesSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" id={SECTION_IDS.solutions} sx={{ py: { xs: 8, md: 10 } }}>
+    <Box
+      component="section"
+      id={SECTION_IDS.solutions}
+      sx={{ py: { xs: LANDING_SIZES.sectionPyXs, md: LANDING_SIZES.sectionPyMd } }}
+    >
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -117,25 +121,42 @@ const FeaturesSection = () => {
             flexDirection: { xs: 'column', md: 'row' },
             justifyContent: 'space-between',
             alignItems: { xs: 'flex-start', md: 'flex-end' },
-            gap: { xs: 3, md: 6 },
-            mb: { xs: 6, md: 8 },
+            gap: { xs: LANDING_SIZES.featuresHeaderGapXs, md: LANDING_SIZES.featuresHeaderGapMd },
+            mb: { xs: LANDING_SIZES.sectionHeaderMbXs, md: LANDING_SIZES.sectionHeaderMbMd },
           }}
         >
-          <LandingH2 component="h2" sx={{ maxWidth: { md: 560 } }}>
+          <LandingH2 component="h2" sx={{ maxWidth: { md: LANDING_SIZES.featuresTitleMaxWidth } }}>
             {t('landing.features.title')}
           </LandingH2>
-          <LandingH4 sx={{ maxWidth: { md: 480 }, textAlign: { xs: 'left', md: 'right' } }}>
+          <LandingH4
+            sx={{
+              maxWidth: { md: LANDING_SIZES.featuresSubtitleMaxWidth },
+              textAlign: { xs: 'left', md: 'right' },
+            }}
+          >
             {t('landing.features.subtitle')}
           </LandingH4>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: LANDING_SIZES.featuresRowGap }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: LANDING_SIZES.featuresRowGap,
+            }}
+          >
             {ROW_1.map((card) => (
               <FeatureCardItem key={card.key} card={card} />
             ))}
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: LANDING_SIZES.featuresRowGap,
+            }}
+          >
             {ROW_2.map((card) => (
               <FeatureCardItem key={card.key} card={card} />
             ))}

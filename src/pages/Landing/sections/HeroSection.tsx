@@ -25,17 +25,24 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
       component="section"
       sx={{
         position: 'relative',
-        pt: { xs: 12, md: '200px' },
-        pb: { xs: 18, md: '340px' },
+        pt: { xs: LANDING_SIZES.heroPtXs, md: LANDING_SIZES.heroPtMd },
+        pb: { xs: LANDING_SIZES.heroPbXs, md: LANDING_SIZES.heroPbMd },
         overflow: 'hidden',
       }}
     >
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-        <LandingH1 component="h1" sx={{ mb: 3 }}>
+        <LandingH1 component="h1" sx={{ mb: LANDING_SIZES.heroTitleMb }}>
           {t('landing.hero.title')}
         </LandingH1>
 
-        <LandingH4 sx={{ maxWidth: 480, mx: 'auto', mb: 5, textAlign: 'center' }}>
+        <LandingH4
+          sx={{
+            maxWidth: LANDING_SIZES.heroSubtitleMaxWidth,
+            mx: 'auto',
+            mb: LANDING_SIZES.heroSubtitleMb,
+            textAlign: 'center',
+          }}
+        >
           {t('landing.hero.subtitle')}
         </LandingH4>
 
@@ -46,12 +53,12 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
           sx={{
             width: LANDING_SIZES.primaryCtaWidth,
             height: LANDING_SIZES.primaryCtaHeight,
-            mb: 6,
+            mb: LANDING_SIZES.heroCtaMarginBottom,
             fontSize: FONT_SIZES.sm,
             textTransform: 'none',
             color: 'primary.800',
             background: (theme) => theme.palette.accent[400],
-            '& .MuiButton-endIcon': { ml: '12px' },
+            '& .MuiButton-endIcon': { ml: LANDING_SIZES.buttonEndIconMl },
             '&:hover': {
               background: (theme) => theme.palette.accent[500],
             },
@@ -65,12 +72,15 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: { xs: 2, md: 4 },
+            gap: { xs: LANDING_SIZES.heroBadgesGapXs, md: LANDING_SIZES.heroBadgesGapMd },
             flexWrap: 'wrap',
           }}
         >
           {(['hipaa', 'gdpr', 'accuracy'] as const).map((badge) => (
-            <Box key={badge} sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+            <Box
+              key={badge}
+              sx={{ display: 'flex', alignItems: 'center', gap: LANDING_SIZES.heroBadgeIconGap }}
+            >
               <VerifiedOutlinedIcon
                 sx={{ color: LANDING_COLORS.faintWhite, fontSize: LANDING_SIZES.iconSm }}
               />

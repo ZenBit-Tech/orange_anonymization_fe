@@ -1,7 +1,7 @@
 import { Box, Container, SvgIcon, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import AppLogo from '@/assets/icons/landingLogo.svg?react';
-import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/pages/Landing/constants';
+import { LANDING_COLORS, LANDING_SIZES, LANDING_TYPOGRAPHY } from '@/pages/Landing/constants';
 
 const LandingFooter = () => {
   const { t } = useTranslation();
@@ -11,23 +11,30 @@ const LandingFooter = () => {
       component="footer"
       sx={(theme) => ({
         bgcolor: theme.palette.primary[800],
-        py: 3,
+        py: LANDING_SIZES.footerPy,
       })}
     >
       <Container
         maxWidth="lg"
         disableGutters
         sx={{
-          px: '20px',
+          px: LANDING_SIZES.footerContainerPaddingX,
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: 'space-between',
           alignItems: { xs: 'flex-start', md: 'center' },
-          gap: 3,
+          gap: LANDING_SIZES.footerContainerGap,
         }}
       >
         <Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: '12px' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: LANDING_SIZES.footerLogoGap,
+              mb: LANDING_SIZES.footerLogoMb,
+            }}
+          >
             <SvgIcon component={AppLogo} inheritViewBox sx={{ color: 'common.white' }} />
             <Typography
               sx={{
@@ -43,7 +50,7 @@ const LandingFooter = () => {
           <Typography
             variant="body2"
             color="neutral.400"
-            sx={{ maxWidth: { xs: '100%', md: '300px' } }}
+            sx={{ maxWidth: { xs: '100%', md: LANDING_SIZES.footerDescriptionMaxWidth } }}
           >
             {t('landing.footer.description')}
           </Typography>

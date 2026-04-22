@@ -31,7 +31,7 @@ const FaqItem = memo(({ faqKey, isExpanded, onClick }: FaqItemProps) => {
         fullWidth
         sx={{
           px: 0,
-          py: 2,
+          py: LANDING_SIZES.faqButtonPaddingY,
           justifyContent: 'flex-start',
           textTransform: 'none',
           color: isExpanded ? 'white' : LANDING_COLORS.questionWhite,
@@ -49,7 +49,7 @@ const FaqItem = memo(({ faqKey, isExpanded, onClick }: FaqItemProps) => {
             display: 'flex',
             alignItems: 'center',
             width: '100%',
-            gap: 1,
+            gap: LANDING_SIZES.faqButtonContentGap,
           }}
         >
           <Typography
@@ -72,7 +72,7 @@ const FaqItem = memo(({ faqKey, isExpanded, onClick }: FaqItemProps) => {
         </Box>
       </Button>
       <Collapse in={isExpanded}>
-        <Box sx={{ pb: 2.5 }}>
+        <Box sx={{ pb: LANDING_SIZES.faqCollapsePaddingBottom }}>
           <Typography
             variant="body2"
             sx={{
@@ -107,14 +107,18 @@ const FaqSection = () => {
   };
 
   return (
-    <Box component="section" id={SECTION_IDS.contact} sx={{ py: { xs: 8, md: 10 } }}>
+    <Box
+      component="section"
+      id={SECTION_IDS.contact}
+      sx={{ py: { xs: LANDING_SIZES.sectionPyXs, md: LANDING_SIZES.sectionPyMd } }}
+    >
       <Container maxWidth="lg">
         <Box
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
-            gap: { xs: 4, md: 8 },
-            mb: { xs: 6, md: 8 },
+            gap: { xs: LANDING_SIZES.faqHeaderGapXs, md: LANDING_SIZES.faqHeaderGapMd },
+            mb: { xs: LANDING_SIZES.sectionHeaderMbXs, md: LANDING_SIZES.sectionHeaderMbMd },
           }}
         >
           <LandingH2 component="h2" sx={{ flex: '0 0 auto' }}>

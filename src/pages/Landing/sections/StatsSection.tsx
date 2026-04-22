@@ -1,7 +1,7 @@
 import { Box, Container, Divider } from '@mui/material';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LANDING_COLORS } from '@/pages/Landing/constants';
+import { LANDING_COLORS, LANDING_SIZES } from '@/pages/Landing/constants';
 import { LandingH1, LandingLabel } from '@/pages/Landing/typography';
 
 const STAT_KEYS = ['accuracy', 'identifiers', 'processingTime', 'compliance'] as const;
@@ -12,7 +12,10 @@ const StatsSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" sx={{ py: { xs: 6, md: '96px' } }}>
+    <Box
+      component="section"
+      sx={{ py: { xs: LANDING_SIZES.statsSectionPyXs, md: LANDING_SIZES.statsSectionPyMd } }}
+    >
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -20,8 +23,8 @@ const StatsSection = () => {
             flexDirection: { xs: 'column', md: 'row' },
             alignItems: 'center',
             justifyContent: { md: 'space-between' },
-            gap: { xs: 4, md: 0 },
-            height: { md: 88 },
+            gap: { xs: LANDING_SIZES.statsHeaderGapXs, md: 0 },
+            height: { md: LANDING_SIZES.statsHeaderHeight },
           }}
         >
           {STAT_KEYS.map((key: StatKey, index) => {
@@ -35,7 +38,7 @@ const StatsSection = () => {
                     flexDirection: 'column',
                     alignItems: { xs: 'center', md: isLast ? 'flex-end' : 'center' },
                     justifyContent: 'center',
-                    gap: '16px',
+                    gap: LANDING_SIZES.statsItemGap,
                   }}
                 >
                   <LandingH1 component="p">{t(`landing.stats.${key}.value`)}</LandingH1>
@@ -47,7 +50,7 @@ const StatsSection = () => {
                     orientation="vertical"
                     flexItem
                     sx={{
-                      width: '1px',
+                      width: LANDING_SIZES.statsDividerWidth,
                       borderColor: LANDING_COLORS.dividerTealSoft,
                       display: { xs: 'none', md: 'block' },
                     }}

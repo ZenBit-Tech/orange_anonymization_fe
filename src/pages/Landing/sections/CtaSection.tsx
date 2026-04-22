@@ -23,8 +23,8 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
       component="section"
       sx={{
         position: 'relative',
-        pt: { xs: 10, md: 14 },
-        pb: { xs: 16, md: 22 },
+        pt: { xs: LANDING_SIZES.ctaSectionPtXs, md: LANDING_SIZES.ctaSectionPtMd },
+        pb: { xs: LANDING_SIZES.ctaSectionPbXs, md: LANDING_SIZES.ctaSectionPbMd },
         overflow: 'hidden',
       }}
     >
@@ -40,12 +40,12 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
             width: '100%',
             maxWidth: LANDING_SIZES.ctaPanelMaxWidth,
             borderRadius: LANDING_SIZES.cardRadius,
-            py: '32px',
-            px: { xs: 3, md: 5 },
+            py: LANDING_SIZES.ctaPanelPaddingY,
+            px: { xs: LANDING_SIZES.ctaPanelPaddingXXs, md: LANDING_SIZES.ctaPanelPaddingXMd },
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '32px',
+            gap: LANDING_SIZES.ctaPanelInnerGap,
             textAlign: 'center',
             background: LANDING_GRADIENTS.ctaPanel,
             backdropFilter: `blur(${LANDING_SIZES.ctaPanelBlur})`,
@@ -87,7 +87,7 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
               textTransform: 'none',
               color: 'primary.800',
               background: (theme) => theme.palette.accent[400],
-              '& .MuiButton-endIcon': { ml: '12px' },
+              '& .MuiButton-endIcon': { ml: LANDING_SIZES.buttonEndIconMl },
               '&:hover': {
                 background: (theme) => theme.palette.accent[500],
               },
