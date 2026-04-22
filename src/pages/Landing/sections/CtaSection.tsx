@@ -1,7 +1,15 @@
-import { Box, ButtonBase, Container, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useTranslation } from 'react-i18next';
 import { LandingSectionDecoration } from '@/components/LandingSectionDecoration';
+import { FONT_SIZES } from '@/constants';
+import {
+  LANDING_COLORS,
+  LANDING_GRADIENTS,
+  LANDING_SIZES,
+  LANDING_TYPOGRAPHY,
+} from '@/pages/Landing/constants';
+import { LandingH2 } from '@/pages/Landing/typography';
 
 export interface CtaSectionProps {
   onGetStarted: () => void;
@@ -22,53 +30,72 @@ const CtaSection = ({ onGetStarted }: CtaSectionProps) => {
     >
       <LandingSectionDecoration variant="cta" />
 
-      <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-        <Typography
-          variant="h3"
-          sx={(theme) => ({
-            color: theme.palette.common.white,
-            fontWeight: theme.typography.fontWeightBold,
-            fontSize: { xs: '1.5rem', md: '2rem' },
-            mb: 2.5,
-          })}
-        >
-          {t('landing.cta.title')}
-        </Typography>
-
-        <Typography
-          variant="body1"
+      <Container
+        maxWidth={false}
+        sx={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'center' }}
+      >
+        <Box
           sx={{
-            color: 'rgba(255,255,255,0.55)',
-            maxWidth: 480,
-            mx: 'auto',
-            mb: 5,
-            lineHeight: 1.7,
+            position: 'relative',
+            width: '100%',
+            maxWidth: LANDING_SIZES.ctaPanelMaxWidth,
+            borderRadius: LANDING_SIZES.cardRadius,
+            py: '32px',
+            px: { xs: 3, md: 5 },
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '32px',
+            textAlign: 'center',
+            background: LANDING_GRADIENTS.ctaPanel,
+            backdropFilter: `blur(${LANDING_SIZES.ctaPanelBlur})`,
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              borderRadius: LANDING_SIZES.cardRadius,
+              padding: LANDING_SIZES.ctaPanelBorderWidth,
+              background: LANDING_GRADIENTS.ctaPanelBorder,
+              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+              maskComposite: 'exclude',
+              WebkitMaskComposite: 'xor',
+              pointerEvents: 'none',
+            },
           }}
         >
-          {t('landing.cta.subtitle')}
-        </Typography>
+          <LandingH2 component="h2">{t('landing.cta.title')}</LandingH2>
 
-        <ButtonBase
-          onClick={onGetStarted}
-          sx={(theme) => ({
-            bgcolor: theme.palette.landing.accent,
-            color: theme.palette.landing.accentContrast,
-            fontFamily: theme.typography.fontFamily,
-            fontSize: theme.typography.body1.fontSize,
-            fontWeight: theme.typography.fontWeightBold,
-            borderRadius: 2,
-            px: 4,
-            py: 1.5,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 1,
-            transition: 'background-color 0.2s',
-            '&:hover': { bgcolor: theme.palette.landing.accentDark },
-          })}
-        >
-          {t('landing.cta.button')}
-          <ArrowForwardIcon sx={{ fontSize: 18 }} />
-        </ButtonBase>
+          <Typography
+            variant="body1"
+            sx={{
+              color: LANDING_COLORS.mutedWhite,
+              maxWidth: 480,
+              lineHeight: LANDING_TYPOGRAPHY.looseLineHeight,
+            }}
+          >
+            {t('landing.cta.subtitle')}
+          </Typography>
+
+          <Button
+            variant="contained"
+            onClick={onGetStarted}
+            endIcon={<ArrowForwardIcon />}
+            sx={{
+              width: LANDING_SIZES.primaryCtaWidth,
+              height: LANDING_SIZES.primaryCtaHeight,
+              fontSize: FONT_SIZES.sm,
+              textTransform: 'none',
+              color: 'primary.800',
+              background: (theme) => theme.palette.accent[400],
+              '& .MuiButton-endIcon': { ml: '12px' },
+              '&:hover': {
+                background: (theme) => theme.palette.accent[500],
+              },
+            }}
+          >
+            {t('landing.cta.button')}
+          </Button>
+        </Box>
       </Container>
     </Box>
   );

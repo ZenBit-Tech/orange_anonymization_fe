@@ -1,132 +1,145 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import StorageIcon from '@mui/icons-material/Storage';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import LockIcon from '@mui/icons-material/Lock';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import type { SvgIconComponent } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import {
+  LANDING_COLORS,
+  LANDING_GRADIENTS,
+  LANDING_SIZES,
+  SECTION_IDS,
+} from '@/pages/Landing/constants';
+import { LandingBody, LandingCardTitle, LandingH2, LandingH4 } from '@/pages/Landing/typography';
 
 interface FeatureCard {
   key: string;
   Icon: SvgIconComponent;
-  highlighted: boolean;
+  variant: 'gradient' | 'solid';
+  flex: number;
 }
 
-const FEATURE_CARDS: FeatureCard[] = [
-  { key: 'detection', Icon: ManageSearchIcon, highlighted: false },
-  { key: 'synthetic', Icon: StorageIcon, highlighted: false },
-  { key: 'compliance', Icon: AssignmentIcon, highlighted: false },
-  { key: 'privacy', Icon: LockIcon, highlighted: true },
+const ROW_1: FeatureCard[] = [
+  {
+    key: 'detection',
+    Icon: ManageSearchIcon,
+    variant: 'gradient',
+    flex: LANDING_SIZES.featureCardFlexSmall,
+  },
+  {
+    key: 'synthetic',
+    Icon: StorageIcon,
+    variant: 'solid',
+    flex: LANDING_SIZES.featureCardFlexLargeAlt,
+  },
 ];
+
+const ROW_2: FeatureCard[] = [
+  {
+    key: 'compliance',
+    Icon: AssignmentIcon,
+    variant: 'solid',
+    flex: LANDING_SIZES.featureCardFlexLarge,
+  },
+  {
+    key: 'privacy',
+    Icon: AdminPanelSettingsIcon,
+    variant: 'gradient',
+    flex: LANDING_SIZES.featureCardFlexSmall,
+  },
+];
+
+const CARD_BG = {
+  gradient: LANDING_GRADIENTS.featureCard,
+  solid: LANDING_COLORS.cardSurface,
+} as const;
+
+const CARD_BORDER = {
+  gradient: 'none',
+  solid: `1.25px solid ${LANDING_COLORS.cardBorderTeal}`,
+} as const;
+
+const FeatureCardItem = ({ card }: { card: FeatureCard }) => {
+  const { t } = useTranslation();
+  const { key, Icon, variant, flex } = card;
+
+  return (
+    <Box
+      sx={{
+        flex: { xs: '1 1 100%', md: flex },
+        minWidth: 0,
+        background: CARD_BG[variant],
+        border: CARD_BORDER[variant],
+        borderRadius: LANDING_SIZES.cardRadius,
+        p: '16px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '36px',
+        height: { md: LANDING_SIZES.featureCardHeight },
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <LandingBody>{t(`landing.features.cards.${key}.description`)}</LandingBody>
+        <Icon
+          sx={{
+            color: LANDING_COLORS.iconAccent,
+            fontSize: LANDING_SIZES.iconLg,
+            flexShrink: 0,
+            ml: 2,
+          }}
+        />
+      </Box>
+
+      <LandingCardTitle sx={{ textTransform: 'capitalize' }}>
+        {t(`landing.features.cards.${key}.title`)}
+      </LandingCardTitle>
+    </Box>
+  );
+};
 
 const FeaturesSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" id="solutions" sx={{ py: { xs: 8, md: 10 } }}>
+    <Box component="section" id={SECTION_IDS.solutions} sx={{ py: { xs: 8, md: 10 } }}>
       <Container maxWidth="lg">
         <Box
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: 'space-between',
+            alignItems: { xs: 'flex-start', md: 'flex-end' },
             gap: { xs: 3, md: 6 },
             mb: { xs: 6, md: 8 },
           }}
         >
-          <Typography
-            variant="h3"
-            sx={(theme) => ({
-              color: theme.palette.common.white,
-              fontWeight: theme.typography.fontWeightBold,
-              fontSize: { xs: '1.5rem', md: '1.75rem' },
-              flex: 1,
-              lineHeight: 1.3,
-            })}
-          >
+          <LandingH2 component="h2" sx={{ maxWidth: { md: 560 } }}>
             {t('landing.features.title')}
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: 'rgba(255,255,255,0.55)',
-              flex: 1,
-              lineHeight: 1.7,
-              alignSelf: 'flex-end',
-            }}
-          >
+          </LandingH2>
+          <LandingH4 sx={{ maxWidth: { md: 480 }, textAlign: { xs: 'left', md: 'right' } }}>
             {t('landing.features.subtitle')}
-          </Typography>
+          </LandingH4>
         </Box>
 
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-            gap: 2,
-          }}
-        >
-          {FEATURE_CARDS.map(({ key, Icon, highlighted }) => (
-            <Box
-              key={key}
-              sx={(theme) => ({
-                bgcolor: highlighted
-                  ? theme.palette.landing.bg.cardActive
-                  : theme.palette.landing.bg.card,
-                border: `1px solid ${highlighted ? theme.palette.landing.accent + '40' : theme.palette.landing.border}`,
-                borderRadius: 3,
-                p: 3,
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: 180,
-                transition: 'border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
-                cursor: 'default',
-                '&:hover': {
-                  borderColor: theme.palette.landing.accent + '80',
-                  transform: 'translateY(-6px)',
-                  boxShadow: '0 16px 48px rgba(78, 205, 196, 0.15)',
-                },
-              })}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  mb: 2,
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, maxWidth: '75%' }}
-                >
-                  {t(`landing.features.cards.${key}.description`)}
-                </Typography>
-                <Box
-                  sx={(theme) => ({
-                    bgcolor: theme.palette.landing.bg.hero,
-                    borderRadius: 2,
-                    p: 0.75,
-                    ml: 2,
-                    flexShrink: 0,
-                  })}
-                >
-                  <Icon sx={(theme) => ({ color: theme.palette.landing.accent, fontSize: 20 })} />
-                </Box>
-              </Box>
-
-              <Typography
-                variant="h6"
-                sx={(theme) => ({
-                  color: theme.palette.common.white,
-                  fontWeight: theme.typography.fontWeightBold,
-                  mt: 'auto',
-                  fontSize: '1rem',
-                })}
-              >
-                {t(`landing.features.cards.${key}.title`)}
-              </Typography>
-            </Box>
-          ))}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+            {ROW_1.map((card) => (
+              <FeatureCardItem key={card.key} card={card} />
+            ))}
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+            {ROW_2.map((card) => (
+              <FeatureCardItem key={card.key} card={card} />
+            ))}
+          </Box>
         </Box>
       </Container>
     </Box>
