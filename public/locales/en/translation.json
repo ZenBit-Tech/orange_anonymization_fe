@@ -245,6 +245,17 @@
       "illustrationAlt": "Session expired"
     }
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or may have been moved.",
+    "home": "Go to home",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis",
+      "logoAlt": "De-ID Studio logo",
+      "illustrationAlt": "404"
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Overview of your de-identification activity",

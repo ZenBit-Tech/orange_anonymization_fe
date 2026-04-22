@@ -17,12 +17,14 @@ export const useAuthForm = () => {
 
   const { register, handleSubmit, setError, clearErrors, trigger } = form;
 
-  const onSubmit = async (data: AuthFormValues) => {
+  const onSubmit = async (data: AuthFormValues): Promise<boolean> => {
     try {
       await login(data.email);
+      return true;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';
       setError('email', { type: 'manual', message: errorMessage });
+      return false;
     }
   };
 

@@ -12,12 +12,11 @@ import {
   ROUTES,
 } from '@/constants';
 import { LAYOUT } from '@/theme';
-
-const PLACEHOLDER_EMAIL = 'demo@clinic.com';
+import { useAppSelector } from '@/store/store';
 
 const MainLayout = () => {
-  const userEmail = PLACEHOLDER_EMAIL;
   const navigate = useNavigate();
+  const userEmail = useAppSelector((state) => state.auth.user?.email ?? '');
   const { isMobile, drawerOpen, handleDrawerOpen, handleDrawerClose } = useMainLayout();
 
   useEffect(() => {

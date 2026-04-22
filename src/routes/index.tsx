@@ -1,6 +1,5 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { CircularProgress, Box } from '@mui/material';
 import { ROUTES } from '@/constants';
 import Auth from '@/pages/Auth';
 import { ProtectedRoute, PublicRoute } from '@/routes/ProtectedRoute';
@@ -13,17 +12,10 @@ import Landing from '@/pages/Landing';
 import TokenPage from '@/pages/TokenPage';
 import NotFound from '@/pages/NotFound';
 import Inactivity from '@/pages/Inactivity';
+import { PageLoader } from '@/components/common/PageLoader';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
-
-function PageLoader() {
-  return (
-    <Box display="flex" alignItems="center" justifyContent="center" minHeight="100vh">
-      <CircularProgress />
-    </Box>
-  );
-}
 
 export function AppRoutes() {
   return (
@@ -39,7 +31,7 @@ export function AppRoutes() {
 
         <Route element={<PublicRoute />}>
           <Route element={<AuthLayout />}>
-            <Route path="/auth/*" element={<Auth />} />
+            <Route path={ROUTES.AUTH} element={<Auth />} />
           </Route>
         </Route>
 

@@ -2,18 +2,19 @@ import { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
-import { AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY, AUTH_USER_KEY, ROUTES } from '@/constants';
+import { ROUTES } from '@/constants';
+import { logout } from '@/store/auth';
+import { useAppDispatch } from '@/store/store';
 import { inactivityImages } from '@/assets/images/inactivity';
 import { inactivityStyles } from './styles';
 
 const Inactivity = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
-    localStorage.removeItem(AUTH_USER_KEY);
-    localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
-  }, []);
+    dispatch(logout());
+  }, [dispatch]);
 
   return (
     <Box sx={inactivityStyles.root}>

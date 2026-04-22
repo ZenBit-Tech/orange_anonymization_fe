@@ -1,61 +1,89 @@
+import { useEffect, useState } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { PageLoader } from '@/components/common/PageLoader';
 import {
   AUTH_SESSION_MAX_AGE_MS,
   AUTH_SESSION_STARTED_AT_KEY,
   AUTH_TOKEN_KEY,
-  AUTH_USER_KEY,
   ROUTES,
 } from '@/constants';
-import { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { logout, selectAuthInitialized, selectIsAuthenticated } from '@/store/auth';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+
+const getSessionStatus = () => {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+
+  if (!token) {
+    return { hasToken: false, isExpired: false };
+  }
+
+  const sessionStartedAt = localStorage.getItem(AUTH_SESSION_STARTED_AT_KEY);
+  const parsedSessionStartedAt = sessionStartedAt ? Number(sessionStartedAt) : NaN;
+  const hasValidSessionStart =
+    Number.isFinite(parsedSessionStartedAt) && parsedSessionStartedAt > 0;
+  const isExpired =
+    !hasValidSessionStart || Date.now() - parsedSessionStartedAt >= AUTH_SESSION_MAX_AGE_MS;
+
+  return { hasToken: true, isExpired };
+};
 
 export function ProtectedRoute() {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const initialized = useAppSelector(selectAuthInitialized);
   const [isSessionExpired, setIsSessionExpired] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      return;
+    const { hasToken, isExpired } = getSessionStatus();
+
+    if (hasToken && isExpired) {
+      dispatch(logout());
     }
 
     const timeoutId = window.setTimeout(() => {
-      const sessionStartedAt = localStorage.getItem(AUTH_SESSION_STARTED_AT_KEY);
-      const parsedSessionStartedAt = sessionStartedAt ? Number(sessionStartedAt) : NaN;
-      const hasValidSessionStart =
-        Number.isFinite(parsedSessionStartedAt) && parsedSessionStartedAt > 0;
-      const sessionAge = hasValidSessionStart
-        ? Date.now() - parsedSessionStartedAt
-        : Number.POSITIVE_INFINITY;
-      const expired = !hasValidSessionStart || sessionAge >= AUTH_SESSION_MAX_AGE_MS;
-
-      if (expired) {
-        localStorage.removeItem(AUTH_TOKEN_KEY);
-        localStorage.removeItem(AUTH_USER_KEY);
-        localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
-      }
-
-      setIsSessionExpired(expired);
+      setIsSessionExpired(hasToken ? isExpired : false);
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
-  }, [token]);
+  }, [dispatch]);
 
-  if (!token) {
-    return <Navigate to={ROUTES.LOGIN} replace />;
+  if (!initialized) {
+    return <PageLoader />;
   }
 
   if (isSessionExpired === null) {
-    return null;
+    return <PageLoader />;
   }
 
   if (isSessionExpired) {
     return <Navigate to={ROUTES.SESSION_EXPIRED} replace />;
   }
 
+  if (!isAuthenticated) {
+    return <Navigate to={ROUTES.LOGIN} replace />;
+  }
+
   return <Outlet />;
 }
 
 export const PublicRoute = () => {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
-  if (token) return <Navigate to={ROUTES.DASHBOARD} replace />;
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const initialized = useAppSelector(selectAuthInitialized);
+  const location = useLocation();
+  const isVerifyRoute = location.pathname.startsWith(ROUTES.VERIFY_BASE);
+  const { hasToken, isExpired } = getSessionStatus();
+
+  if (!initialized) {
+    return <PageLoader />;
+  }
+
+  if (hasToken && isExpired) {
+    return <Navigate to={ROUTES.SESSION_EXPIRED} replace />;
+  }
+
+  if (isAuthenticated && !isVerifyRoute) {
+    return <Navigate to={ROUTES.DASHBOARD} replace />;
+  }
+
   return <Outlet />;
 };
