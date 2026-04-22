@@ -48,18 +48,6 @@ export const notFoundStyles: Record<string, SxProps<Theme>> = {
     alignItems: 'center',
     lineHeight: 1,
   },
-  logoTitle: {
-    fontSize: NOT_FOUND_TYPOGRAPHY.logoTitle.fontSize,
-    lineHeight: NOT_FOUND_TYPOGRAPHY.logoTitle.lineHeight,
-    fontWeight: 700,
-    color: NOT_FOUND_COLORS.logoText,
-  },
-  logoSubtitle: {
-    fontSize: NOT_FOUND_TYPOGRAPHY.logoSubtitle.fontSize,
-    lineHeight: NOT_FOUND_TYPOGRAPHY.logoSubtitle.lineHeight,
-    fontWeight: 600,
-    color: NOT_FOUND_COLORS.logoText,
-  },
   illustrationWrapper: {
     position: 'absolute',
     left: '50%',

@@ -22,15 +22,15 @@ export const INACTIVITY_TYPOGRAPHY = {
     lineHeight: `${LINE_HEIGHTS.xs}px`,
   },
   title: {
-    fontSize: { xs: 26, sm: 30, md: FONT_SIZES.h2 },
-    lineHeight: { xs: '30px', sm: '34px', md: '42px' },
+    fontSize: { xs: 38, sm: 40, md: FONT_SIZES.h2 },
+    lineHeight: { xs: '44px', sm: '46px', md: '44px' },
   },
   description: {
-    fontSize: { xs: FONT_SIZES.xs, sm: 13, md: FONT_SIZES.sm },
-    lineHeight: { xs: '18px', sm: `${LINE_HEIGHTS.sm}px`, md: '21px' },
+    fontSize: FONT_SIZES.md,
+    lineHeight: `${LINE_HEIGHTS.md}px`,
   },
   signInLink: {
-    fontSize: { xs: 11, sm: FONT_SIZES.xs, md: 13 },
-    lineHeight: { xs: '14px', sm: `${LINE_HEIGHTS.xs}px`, md: 18 },
+    fontSize: FONT_SIZES.sm,
+    lineHeight: `${LINE_HEIGHTS.sm}px`,
   },
 } as const;
