@@ -10,6 +10,7 @@ import { LandingLayout } from '@/components/layouts/LandingLayout';
 import Contact from '@/pages/Contact';
 import Landing from '@/pages/Landing';
 import TokenPage from '@/pages/TokenPage';
+import NotFound from '@/pages/NotFound';
 import { PageLoader } from '@/components/common/PageLoader';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
@@ -39,6 +40,8 @@ export function AppRoutes() {
             <Route path={ROUTES.SYNTHETIC_DATA} element={<SyntheticData />} />
           </Route>
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
