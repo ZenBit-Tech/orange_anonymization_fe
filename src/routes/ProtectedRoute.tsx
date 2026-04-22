@@ -1,18 +1,38 @@
-import { AUTH_TOKEN_KEY } from '@/constants';
-import { Navigate, Outlet } from 'react-router-dom';
+import { ROUTES } from '@/constants';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAppSelector } from '@/store/store';
+import { PageLoader } from '@/components/common/PageLoader';
+import { selectAuthInitialized, selectIsAuthenticated } from '@/store/auth';
 
 export function ProtectedRoute() {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const initialized = useAppSelector(selectAuthInitialized);
 
-  if (!token) {
-    return <Navigate to="/auth/login" replace />;
+  if (!initialized) {
+    return <PageLoader />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
   return <Outlet />;
 }
 
 export const PublicRoute = () => {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
-  if (token) return <Navigate to="/app" replace />;
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const initialized = useAppSelector(selectAuthInitialized);
+  const location = useLocation();
+
+  const isVerifyRoute = location.pathname.startsWith(ROUTES.VERIFY_BASE);
+
+  if (!initialized) {
+    return <PageLoader />;
+  }
+
+  if (isAuthenticated && !isVerifyRoute) {
+    return <Navigate to={ROUTES.DASHBOARD} replace />;
+  }
+
   return <Outlet />;
 };

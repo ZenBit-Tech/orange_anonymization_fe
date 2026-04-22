@@ -1,10 +1,14 @@
 import axios, { type AxiosError } from 'axios';
-import { API_BASE_URL, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import { API_BASE_URL, AUTH_TOKEN_KEY } from '@/constants';
 import type { ApiError } from '@/services/types';
+import { API_TIMEOUT } from '@/constants/api-config';
+import { store } from '@/store/store';
+import { logout } from '@/store/auth';
+import { HTTP_STATUS } from '@/constants/http-status';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30_000,
+  timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -13,9 +17,11 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error: AxiosError) => Promise.reject(error),
@@ -24,13 +30,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiError>) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+
+    if (status === HTTP_STATUS.UNAUTHORIZED) {
       localStorage.removeItem(AUTH_TOKEN_KEY);
-      window.location.href = ROUTES.LOGIN;
-      return Promise.reject(new Error('Session expired. Please sign in again.'));
+      store.dispatch(logout());
     }
 
     const serverMessage = error.response?.data?.message;
+
     const message = Array.isArray(serverMessage)
       ? serverMessage.join(', ')
       : (serverMessage ?? error.message ?? 'An unexpected error occurred');
@@ -38,5 +46,3 @@ api.interceptors.response.use(
     return Promise.reject(new Error(message));
   },
 );
-
-export default api;

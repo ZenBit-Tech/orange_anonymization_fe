@@ -1,21 +1,22 @@
-import api from '@/services/api';
-import { AUTH_TOKEN_KEY } from '@/constants';
+import { api } from '@/services/api';
+import { API_ROUTES } from '@/constants/api-routes';
 
-interface AuthResponse {
-  accessToken: string;
-  user: {
-    id: string;
-    email: string;
-  };
+interface LoginResponse {
+  message: string;
 }
 
-export const login = async (email: string): Promise<void> => {
-  const { data } = await api.post<AuthResponse>('/auth/login', { email });
+interface VerifyResponse {
+  accessToken: string;
+}
 
-  localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
-  localStorage.setItem('user', JSON.stringify(data.user));
+export const login = async (email: string): Promise<LoginResponse> => {
+  const { data } = await api.post<LoginResponse>(API_ROUTES.AUTH_LOGIN, { email });
+  return data;
 };
 
-export const verify = async (token: string) => {
-  return await api.get<AuthResponse>(`/auth/verify?token=${token}`);
+export const verify = async (token: string): Promise<VerifyResponse> => {
+  const { data } = await api.get<VerifyResponse>(API_ROUTES.AUTH_VERIFY, {
+    params: { token },
+  });
+  return data;
 };
