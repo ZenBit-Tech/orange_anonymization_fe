@@ -1,32 +1,35 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AUTH_TOKEN_KEY, ROUTES } from '@/constants';
-import { verify } from '@/services/auth/auth.api';
+import { ROUTES } from '@/constants';
+import { useAppDispatch } from '@/store/store';
+import { verifyMagicLink } from '@/store/auth';
+import { PageLoader } from '@/components/common/PageLoader';
 
 const TokenPage = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const verifyToken = async (): Promise<void> => {
-      if (!token) {
-        navigate(ROUTES.LOGIN);
-        return;
-      }
-
+    const run = async () => {
       try {
-        const data = await verify(token);
-        localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
-        navigate(ROUTES.DASHBOARD);
+        if (!token) {
+          navigate(ROUTES.LOGIN, { replace: true });
+          return;
+        }
+
+        await dispatch(verifyMagicLink(token)).unwrap();
+
+        navigate(ROUTES.DASHBOARD, { replace: true });
       } catch {
-        navigate(ROUTES.LOGIN);
+        navigate(ROUTES.LOGIN, { replace: true });
       }
     };
 
-    verifyToken();
-  }, [token, navigate]);
+    run();
+  }, [token, navigate, dispatch]);
 
-  return null;
+  return <PageLoader />;
 };
 
 export default TokenPage;

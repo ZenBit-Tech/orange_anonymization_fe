@@ -1,4 +1,4 @@
-import api from '@/services/api';
+import { api } from '@/services/api';
 import { API_ROUTES } from '@/constants/api-routes';
 
 interface LoginResponse {
