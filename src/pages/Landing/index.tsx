@@ -8,7 +8,7 @@ import { CtaSection } from '@/pages/Landing/sections/CtaSection';
 import { FaqSection } from '@/pages/Landing/sections/FaqSection';
 
 const Landing = () => {
-  const { expandedFaq, handleFaqChange, handleGetStarted } = useLanding();
+  const { handleGetStarted } = useLanding();
 
   return (
     <Box sx={(theme) => ({ bgcolor: theme.palette.primary[800], minHeight: '100vh' })}>
@@ -17,7 +17,7 @@ const Landing = () => {
       <FeaturesSection />
       <ComplianceSection />
       <CtaSection onGetStarted={handleGetStarted} />
-      <FaqSection expandedFaq={expandedFaq} onFaqChange={handleFaqChange} />
+      <FaqSection />
     </Box>
   );
 };
