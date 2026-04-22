@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material';
+import { INACTIVITY_COLORS, INACTIVITY_TYPOGRAPHY } from './constants';
 
 const FIGMA_CANVAS_WIDTH = 1440;
 const FIGMA_CANVAS_HEIGHT = 900;
@@ -6,7 +7,7 @@ const FIGMA_CANVAS_HEIGHT = 900;
 export const inactivityStyles: Record<string, SxProps<Theme>> = {
   root: {
     minHeight: { xs: '100dvh', md: `${FIGMA_CANVAS_HEIGHT}px` },
-    bgcolor: '#01132F',
+    bgcolor: INACTIVITY_COLORS.pageBackground,
     color: 'common.white',
     width: '100%',
     position: 'relative',
@@ -30,28 +31,33 @@ export const inactivityStyles: Record<string, SxProps<Theme>> = {
     alignItems: 'center',
   },
   logoImage: {
-    width: 'min(100%, 1440px)',
+    width: {
+      xs: 'min(98vw, 760px)',
+      sm: 'min(96vw, 1100px)',
+      md: 'min(100%, 1440px)',
+    },
+    maxWidth: 'none',
     height: 'auto',
-    display: { xs: 'none', md: 'block' },
+    display: 'block',
     objectFit: 'contain',
   },
   logoTextBlock: {
-    display: { xs: 'flex', md: 'none' },
+    display: 'none',
     flexDirection: 'column',
     alignItems: 'center',
     lineHeight: 1,
   },
   logoTitle: {
-    fontSize: 24,
-    lineHeight: '28px',
+    fontSize: INACTIVITY_TYPOGRAPHY.logoTitle.fontSize,
+    lineHeight: INACTIVITY_TYPOGRAPHY.logoTitle.lineHeight,
     fontWeight: 700,
-    color: '#FFFFFF',
+    color: INACTIVITY_COLORS.logoText,
   },
   logoSubtitle: {
-    fontSize: 12,
-    lineHeight: '16px',
+    fontSize: INACTIVITY_TYPOGRAPHY.logoSubtitle.fontSize,
+    lineHeight: INACTIVITY_TYPOGRAPHY.logoSubtitle.lineHeight,
     fontWeight: 600,
-    color: '#FFFFFF',
+    color: INACTIVITY_COLORS.logoText,
   },
   illustrationWrapper: {
     position: 'absolute',
@@ -80,16 +86,16 @@ export const inactivityStyles: Record<string, SxProps<Theme>> = {
     gap: { xs: '10px', sm: '12px', md: '16px' },
   },
   title: {
-    fontSize: { xs: 26, sm: 30, md: 36 },
-    lineHeight: { xs: '30px', sm: '34px', md: '42px' },
+    fontSize: INACTIVITY_TYPOGRAPHY.title.fontSize,
+    lineHeight: INACTIVITY_TYPOGRAPHY.title.lineHeight,
     fontWeight: 700,
-    color: '#B2EDE5',
+    color: INACTIVITY_COLORS.title,
   },
   description: {
-    fontSize: { xs: 12, sm: 13, md: 14 },
-    lineHeight: { xs: '18px', sm: '20px', md: '21px' },
+    fontSize: INACTIVITY_TYPOGRAPHY.description.fontSize,
+    lineHeight: INACTIVITY_TYPOGRAPHY.description.lineHeight,
     fontWeight: 500,
-    color: '#9CA3AF',
+    color: INACTIVITY_COLORS.description,
   },
   signInLink: {
     minWidth: '100px',
@@ -101,14 +107,14 @@ export const inactivityStyles: Record<string, SxProps<Theme>> = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: { xs: 11, sm: 12, md: 13 },
-    lineHeight: { xs: '14px', sm: '16px', md: '18px' },
+    fontSize: INACTIVITY_TYPOGRAPHY.signInLink.fontSize,
+    lineHeight: INACTIVITY_TYPOGRAPHY.signInLink.lineHeight,
     fontWeight: 500,
-    color: '#0F213D',
-    bgcolor: '#00BFA5',
+    color: INACTIVITY_COLORS.buttonText,
+    bgcolor: INACTIVITY_COLORS.buttonBg,
     transition: 'background-color 120ms ease',
     '&:hover': {
-      bgcolor: '#00A68F',
+      bgcolor: INACTIVITY_COLORS.buttonBgHover,
     },
   },
   mobileGradient: {
@@ -116,7 +122,6 @@ export const inactivityStyles: Record<string, SxProps<Theme>> = {
     position: 'absolute',
     inset: 0,
     pointerEvents: 'none',
-    background:
-      'linear-gradient(180deg, rgba(1,19,47,0) 0%, rgba(1,19,47,0.25) 35%, rgba(1,19,47,0.45) 100%)',
+    background: INACTIVITY_COLORS.mobileGradient,
   },
 };

@@ -233,6 +233,18 @@
       "verifyFailed": "Invalid or expired magic link."
     }
   },
+  "inactivity": {
+    "title": "Your session has expired",
+    "descriptionLineOne": "Your session timed out due to inactivity.",
+    "descriptionLineTwo": "Please sign in again to continue.",
+    "signInAgain": "Sign in again",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis",
+      "logoAlt": "De-ID Studio logo",
+      "illustrationAlt": "Session expired"
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Overview of your de-identification activity",

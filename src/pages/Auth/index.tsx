@@ -4,6 +4,7 @@ import { InputAdornment } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants';
 import { useAuthForm } from './useAuthForm';
 import { authText } from './constants';
 import {
@@ -59,8 +60,13 @@ const AuthForm = () => {
   const isActive = isValid && !isSubmitting;
 
   const handleFormSubmit = async (data: { email: string }) => {
-    await onSubmit(data);
-    setEmailSent(true);
+    const isSuccess = await onSubmit(data);
+    if (isSuccess) {
+      navigate(ROUTES.DASHBOARD, { replace: true });
+      return;
+    }
+
+    setEmailSent(false);
   };
 
   return (

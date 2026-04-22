@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY, AUTH_USER_KEY, ROUTES } from '@/constants';
 import { inactivityImages } from '@/assets/images/inactivity';
 import { inactivityStyles } from './styles';
 
 const Inactivity = () => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
@@ -19,12 +22,14 @@ const Inactivity = () => {
           <Box
             component="img"
             src={inactivityImages.logo}
-            alt="De-ID Studio logo"
+            alt={t('inactivity.branding.logoAlt')}
             sx={inactivityStyles.logoImage}
           />
           <Box sx={inactivityStyles.logoTextBlock}>
-            <Typography sx={inactivityStyles.logoTitle}>De-ID Studio</Typography>
-            <Typography sx={inactivityStyles.logoSubtitle}>De-ID & Synthesis</Typography>
+            <Typography sx={inactivityStyles.logoTitle}>{t('inactivity.branding.name')}</Typography>
+            <Typography sx={inactivityStyles.logoSubtitle}>
+              {t('inactivity.branding.tagline')}
+            </Typography>
           </Box>
         </Box>
 
@@ -32,22 +37,22 @@ const Inactivity = () => {
           <Box
             component="img"
             src={inactivityImages.clock}
-            alt="Session expired"
+            alt={t('inactivity.branding.illustrationAlt')}
             sx={inactivityStyles.illustration}
           />
         </Box>
 
         <Box sx={inactivityStyles.content}>
-          <Typography sx={inactivityStyles.title}>Your session has expired</Typography>
+          <Typography sx={inactivityStyles.title}>{t('inactivity.title')}</Typography>
 
           <Typography sx={inactivityStyles.description}>
-            Your session timed out due to inactivity.
+            {t('inactivity.descriptionLineOne')}
             <br />
-            Please sign in again to continue.
+            {t('inactivity.descriptionLineTwo')}
           </Typography>
 
           <Box component={RouterLink} to={ROUTES.LOGIN} sx={inactivityStyles.signInLink}>
-            Sign in again
+            {t('inactivity.signInAgain')}
           </Box>
         </Box>
       </Box>
