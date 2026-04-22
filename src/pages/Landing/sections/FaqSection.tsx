@@ -1,113 +1,151 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Container,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Collapse, Container, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import type { SyntheticEvent } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  LANDING_COLORS,
+  LANDING_SIZES,
+  LANDING_TRANSITIONS,
+  LANDING_TYPOGRAPHY,
+  SECTION_IDS,
+} from '@/pages/Landing/constants';
+import { LandingH2, LandingH4 } from '@/pages/Landing/typography';
 
 const FAQ_KEYS = ['industries', 'customSolutions', 'support', 'implementation'] as const;
 
 type FaqKey = (typeof FAQ_KEYS)[number];
 
-export interface FaqSectionProps {
-  expandedFaq: string | false;
-  onFaqChange: (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => void;
+interface FaqItemProps {
+  faqKey: FaqKey;
+  isExpanded: boolean;
+  onClick: () => void;
 }
 
-const FaqSection = ({ expandedFaq, onFaqChange }: FaqSectionProps) => {
+const FaqItem = memo(({ faqKey, isExpanded, onClick }: FaqItemProps) => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" id="contact" sx={{ py: { xs: 8, md: 10 } }}>
+    <Box sx={{ borderTop: `1px solid ${LANDING_COLORS.dividerTeal}` }}>
+      <Button
+        onClick={onClick}
+        fullWidth
+        sx={{
+          px: 0,
+          py: LANDING_SIZES.faqButtonPaddingY,
+          justifyContent: 'flex-start',
+          textTransform: 'none',
+          color: isExpanded ? 'white' : LANDING_COLORS.questionWhite,
+          fontSize: LANDING_TYPOGRAPHY.label.fontSize,
+          fontWeight: LANDING_TYPOGRAPHY.label.fontWeight,
+          transition: LANDING_TRANSITIONS.colorQuick,
+          '&:hover': {
+            bgcolor: 'transparent',
+            color: 'white',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            gap: LANDING_SIZES.faqButtonContentGap,
+          }}
+        >
+          <Typography
+            sx={{
+              flex: 1,
+              textAlign: 'left',
+            }}
+          >
+            {t(`landing.faq.items.${faqKey}.question`)}
+          </Typography>
+          <ExpandMoreIcon
+            sx={{
+              fontSize: LANDING_SIZES.iconMd,
+              color: isExpanded ? 'landing.accent' : LANDING_COLORS.subtleWhite,
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: LANDING_TRANSITIONS.transformQuick,
+              flexShrink: 0,
+            }}
+          />
+        </Box>
+      </Button>
+      <Collapse in={isExpanded}>
+        <Box sx={{ pb: LANDING_SIZES.faqCollapsePaddingBottom }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: LANDING_COLORS.subtleWhite,
+              lineHeight: LANDING_TYPOGRAPHY.looseLineHeight,
+            }}
+          >
+            {t(`landing.faq.items.${faqKey}.answer`)}
+          </Typography>
+        </Box>
+      </Collapse>
+    </Box>
+  );
+});
+
+FaqItem.displayName = 'FaqItem';
+
+const FaqSection = () => {
+  const { t } = useTranslation();
+  const [expandedFaq, setExpandedFaq] = useState<Set<string>>(new Set());
+
+  const handleToggle = (key: FaqKey) => {
+    setExpandedFaq((prev) => {
+      const updated = new Set(prev);
+      if (updated.has(key)) {
+        updated.delete(key);
+      } else {
+        updated.add(key);
+      }
+      return updated;
+    });
+  };
+
+  return (
+    <Box
+      component="section"
+      id={SECTION_IDS.contact}
+      sx={{ py: { xs: LANDING_SIZES.sectionPyXs, md: LANDING_SIZES.sectionPyMd } }}
+    >
       <Container maxWidth="lg">
         <Box
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
-            gap: { xs: 4, md: 8 },
-            mb: { xs: 6, md: 8 },
+            gap: { xs: LANDING_SIZES.faqHeaderGapXs, md: LANDING_SIZES.faqHeaderGapMd },
+            mb: { xs: LANDING_SIZES.sectionHeaderMbXs, md: LANDING_SIZES.sectionHeaderMbMd },
           }}
         >
-          <Typography
-            variant="h3"
-            sx={(theme) => ({
-              color: theme.palette.common.white,
-              fontWeight: theme.typography.fontWeightBold,
-              fontSize: { xs: '1.5rem', md: '1.75rem' },
-              flex: '0 0 auto',
-            })}
-          >
+          <LandingH2 component="h2" sx={{ flex: '0 0 auto' }}>
             {t('landing.faq.title')}
-          </Typography>
-          <Typography
-            variant="body1"
+          </LandingH2>
+          <LandingH4
             sx={{
-              color: 'rgba(255,255,255,0.5)',
-              lineHeight: 1.7,
+              maxWidth: { md: LANDING_SIZES.faqSubtitleMaxWidth },
+              textAlign: { xs: 'left', md: 'right' },
               alignSelf: { md: 'flex-end' },
+              ml: { md: 'auto' },
             }}
           >
             {t('landing.faq.subtitle')}
-          </Typography>
+          </LandingH4>
         </Box>
 
         <Box>
           {FAQ_KEYS.map((key: FaqKey) => (
-            <Accordion
+            <FaqItem
               key={key}
-              expanded={expandedFaq === key}
-              onChange={onFaqChange(key)}
-              disableGutters
-              elevation={0}
-              sx={(theme) => ({
-                bgcolor: 'transparent',
-                borderTop: `1px solid ${theme.palette.landing.border}`,
-                '&:last-child': {
-                  borderBottom: `1px solid ${theme.palette.landing.border}`,
-                },
-                '&::before': { display: 'none' },
-              })}
-            >
-              <AccordionSummary
-                expandIcon={
-                  <ExpandMoreIcon
-                    sx={(theme) => ({
-                      color:
-                        expandedFaq === key
-                          ? theme.palette.landing.accent
-                          : 'rgba(255,255,255,0.5)',
-                      fontSize: 20,
-                    })}
-                  />
-                }
-                sx={{ px: 0, py: 2 }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={(theme) => ({
-                    color:
-                      expandedFaq === key ? theme.palette.common.white : 'rgba(255,255,255,0.75)',
-                    fontWeight: theme.typography.fontWeightMedium,
-                  })}
-                >
-                  {t(`landing.faq.items.${key}.question`)}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ px: 0, pt: 0, pb: 2.5 }}>
-                <Typography
-                  variant="body2"
-                  sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}
-                >
-                  {t(`landing.faq.items.${key}.answer`)}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
+              faqKey={key}
+              isExpanded={expandedFaq.has(key)}
+              onClick={() => handleToggle(key)}
+            />
           ))}
+          <Box sx={{ borderTop: `1px solid ${LANDING_COLORS.dividerTeal}` }} />
         </Box>
       </Container>
     </Box>

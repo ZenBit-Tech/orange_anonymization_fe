@@ -8,17 +8,11 @@ const DECORATION_ASSETS: Record<LandingSectionDecorationProps['variant'], string
 const VARIANT_SX: Record<LandingSectionDecorationProps['variant'], SxProps<Theme>> = {
   hero: {
     backgroundPosition: 'center bottom',
-    backgroundSize: 'cover',
-    maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 75%, transparent 100%)',
-    WebkitMaskImage:
-      'linear-gradient(to bottom, transparent 0%, black 15%, black 75%, transparent 100%)',
+    backgroundSize: '100% auto',
   },
   cta: {
     backgroundPosition: 'center center',
-    backgroundSize: 'cover',
-    maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-    WebkitMaskImage:
-      'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+    backgroundSize: '100% auto',
   },
 };
 

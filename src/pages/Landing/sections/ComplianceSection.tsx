@@ -1,48 +1,55 @@
-import { Box, Chip, Container, Typography } from '@mui/material';
+import { Box, Chip, Container, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import {
+  LANDING_CLASS_NAMES,
+  LANDING_COLORS,
+  LANDING_SHADOWS,
+  LANDING_SIZES,
+  LANDING_TRANSITIONS,
+  LANDING_TRANSFORMS,
+  LANDING_TYPOGRAPHY,
+} from '@/pages/Landing/constants';
+import { LandingH1, LandingH2, LandingH3, LandingH4 } from '@/pages/Landing/typography';
 
-interface FrameworkConfig {
-  key: string;
-  chipColor: string;
-  featured: boolean;
-}
-
-const FRAMEWORKS: FrameworkConfig[] = [
-  { key: 'gdpr', chipColor: '#22C55E', featured: false },
-  { key: 'hipaa', chipColor: '#4ECDC4', featured: true },
-  { key: 'ukDpa', chipColor: '#22C55E', featured: false },
-  { key: 'swissDsg', chipColor: '#EF4444', featured: false },
-];
+const FRAMEWORK_KEYS = ['gdpr', 'hipaa', 'ukDpa', 'swissDsg'] as const;
 
 const ComplianceSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" sx={{ py: { xs: 8, md: 10 } }}>
+    <Box
+      component="section"
+      sx={{ py: { xs: LANDING_SIZES.sectionPyXs, md: LANDING_SIZES.sectionPyMd } }}
+    >
       <Container maxWidth="lg">
-        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-          <Typography
-            variant="h3"
-            sx={(theme) => ({
-              color: theme.palette.common.white,
-              fontWeight: theme.typography.fontWeightBold,
-              fontSize: { xs: '1.5rem', md: '2rem' },
-              mb: 2,
-            })}
+        <Divider
+          sx={{
+            borderColor: LANDING_COLORS.dividerTeal,
+            borderBottomWidth: '1px',
+          }}
+        />
+        <Box
+          sx={{
+            textAlign: 'center',
+            py: { xs: LANDING_SIZES.complianceInnerPyXs, md: LANDING_SIZES.complianceSectionPy },
+            mb: { xs: LANDING_SIZES.sectionHeaderMbXs, md: LANDING_SIZES.sectionHeaderMbMd },
+          }}
+        >
+          <LandingH1
+            component="h2"
+            sx={{ maxWidth: { md: LANDING_SIZES.complianceTitleMaxWidth }, mx: 'auto', mb: 2 }}
           >
             {t('landing.dataIntelligence.title')}
-          </Typography>
-          <Typography
-            variant="body1"
+          </LandingH1>
+          <LandingH3
             sx={{
-              color: 'rgba(255,255,255,0.55)',
-              maxWidth: 560,
+              maxWidth: LANDING_SIZES.complianceSubtitleMaxWidth,
               mx: 'auto',
-              lineHeight: 1.7,
+              textAlign: 'center',
             }}
           >
             {t('landing.dataIntelligence.subtitle')}
-          </Typography>
+          </LandingH3>
         </Box>
 
         <Box
@@ -51,89 +58,99 @@ const ComplianceSection = () => {
             flexDirection: { xs: 'column', md: 'row' },
             justifyContent: 'space-between',
             alignItems: { xs: 'flex-start', md: 'flex-end' },
-            gap: 2,
-            mb: 4,
+            gap: LANDING_SIZES.complianceFrameworksHeaderGap,
+            mb: LANDING_SIZES.complianceFrameworksHeaderMb,
           }}
         >
-          <Typography
-            variant="h4"
-            sx={(theme) => ({
-              color: theme.palette.common.white,
-              fontWeight: theme.typography.fontWeightBold,
-              fontSize: { xs: '1.25rem', md: '1.5rem' },
-            })}
-          >
-            {t('landing.complianceFrameworks.title')}
-          </Typography>
-          <Typography
-            variant="body2"
+          <LandingH2 component="h3">{t('landing.complianceFrameworks.title')}</LandingH2>
+          <LandingH4
             sx={{
-              color: 'rgba(255,255,255,0.5)',
-              maxWidth: 360,
+              maxWidth: { md: LANDING_SIZES.complianceFrameworksSubtitleMaxWidth },
               textAlign: { xs: 'left', md: 'right' },
-              lineHeight: 1.6,
             }}
           >
             {t('landing.complianceFrameworks.subtitle')}
-          </Typography>
+          </LandingH4>
         </Box>
 
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-            gap: 2,
+            gap: LANDING_SIZES.complianceGridGap,
+            alignItems: 'start',
           }}
         >
-          {FRAMEWORKS.map(({ key, chipColor, featured }) => (
+          {FRAMEWORK_KEYS.map((key) => (
             <Box
               key={key}
-              sx={(theme) => ({
-                bgcolor: theme.palette.landing.bg.card,
-                border: `1px solid ${
-                  featured ? theme.palette.landing.accent : theme.palette.landing.border
-                }`,
-                borderRadius: 3,
-                p: 2.5,
+              sx={{
+                bgcolor: LANDING_COLORS.cardSurface,
+                border: `1px solid ${LANDING_COLORS.cardBorder}`,
+                borderRadius: LANDING_SIZES.cardRadius,
+                pt: LANDING_SIZES.frameworkCardPaddingY,
+                pb: LANDING_SIZES.frameworkCardPaddingY,
+                pl: LANDING_SIZES.frameworkCardPaddingX,
+                pr: LANDING_SIZES.frameworkCardPaddingX,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1.5,
-                transition: 'border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
+                justifyContent: 'space-between',
+                gap: LANDING_SIZES.frameworkCardGap,
+                minHeight: LANDING_SIZES.frameworkCardMinHeight,
+                transformOrigin: 'center',
+                willChange: 'transform',
+                transition: LANDING_TRANSITIONS.cardHover,
                 cursor: 'default',
-                '&:hover': {
-                  borderColor: featured
-                    ? theme.palette.landing.accent
-                    : theme.palette.landing.accent + '70',
-                  transform: 'translateY(-5px)',
-                  boxShadow: '0 12px 40px rgba(78, 205, 196, 0.13)',
+                [`& .${LANDING_CLASS_NAMES.frameworkCardTitle}`]: {
+                  color: LANDING_COLORS.cardTitle,
+                  fontSize: LANDING_TYPOGRAPHY.frameworkTitle.fontSize,
+                  lineHeight: LANDING_TYPOGRAPHY.frameworkTitle.lineHeight,
+                  fontWeight: LANDING_TYPOGRAPHY.frameworkTitle.fontWeight,
+                  transition: LANDING_TRANSITIONS.colorFast,
                 },
-              })}
+                '&:hover': {
+                  transform: LANDING_TRANSFORMS.cardHover,
+                  borderColor: 'transparent',
+                  boxShadow: LANDING_SHADOWS.frameworkCardHover,
+                  zIndex: 1,
+                  [`& .${LANDING_CLASS_NAMES.frameworkCardTitle}`]: {
+                    color: LANDING_COLORS.accentText,
+                  },
+                },
+              }}
             >
               <Chip
                 label={t(`landing.complianceFrameworks.frameworks.${key}.badge`)}
                 size="small"
                 sx={{
-                  alignSelf: 'flex-start',
-                  bgcolor: chipColor + '22',
-                  color: chipColor,
-                  fontWeight: 600,
-                  fontSize: '0.7rem',
-                  height: 22,
-                  border: `1px solid ${chipColor}44`,
+                  alignSelf: 'flex-end',
+                  height: LANDING_SIZES.chipHeight,
+                  borderRadius: LANDING_SIZES.chipBorderRadius,
+                  px: LANDING_SIZES.chipPaddingX,
+                  py: LANDING_SIZES.chipPaddingY,
+                  bgcolor: LANDING_COLORS.chipBg,
+                  color: LANDING_COLORS.chipText,
+                  fontWeight: LANDING_TYPOGRAPHY.chipLabel.fontWeight,
+                  fontSize: LANDING_TYPOGRAPHY.chipLabel.fontSize,
+                  lineHeight: LANDING_TYPOGRAPHY.chipLabel.lineHeight,
+                  border: `1px solid ${LANDING_COLORS.chipBorder}`,
+                  '& .MuiChip-label': {
+                    px: 0,
+                  },
                 }}
               />
-              <Typography
-                variant="body2"
-                sx={(theme) => ({
-                  color: theme.palette.common.white,
-                  fontWeight: theme.typography.fontWeightMedium,
-                  lineHeight: 1.5,
-                  fontSize: '0.875rem',
-                })}
-              >
+              <Typography className={LANDING_CLASS_NAMES.frameworkCardTitle}>
                 {t(`landing.complianceFrameworks.frameworks.${key}.title`)}
               </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)' }}>
+              <Typography
+                component="span"
+                sx={{
+                  color: LANDING_COLORS.body,
+                  fontSize: LANDING_TYPOGRAPHY.entityText.fontSize,
+                  lineHeight: LANDING_TYPOGRAPHY.entityText.lineHeight,
+                  fontWeight: LANDING_TYPOGRAPHY.entityText.fontWeight,
+                }}
+              >
                 {t(`landing.complianceFrameworks.frameworks.${key}.entities`)}
               </Typography>
             </Box>

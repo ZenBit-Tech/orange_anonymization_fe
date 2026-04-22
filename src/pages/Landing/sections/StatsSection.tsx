@@ -1,5 +1,8 @@
-import { Box, Container, Divider, Typography } from '@mui/material';
+import { Box, Container, Divider } from '@mui/material';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LANDING_COLORS, LANDING_SIZES } from '@/pages/Landing/constants';
+import { LandingH1, LandingLabel } from '@/pages/Landing/typography';
 
 const STAT_KEYS = ['accuracy', 'identifiers', 'processingTime', 'compliance'] as const;
 
@@ -9,60 +12,53 @@ const StatsSection = () => {
   const { t } = useTranslation();
 
   return (
-    <Box component="section" sx={{ py: { xs: 6, md: 8 } }}>
+    <Box
+      component="section"
+      sx={{ py: { xs: LANDING_SIZES.statsSectionPyXs, md: LANDING_SIZES.statsSectionPyMd } }}
+    >
       <Container maxWidth="lg">
         <Box
           sx={{
             display: 'flex',
-            alignItems: 'stretch',
-            justifyContent: 'center',
-            flexWrap: { xs: 'wrap', md: 'nowrap' },
-            gap: { xs: 4, md: 0 },
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+            justifyContent: { md: 'space-between' },
+            gap: { xs: LANDING_SIZES.statsHeaderGapXs, md: 0 },
+            height: { md: LANDING_SIZES.statsHeaderHeight },
           }}
         >
-          {STAT_KEYS.map((key: StatKey, index) => (
-            <Box key={key} sx={{ display: 'flex', alignItems: 'stretch', flex: 1 }}>
-              <Box
-                sx={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: { xs: 'center', md: 'flex-start' },
-                  px: { md: 5 },
-                }}
-              >
-                <Typography
-                  variant="h3"
-                  sx={(theme) => ({
-                    color: theme.palette.landing.accent,
-                    fontWeight: theme.typography.fontWeightBold,
-                    fontSize: { xs: '2rem', md: '2.5rem' },
-                    lineHeight: 1.1,
-                    mb: 0.75,
-                  })}
+          {STAT_KEYS.map((key: StatKey, index) => {
+            const isLast = index === STAT_KEYS.length - 1;
+            const showDivider = index < STAT_KEYS.length - 1;
+            return (
+              <Fragment key={key}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: { xs: 'center', md: isLast ? 'flex-end' : 'center' },
+                    justifyContent: 'center',
+                    gap: LANDING_SIZES.statsItemGap,
+                  }}
                 >
-                  {t(`landing.stats.${key}.value`)}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: 'rgba(255,255,255,0.5)', letterSpacing: '0.01em' }}
-                >
-                  {t(`landing.stats.${key}.label`)}
-                </Typography>
-              </Box>
+                  <LandingH1 component="p">{t(`landing.stats.${key}.value`)}</LandingH1>
+                  <LandingLabel>{t(`landing.stats.${key}.label`)}</LandingLabel>
+                </Box>
 
-              {index < STAT_KEYS.length - 1 && (
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  sx={(theme) => ({
-                    borderColor: theme.palette.landing.border,
-                    display: { xs: 'none', md: 'block' },
-                  })}
-                />
-              )}
-            </Box>
-          ))}
+                {showDivider && (
+                  <Divider
+                    orientation="vertical"
+                    flexItem
+                    sx={{
+                      width: LANDING_SIZES.statsDividerWidth,
+                      borderColor: LANDING_COLORS.dividerTealSoft,
+                      display: { xs: 'none', md: 'block' },
+                    }}
+                  />
+                )}
+              </Fragment>
+            );
+          })}
         </Box>
       </Container>
     </Box>
