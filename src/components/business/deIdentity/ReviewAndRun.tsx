@@ -1,4 +1,4 @@
-import type { EntityDetection, JobResults } from '@/pages/DeIdentify/types';
+import { JobStatus, type EntityDetection, type JobResults } from '@/pages/DeIdentify/types';
 import { jobsService } from '@/services/jobsService';
 import { resultsService } from '@/services/resultsService';
 import { ContentCopy, Download } from '@mui/icons-material';
@@ -32,6 +32,14 @@ const getEntityColor = (type: string) => {
     IP_ADDRESS: 'IP_ADDRESS',
     MEDICAL_LICENSE: 'MEDICAL_LICENSE',
     CREDIT_CARD: 'CREDIT_CARD',
+    ACCOUNT: 'IBAN_CODE',
+    LICENSE: 'US_DRIVER_LICENSE',
+    MRN: 'MEDICAL_RECORD_NUMBER',
+    ZIP: 'US_ZIP_CODE',
+    VEHICLE: 'US_PASSPORT',
+    IBAN_CODE: 'IBAN_CODE',
+    US_DRIVER_LICENSE: 'US_DRIVER_LICENSE',
+    MEDICAL_RECORD_NUMBER: 'MEDICAL_RECORD_NUMBER',
   };
 
   const paletteKey = map[type] || 'DEFAULT';
@@ -79,9 +87,9 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
     try {
       const job = await jobsService.getJobById(jobId);
 
-      if (job.status === 'succeeded') {
+      if (job.status === JobStatus.SUCCEEDED) {
         await getResults();
-      } else if (job.status === 'failed') {
+      } else if (job.status === JobStatus.FAILED) {
         setIsError(true);
         stopPolling();
       }
@@ -185,7 +193,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
             <Box
               sx={{ bgcolor: 'background.default', p: 2, borderRadius: 1, fontFamily: 'monospace' }}
             >
-              {renderHighlightedText(textToDisplay, results?.entityTable as EntityDetection[])}
+              {renderHighlightedText(textToDisplay, results?.entityTable ?? [])}
             </Box>
           </Paper>
         </Grid>

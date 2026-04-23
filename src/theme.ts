@@ -230,6 +230,11 @@ const BRAND = {
     IP_ADDRESS: '#1B5E20',
     MEDICAL_LICENSE: '#0D47A1',
     URL: '#4E342E',
+    IBAN_CODE: '#2E7D32',
+    US_DRIVER_LICENSE: '#C62828',
+    MEDICAL_RECORD_NUMBER: '#0277BD',
+    US_PASSPORT: '#1565C0',
+    US_ZIP_CODE: '#AD1457',
     DEFAULT: '#37474F',
   },
   secondary: {

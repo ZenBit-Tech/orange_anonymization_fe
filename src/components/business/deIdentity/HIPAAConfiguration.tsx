@@ -1,13 +1,13 @@
-import type { HIPAAMethodUI, IJob } from '@/pages/DeIdentify/types';
-import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useTranslation } from 'react-i18next';
-import { alpha, Box, Grid, Typography } from '@mui/material';
 import {
   RadioButtonCheckedOutlined as RadioButtonCheckedOutlinedIcon,
   RadioButtonUncheckedOutlined as RadioButtonUncheckedOutlinedIcon,
   ReportProblemOutlined as ReportProblemOutlinedIcon,
   Check as CheckIcon,
 } from '@mui/icons-material';
+import type { HIPAAMethodUI, IJob } from '@/pages/DeIdentify/types';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { alpha, Box, Grid, Typography } from '@mui/material';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { jobsService } from '@/services/jobsService';
 import { FONT_SIZES } from '@/constants';

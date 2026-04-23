@@ -20,6 +20,6 @@ export const StepContent: FC<IProps> = ({ step, jobId }) => {
     case 3:
       return <ReviewAndRun jobId={jobId} />;
     default:
-      return 'Unknown step';
+      return null;
   }
 };

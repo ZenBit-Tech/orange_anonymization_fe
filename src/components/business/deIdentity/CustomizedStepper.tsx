@@ -137,12 +137,16 @@ export default function CustomizedSteppers() {
   };
 
   const getLatestDraft = async () => {
-    const response = await jobsService.getLatestDraft();
+    try {
+      const response = await jobsService.getLatestDraft();
 
-    if (!response) {
-      createJob();
-    } else {
-      dispatch(setJobAC(response));
+      if (!response) {
+        createJob();
+      } else {
+        dispatch(setJobAC(response));
+      }
+    } catch (error) {
+      console.error('Error fetching latest draft:', error);
     }
   };
 
@@ -156,31 +160,43 @@ export default function CustomizedSteppers() {
   };
 
   const handleNext = async () => {
-    const data: Partial<IJob> = {
-      wizardState: {
-        currentStep: activeStep + 2,
-        frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
-        inputData: currentJob?.wizardState?.inputData || null,
-        configSettings: currentJob?.wizardState?.configSettings || {},
-      },
-    };
-    await updateJob(currentJob?.id as string, data);
+    try {
+      const data: Partial<IJob> = {
+        wizardState: {
+          currentStep: activeStep + 2,
+          frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
+          inputData: currentJob?.wizardState?.inputData || null,
+          configSettings: currentJob?.wizardState?.configSettings || {},
+        },
+      };
+      await updateJob(currentJob?.id as string, data);
+    } catch (error) {
+      console.error('Error updating job:', error);
+    }
 
     if (activeStep === 2) {
-      jobsService.runAnalysis(currentJob?.id as string, localOriginalText);
+      try {
+        await jobsService.runAnalysis(currentJob?.id as string, localOriginalText);
+      } catch (error) {
+        console.error('Error running analysis:', error);
+      }
     }
   };
 
-  const handleBack = () => {
-    const data: Partial<IJob> = {
-      wizardState: {
-        currentStep: activeStep,
-        frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
-        inputData: currentJob?.wizardState?.inputData || null,
-        configSettings: currentJob?.wizardState?.configSettings || {},
-      },
-    };
-    updateJob(currentJob?.id as string, data);
+  const handleBack = async () => {
+    try {
+      const data: Partial<IJob> = {
+        wizardState: {
+          currentStep: activeStep,
+          frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
+          inputData: currentJob?.wizardState?.inputData || null,
+          configSettings: currentJob?.wizardState?.configSettings || {},
+        },
+      };
+      await updateJob(currentJob?.id as string, data);
+    } catch (error) {
+      console.error('Error going back:', error);
+    }
   };
 
   return (

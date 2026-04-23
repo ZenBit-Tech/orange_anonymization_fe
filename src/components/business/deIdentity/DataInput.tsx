@@ -1,7 +1,8 @@
-import Tabs, { Tab } from '@/components/UI/Tabs';
-import { Box, Button, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+import Tabs, { Tab } from '@/components/UI/Tabs';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import {
   Edit as EditIcon,
   ArrowCircleUpOutlined as ArrowCircleUpOutlinedIcon,
@@ -11,7 +12,6 @@ import {
   Check as CheckIcon,
   ArrowUpward as ArrowUpwardIcon,
 } from '@mui/icons-material';
-import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { jobsService } from '@/services/jobsService';
 import type { IJob, WizardState } from '@/pages/DeIdentify/types';
@@ -48,18 +48,14 @@ const DataInput = () => {
   useEffect(() => {
     if (text === localOriginalText) return;
 
-    const timeoutId = setTimeout(async () => {
-      if (currentJob?.id) {
-        dispatch(
-          setLocalOriginalTextAC({
-            jobId: currentJob.id,
-            text: text,
-          }),
-        );
-      }
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
+    if (currentJob?.id) {
+      dispatch(
+        setLocalOriginalTextAC({
+          jobId: currentJob.id,
+          text: text,
+        }),
+      );
+    }
   }, [text, currentJob?.id]);
 
   const validate = (value: string) => {
@@ -91,7 +87,7 @@ const DataInput = () => {
   const handleFileUpload = async (file: File) => {
     setFileError(null);
 
-    const allowedExtensions = ['text/plain', 'application/json', 'text/csv', 'application/pdf'];
+    const allowedExtensions = ['text/plain', 'application/json', 'text/csv'];
 
     if (!allowedExtensions.includes(file.type)) {
       setFileError(t('deIdentify.input.validation.unsupportedFormat'));
