@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import { alpha, styled } from '@mui/material/styles';
 import {
   Stack,
   Stepper,
@@ -26,6 +27,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { jobsService } from '@/services/jobsService';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import type { IJob } from '@/pages/DeIdentify/types';
+import { FONT_SIZES } from '@/constants';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -66,7 +68,7 @@ const ColorlibStepIconRoot = styled('div')<{
         backgroundColor: theme.palette.primary[500],
         width: 60,
         height: 60,
-        boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+        boxShadow: `0 4px 10px ${alpha(theme.palette.common.black, 0.25)}`,
       }
     : {
         margin: 14,
@@ -103,17 +105,29 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = ['Compliance', 'Data Input', 'Configuration', 'Review & Run'];
-
 export default function CustomizedSteppers() {
+  const { t } = useTranslation();
   const { currentJob } = useAppSelector((state) => state.jobs);
+  const localOriginalText = useAppSelector(
+    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
+  );
+
+  const steps = useMemo(
+    () => [
+      t('deIdentify.steps.compliance'),
+      t('deIdentify.steps.dataInput'),
+      t('deIdentify.steps.configuration'),
+      t('deIdentify.steps.reviewAndRun'),
+    ],
+    [t],
+  );
 
   const activeStep = useMemo(() => (currentJob?.wizardState?.currentStep ?? 1) - 1, [currentJob]);
   const selectedFramework = useMemo(
     () => currentJob?.wizardState?.frameworkSelection ?? null,
     [currentJob],
   );
-  const text = useMemo(() => currentJob?.originalText, [currentJob]);
+  const text = useMemo(() => localOriginalText, [localOriginalText]);
 
   const dispatch = useAppDispatch();
 
@@ -150,7 +164,11 @@ export default function CustomizedSteppers() {
         configSettings: currentJob?.wizardState?.configSettings || {},
       },
     };
-    updateJob(currentJob?.id as string, data);
+    await updateJob(currentJob?.id as string, data);
+
+    if (activeStep === 2) {
+      jobsService.runAnalysis(currentJob?.id as string, localOriginalText);
+    }
   };
 
   const handleBack = () => {
@@ -160,18 +178,6 @@ export default function CustomizedSteppers() {
         frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
         inputData: currentJob?.wizardState?.inputData || null,
         configSettings: currentJob?.wizardState?.configSettings || {},
-      },
-    };
-    updateJob(currentJob?.id as string, data);
-  };
-
-  const handleReset = () => {
-    const data: Partial<IJob> = {
-      wizardState: {
-        currentStep: 1,
-        frameworkSelection: null,
-        inputData: null,
-        configSettings: {},
       },
     };
     updateJob(currentJob?.id as string, data);
@@ -197,18 +203,18 @@ export default function CustomizedSteppers() {
           '& .MuiStepLabel-label': {
             color: 'neutral.400',
             mt: 1,
-            fontWeight: 600,
-            fontSize: '14px',
+            fontWeight: 'fontWeightSemiBold',
+            fontSize: FONT_SIZES.sm,
           },
           '& .MuiStepLabel-label.Mui-active': {
             color: 'primary.500',
-            fontWeight: 600,
-            fontSize: '16px',
+            fontWeight: 'fontWeightSemiBold',
+            fontSize: FONT_SIZES.md,
           },
           '& .MuiStepLabel-label.Mui-completed': {
             color: 'primary.500',
-            fontWeight: 600,
-            fontSize: '14px',
+            fontWeight: 'fontWeightSemiBold',
+            fontSize: FONT_SIZES.sm,
           },
         }}
       >
@@ -229,7 +235,7 @@ export default function CustomizedSteppers() {
         }}
       >
         {activeStep === steps.length ? (
-          <ReviewAndRun onReset={handleReset} />
+          <ReviewAndRun jobId={currentJob?.id as string} />
         ) : (
           <Box
             sx={{
@@ -246,7 +252,7 @@ export default function CustomizedSteppers() {
                 flexDirection: 'column',
               }}
             >
-              <StepContent step={activeStep} />
+              <StepContent step={activeStep} jobId={currentJob?.id as string} />
             </Box>
 
             <Box
@@ -264,14 +270,19 @@ export default function CustomizedSteppers() {
                 sx={{ mr: 1, color: (theme) => theme.palette.neutral[700] }}
                 startIcon={<ArrowBackIcon />}
               >
-                Back
+                {t('common.back')}
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
               <Button
                 variant="contained"
                 disabled={
                   (activeStep === 0 && !selectedFramework) ||
-                  (activeStep === 1 && (!text || text.length < 50 || text.length > 5000))
+                  (activeStep === 1 && (!text || text.length < 50 || text.length > 5000)) ||
+                  (activeStep === 2 &&
+                    (!currentJob?.wizardState?.configSettings.method ||
+                      !currentJob?.wizardState?.configSettings.strategies ||
+                      !currentJob?.wizardState?.configSettings.language ||
+                      !currentJob?.wizardState?.configSettings.threshold))
                 }
                 onClick={handleNext}
                 sx={{
@@ -280,7 +291,11 @@ export default function CustomizedSteppers() {
                 }}
                 endIcon={activeStep === steps.length - 1 ? null : <ArrowForwardIcon />}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Continue'}
+                {activeStep === steps.length - 1
+                  ? t('common.finish')
+                  : activeStep === 2
+                    ? t('common.analyze')
+                    : t('common.continue')}
               </Button>
             </Box>
           </Box>

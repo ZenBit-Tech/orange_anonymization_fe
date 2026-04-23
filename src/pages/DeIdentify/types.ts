@@ -34,6 +34,7 @@ export interface JobConfigSettings {
   language?: string;
   method?: string;
   entities?: string[];
+  strategies?: Record<string, string>;
   [key: string]: unknown;
 }
 
@@ -51,7 +52,6 @@ export interface IJob {
   userId: string;
   wizardState: WizardState | null;
   framework?: string;
-  originalText?: string;
   anonymizedText?: string;
   processingTime?: number;
   errorMessage: string | null;
@@ -68,7 +68,6 @@ export interface EntityDetection {
 }
 
 export interface JobMainContent {
-  originalText: string;
   anonymizedText: string;
 }
 
@@ -88,4 +87,25 @@ export interface JobResults {
   mainContent: JobMainContent;
   entityTable: EntityDetection[];
   auditTrail: JobAuditTrail;
+}
+
+export interface Language {
+  code: string;
+  name: string;
+  isAutoDetected?: boolean;
+}
+
+export type HIPAAMethodUI = Omit<HIPAAMethod, 'description' | 'comment'> & {
+  titleKey: string;
+  descKey: string;
+  commentKey: string;
+};
+
+export interface RedactOption {
+  id: string;
+  category: string;
+  categoryLabel: string;
+  titleKey: string;
+  descKey: string;
+  icon: React.ReactNode;
 }

@@ -1,14 +1,16 @@
 import type { IJob } from '@/pages/DeIdentify/types';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 interface JobState {
   items: IJob[];
   currentJob: IJob | null;
+  localOriginalTexts: Record<string, string>;
 }
 
 const initialState: JobState = {
   items: [],
   currentJob: null,
+  localOriginalTexts: {},
 };
 
 const jobsSlice = createSlice({
@@ -30,9 +32,21 @@ const jobsSlice = createSlice({
     resetJobState: (state) => {
       state.items = [];
       state.currentJob = null;
+      state.localOriginalTexts = {};
+    },
+    setLocalOriginalTextAC: (state, action: PayloadAction<{ jobId: string; text: string }>) => {
+      const { jobId, text } = action.payload;
+      state.localOriginalTexts[jobId] = text;
     },
   },
 });
 
-export const { setJobsAC, setJobAC, removeJobsAC, removeJobAC, resetJobState } = jobsSlice.actions;
+export const {
+  setJobsAC,
+  setJobAC,
+  removeJobsAC,
+  removeJobAC,
+  resetJobState,
+  setLocalOriginalTextAC,
+} = jobsSlice.actions;
 export default jobsSlice.reducer;

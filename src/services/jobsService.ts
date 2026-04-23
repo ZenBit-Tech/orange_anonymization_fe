@@ -29,8 +29,8 @@ export const jobsService = {
     return response.data;
   },
 
-  async runAnalysis(id: string): Promise<IJob> {
-    const response = await api.post<IJob>(`/jobs/${id}/run`);
+  async runAnalysis(id: string, originalText: string): Promise<IJob> {
+    const response = await api.post<IJob>(`/jobs/${id}/run`, { originalText });
     return response.data;
   },
 

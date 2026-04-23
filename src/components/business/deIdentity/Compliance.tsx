@@ -1,42 +1,49 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { alpha, Box, Grid, Typography } from '@mui/material';
 import { Check as CheckIcon } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import type { IComplianceFramework, IJob, WizardState } from '@/pages/DeIdentify/types';
 import { jobsService } from '@/services/jobsService';
 import { setJobAC } from '@/store/slices/jobsSlice';
+import { FONT_SIZES } from '@/constants';
 
-const complianceFrameworks: IComplianceFramework[] = [
+const complianceFrameworks: (Omit<IComplianceFramework, 'title' | 'description' | 'tag'> & {
+  titleKey: string;
+  descriptionKey: string;
+  tagKey: string;
+})[] = [
   {
     id: 1,
     slug: 'hipaa',
-    title: 'HIPAA',
-    description: 'Safe Harbor / Expert Determination',
-    tag: 'US Healthcare',
+    titleKey: 'deIdentify.framework.hipaa.title',
+    descriptionKey: 'deIdentify.framework.hipaa.description',
+    tagKey: 'deIdentify.framework.hipaa.tag',
   },
   {
     id: 2,
     slug: 'eu-gdpr',
-    title: 'EU GDPR',
-    description: 'General Data Protection Regulation',
-    tag: 'European Union',
+    titleKey: 'deIdentify.framework.euGdpr.title',
+    descriptionKey: 'deIdentify.framework.euGdpr.description',
+    tagKey: 'deIdentify.framework.euGdpr.tag',
   },
   {
     id: 3,
     slug: 'uk-gdpr',
-    title: 'UK GDPR',
-    description: 'UK General Data Protection Regulation',
-    tag: 'United Kingdom',
+    titleKey: 'deIdentify.framework.ukGdpr.title',
+    descriptionKey: 'deIdentify.framework.ukGdpr.description',
+    tagKey: 'deIdentify.framework.ukGdpr.tag',
   },
   {
     id: 4,
     slug: 'swiss-fadp',
-    title: 'Swiss FADP',
-    description: 'Federal Act on Data Protection',
-    tag: 'Switzerland',
+    titleKey: 'deIdentify.framework.swissFadp.title',
+    descriptionKey: 'deIdentify.framework.swissFadp.description',
+    tagKey: 'deIdentify.framework.swissFadp.tag',
   },
 ];
 
 const Compliance = () => {
+  const { t } = useTranslation();
   const { currentJob } = useAppSelector((state) => state.jobs);
   const dispatch = useAppDispatch();
 
@@ -58,11 +65,18 @@ const Compliance = () => {
 
   return (
     <Box sx={{ mx: '20px' }}>
-      <Typography sx={{ color: 'neutral.900', fontWeight: 600, fontSize: '24px', mb: '8px' }}>
-        Select Compliance Framework
+      <Typography
+        sx={{
+          color: 'neutral.900',
+          fontWeight: 'fontWeightSemiBold',
+          fontSize: FONT_SIZES.xxl,
+          mb: '8px',
+        }}
+      >
+        {t('deIdentify.framework.title')}
       </Typography>
-      <Typography sx={{ color: 'neutral.500', fontSize: '14px', mb: '48px' }}>
-        Ensure all data handling meets regulatory requirements.
+      <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm, mb: '48px' }}>
+        {t('deIdentify.framework.subtitle')}
       </Typography>
 
       <Grid container spacing={2}>
@@ -72,13 +86,15 @@ const Compliance = () => {
           return (
             <Grid size={{ xs: 12, md: 6 }} key={framework.id}>
               <Box
-                onClick={() => selectFramework(framework)}
+                onClick={() => selectFramework(framework as unknown as IComplianceFramework)}
                 sx={{
                   border: `${isActive ? 2 : 1}px solid`,
-                  borderColor: `${isActive ? 'primary.500' : 'neutral.200'}`,
+                  borderColor: (theme) =>
+                    isActive ? theme.palette.primary[500] : theme.palette.neutral[200],
                   borderRadius: '12px',
-                  backgroundColor: `${isActive ? 'primary.50' : 'common.white'}`,
-                  boxShadow: '0px 1px 3px 0px #00000014',
+                  backgroundColor: (theme) =>
+                    isActive ? theme.palette.primary[50] : theme.palette.common.white,
+                  boxShadow: (theme) => `0px 1px 3px ${alpha(theme.palette.common.black, 0.08)}`,
                   padding: '20px',
                   cursor: 'pointer',
                   transition: 'transform 0.3s',
@@ -90,28 +106,28 @@ const Compliance = () => {
                 <Box
                   sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                 >
-                  <Typography sx={{ color: 'primary.500', fontWeight: 600 }}>
-                    {framework.title}
+                  <Typography sx={{ color: 'primary.500', fontWeight: 'fontWeightSemiBold' }}>
+                    {t(framework.titleKey)}
                   </Typography>
                   {isActive && <CheckIcon sx={{ color: 'primary.500' }} />}
                 </Box>
-                <Typography sx={{ color: 'primary.500', fontSize: '12px', mb: '54px' }}>
-                  {framework.description}
+                <Typography sx={{ color: 'primary.500', fontSize: FONT_SIZES.xs, mb: '54px' }}>
+                  {t(framework.descriptionKey)}
                 </Typography>
                 <Box
                   sx={{
                     display: 'inline-block',
                     backgroundColor: 'primary.50',
                     color: 'primary.500',
-                    fontSize: '12px',
-                    fontWeight: 500,
+                    fontSize: FONT_SIZES.xs,
+                    fontWeight: 'fontWeightMedium',
                     padding: '4px 8px',
                     borderRadius: '4px',
                     border: `1px solid`,
                     borderColor: `${isActive ? 'primary.300' : 'primary.500'}`,
                   }}
                 >
-                  {framework.tag}
+                  {t(framework.tagKey)}
                 </Box>
               </Box>
             </Grid>

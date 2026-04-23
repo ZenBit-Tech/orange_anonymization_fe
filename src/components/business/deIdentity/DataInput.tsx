@@ -1,6 +1,7 @@
 import Tabs, { Tab } from '@/components/UI/Tabs';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Edit as EditIcon,
   ArrowCircleUpOutlined as ArrowCircleUpOutlinedIcon,
@@ -12,29 +13,30 @@ import {
 } from '@mui/icons-material';
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
-import pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.mjs?url';
 import { jobsService } from '@/services/jobsService';
 import type { IJob, WizardState } from '@/pages/DeIdentify/types';
-import { setJobAC } from '@/store/slices/jobsSlice';
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+import { setJobAC, setLocalOriginalTextAC } from '@/store/slices/jobsSlice';
+import { FONT_SIZES } from '@/constants';
 
 const schema = yup
   .string()
-  .required('This field is required')
-  .min(50, 'Text must be at least 50 characters')
-  .max(5000, 'Text cannot exceed 5000 characters');
+  .required('deIdentify.input.validation.required')
+  .min(50, 'deIdentify.input.validation.minLength')
+  .max(5000, 'deIdentify.input.validation.tooLong');
 
 const DataInput = () => {
-  const [currentTab, setCurrentTab] = useState('Enter Text');
+  const { t } = useTranslation();
+  const [currentTab, setCurrentTab] = useState(t('deIdentify.input.tabs.text'));
   const [error, setError] = useState<string | null>(null);
   const [isTouched, setIsTouched] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
 
   const { currentJob } = useAppSelector((state) => state.jobs);
+  const localOriginalText = useAppSelector(
+    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
+  );
 
-  const [text, setText] = useState(currentJob?.originalText ?? '');
+  const [text, setText] = useState(localOriginalText || '');
 
   const dispatch = useAppDispatch();
 
@@ -43,15 +45,32 @@ const DataInput = () => {
     dispatch(setJobAC(response));
   };
 
+  useEffect(() => {
+    if (text === localOriginalText) return;
+
+    const timeoutId = setTimeout(async () => {
+      if (currentJob?.id) {
+        dispatch(
+          setLocalOriginalTextAC({
+            jobId: currentJob.id,
+            text: text,
+          }),
+        );
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [text, currentJob?.id]);
+
   const validate = (value: string) => {
     try {
       schema.validateSync(value);
       setError(null);
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        setError(err.message);
+        setError(t(err.message));
       } else {
-        setError('Unexpected error occor.');
+        setError(t('errors.generic'));
       }
     }
   };
@@ -72,19 +91,28 @@ const DataInput = () => {
   const handleFileUpload = async (file: File) => {
     setFileError(null);
 
-    const allowedExtensions = ['text/plain', 'application/pdf'];
+    const allowedExtensions = ['text/plain', 'application/json', 'text/csv', 'application/pdf'];
 
     if (!allowedExtensions.includes(file.type)) {
-      setFileError('Unsupported format. Please upload .txt or .pdf');
+      setFileError(t('deIdentify.input.validation.unsupportedFormat'));
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setFileError('File is too large. Max size is 5 MB');
+      setFileError(t('deIdentify.input.validation.fileTooLarge'));
       return;
     }
 
+    const textContent = await file.text();
     const response = await jobsService.uploadFile(currentJob?.id as string, file);
+
+    dispatch(
+      setLocalOriginalTextAC({
+        jobId: response.id,
+        text: textContent,
+      }),
+    );
+
     dispatch(setJobAC(response));
   };
 
@@ -112,21 +140,28 @@ const DataInput = () => {
 
   return (
     <Box sx={{ mx: '20px' }}>
-      <Typography sx={{ color: 'neutral.900', fontWeight: 600, fontSize: '24px', mb: '8px' }}>
-        Enter Your Data
+      <Typography
+        sx={{
+          color: 'neutral.900',
+          fontWeight: 'fontWeightSemiBold',
+          fontSize: FONT_SIZES.xxl,
+          mb: '8px',
+        }}
+      >
+        {t('deIdentify.input.title')}
       </Typography>
-      <Typography sx={{ color: 'neutral.500', fontSize: '14px', mb: '48px' }}>
-        Paste text or upload a file to anonymize
+      <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm, mb: '48px' }}>
+        {t('deIdentify.input.subtitle')}
       </Typography>
 
       <Tabs active={currentTab} setActive={setCurrentTab}>
-        <Tab name="Enter Text" icon={<EditIcon />}>
+        <Tab name={t('deIdentify.input.tabs.text')} icon={<EditIcon />}>
           <Box sx={{ width: '100%' }}>
             <TextField
               fullWidth
               multiline
               rows={10}
-              placeholder="Paste your text here — minimum 50 characters required"
+              placeholder={t('deIdentify.input.placeholder')}
               value={text}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -144,7 +179,7 @@ const DataInput = () => {
                 '& .MuiFormHelperText-root': {
                   mx: 0,
                   mt: 1,
-                  fontSize: '12px',
+                  fontSize: FONT_SIZES.xs,
                 },
               }}
             />
@@ -152,17 +187,17 @@ const DataInput = () => {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 0.5 }}>
               <Typography
                 sx={{
-                  fontSize: '12px',
+                  fontSize: FONT_SIZES.xs,
                   color: text.length > 5000 ? 'error.main' : 'neutral.500',
                 }}
               >
-                {text.length.toLocaleString()} / 5,000 characters
+                {t('deIdentify.input.characterCount', { count: text.length.toLocaleString() })}
               </Typography>
             </Box>
           </Box>
         </Tab>
 
-        <Tab name="Upload File" icon={<ArrowCircleUpOutlinedIcon />}>
+        <Tab name={t('deIdentify.input.tabs.file')} icon={<ArrowCircleUpOutlinedIcon />}>
           <Box
             onDragOver={(e) => e.preventDefault()}
             onDrop={onDrop}
@@ -174,17 +209,19 @@ const DataInput = () => {
               alignItems: 'center',
               justifyContent: 'center',
               border: '1px dashed',
-              borderColor: fileError
-                ? 'error.main'
-                : currentJob?.wizardState?.inputData?.fileName
-                  ? '#16A34A99'
-                  : 'neutral.300',
+              borderColor: (theme) =>
+                fileError
+                  ? theme.palette.error.main
+                  : currentJob?.wizardState?.inputData?.fileName
+                    ? theme.palette.success.main
+                    : theme.palette.neutral[300],
               borderRadius: '12px',
-              backgroundColor: fileError
-                ? '#DC262605'
-                : currentJob?.wizardState?.inputData?.fileName
-                  ? '#16A34A05'
-                  : 'common.white',
+              backgroundColor: (theme) =>
+                fileError
+                  ? theme.palette.state?.errorBg
+                  : currentJob?.wizardState?.inputData?.fileName
+                    ? theme.palette.state?.successBg
+                    : theme.palette.common.white,
               p: 3,
               marginX: 'auto',
             }}
@@ -207,13 +244,13 @@ const DataInput = () => {
               }}
             >
               {fileError ? (
-                <PriorityHighIcon sx={{ fontSize: 28, color: 'error.main' }} />
+                <PriorityHighIcon sx={{ fontSize: FONT_SIZES.xxxl, color: 'error.main' }} />
               ) : (
                 <>
                   {currentJob?.wizardState?.inputData?.fileName ? (
-                    <CheckIcon sx={{ fontSize: 28, color: 'success.main' }} />
+                    <CheckIcon sx={{ fontSize: FONT_SIZES.xxxl, color: 'success.main' }} />
                   ) : (
-                    <ArrowUpwardIcon sx={{ fontSize: 28, color: 'primary.800' }} />
+                    <ArrowUpwardIcon sx={{ fontSize: FONT_SIZES.xxxl, color: 'primary.800' }} />
                   )}
                 </>
               )}
@@ -221,12 +258,19 @@ const DataInput = () => {
 
             {!currentJob?.wizardState?.inputData?.fileName ? (
               <>
-                <Typography sx={{ fontSize: '24px', fontWeight: 500, color: 'neutral.700', mb: 1 }}>
-                  Upload your file
+                <Typography
+                  sx={{
+                    fontSize: FONT_SIZES.xxl,
+                    fontWeight: 'fontWeightMedium',
+                    color: 'neutral.700',
+                    mb: 1,
+                  }}
+                >
+                  {t('deIdentify.input.upload.title')}
                 </Typography>
 
-                <Typography sx={{ fontSize: '16px', color: 'neutral.500', mb: 3 }}>
-                  Drag & drop
+                <Typography sx={{ fontSize: FONT_SIZES.md, color: 'neutral.500', mb: 3 }}>
+                  {t('deIdentify.input.upload.dragDrop')}
                 </Typography>
 
                 <Box
@@ -244,7 +288,9 @@ const DataInput = () => {
                     },
                   }}
                 >
-                  <Typography sx={{ px: 2, fontSize: '14px', color: 'neutral.400' }}>or</Typography>
+                  <Typography sx={{ px: 2, fontSize: FONT_SIZES.sm, color: 'neutral.400' }}>
+                    {t('common.or')}
+                  </Typography>
                 </Box>
               </>
             ) : (
@@ -256,14 +302,14 @@ const DataInput = () => {
                 ) : (
                   <>
                     <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                      <Typography sx={{ color: 'neutral.900', fontSize: '16px' }}>
+                      <Typography sx={{ color: 'neutral.900', fontSize: FONT_SIZES.md }}>
                         {currentJob?.wizardState?.inputData.fileName}
                       </Typography>
                       <Button sx={{ color: 'neutral.500' }} onClick={onRemoveFile}>
                         <CloseIcon />
                       </Button>
                     </Box>
-                    <Typography sx={{ mb: 3, color: 'neutral.500', fontSize: '12px' }}>
+                    <Typography sx={{ mb: 3, color: 'neutral.500', fontSize: FONT_SIZES.xs }}>
                       {`${((currentJob?.wizardState?.inputData.fileSize ?? 0) / (1024 * 1024)).toFixed(1)} MB - ${currentJob?.wizardState?.inputData.fileName?.split('.').pop()?.toUpperCase()}`}
                     </Typography>
                   </>
@@ -283,8 +329,8 @@ const DataInput = () => {
                     borderRadius: '8px',
                     px: 4,
                     py: 1,
-                    fontSize: '14px',
-                    fontWeight: 500,
+                    fontSize: FONT_SIZES.sm,
+                    fontWeight: 'fontWeightMedium',
                     boxShadow: 'none',
                     backgroundImage: 'none',
                     '&:hover': {
@@ -294,12 +340,14 @@ const DataInput = () => {
                     },
                   }}
                 >
-                  {currentJob?.wizardState?.inputData?.fileName ? 'Replace file' : 'Browse file'}
+                  {currentJob?.wizardState?.inputData?.fileName
+                    ? t('deIdentify.input.upload.replace')
+                    : t('deIdentify.input.upload.browse')}
                   <input type="file" hidden accept=".txt,.pdf" onChange={onFileInputChange} />
                 </Button>
 
-                <Typography sx={{ mt: 2, fontSize: '12px', color: 'neutral.400' }}>
-                  Supported formats: .txt, .pdf — max 5 MB
+                <Typography sx={{ mt: 2, fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
+                  {t('deIdentify.input.upload.supported')}
                 </Typography>
               </>
             ) : (
@@ -312,13 +360,13 @@ const DataInput = () => {
                     borderRadius: '8px',
                     px: 4,
                     py: 1,
-                    fontSize: '14px',
-                    fontWeight: 500,
+                    fontSize: FONT_SIZES.sm,
+                    fontWeight: 'fontWeightMedium',
                     boxShadow: 'none',
                   }}
                   endIcon={<ArrowCircleUpIcon />}
                 >
-                  Replace file
+                  {t('deIdentify.input.upload.replace')}
                   <input type="file" hidden accept=".txt,.pdf" onChange={onFileInputChange} />
                 </Button>
               </>
@@ -335,12 +383,14 @@ const DataInput = () => {
             }}
           >
             {fileError ? (
-              <Typography sx={{ fontSize: '12px', color: 'error.main' }}>{fileError}</Typography>
+              <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'error.main' }}>
+                {fileError}
+              </Typography>
             ) : (
               <>
                 {!currentJob?.wizardState?.inputData?.fileName && (
-                  <Typography sx={{ fontSize: '12px', color: 'neutral.400' }}>
-                    Upload a file to continue
+                  <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
+                    {t('deIdentify.input.upload.required')}
                   </Typography>
                 )}
               </>

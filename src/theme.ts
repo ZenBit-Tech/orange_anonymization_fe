@@ -105,6 +105,11 @@ declare module '@mui/material/styles' {
       primaryAccent: string;
     };
     sidebar: SidebarPalette;
+    state: {
+      successBorder: string;
+      successBg: string;
+      errorBg: string;
+    };
   }
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
@@ -122,9 +127,15 @@ declare module '@mui/material/styles' {
       primaryAccent?: string;
     };
     sidebar?: SidebarPalette;
+    state?: {
+      successBorder?: string;
+      successBg?: string;
+      errorBg?: string;
+    };
   }
   interface PaletteColor {
     50?: string;
+    100?: string;
     200?: string;
     300?: string;
     400?: string;
@@ -136,6 +147,7 @@ declare module '@mui/material/styles' {
   }
   interface SimplePaletteColorOptions {
     50?: string;
+    100?: string;
     200?: string;
     300?: string;
     400?: string;
@@ -177,10 +189,12 @@ const BRAND = {
   dark: '#021430',
   greenOpacity: '#66D9C84D',
   accent: {
+    100: '#B2EDE5',
     400: '#00BFA5',
     500: '#00A68F',
   },
   neutral: {
+    50: '#F9FAFB',
     100: '#F3F4F6',
     200: '#E5E7EB',
     400: '#9CA3AF',
@@ -192,12 +206,18 @@ const BRAND = {
     50: '#E8EFF7',
     300: '#4F7FB8',
     500: '#1B3A6B',
+    600: '#152D54',
     800: '#01132F',
     lightest: '#E3F2FD',
     light: '#64B5F6',
     main: '#1565C0',
     dark: '#0D47A1',
     contrastText: WHITE,
+  },
+  state: {
+    successBorder: '#16A34A99',
+    successBg: '#16A34A05',
+    errorBg: '#DC262605',
   },
   entities: {
     PERSON: '#1565C0',
