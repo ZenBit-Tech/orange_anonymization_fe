@@ -160,7 +160,9 @@ export const ErrorIconContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const SubmitButton = styled(Button)<SubmitButtonProps>(({ theme, isActive }) => ({
+export const SubmitButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'isActive',
+})<SubmitButtonProps>(({ theme, isActive }) => ({
   height: sizes.button.height,
   borderRadius: sizes.button.borderRadius,
   marginTop: theme.spacing(3),
