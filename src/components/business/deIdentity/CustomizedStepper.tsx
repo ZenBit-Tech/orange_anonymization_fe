@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { alpha, styled } from '@mui/material/styles';
 import {
@@ -10,6 +10,8 @@ import {
   Button,
   StepConnector,
   stepConnectorClasses,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import {
   Check as CheckIcon,
@@ -111,6 +113,7 @@ export default function CustomizedSteppers() {
   const localOriginalText = useAppSelector(
     (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const steps = useMemo(
     () => [
@@ -131,6 +134,10 @@ export default function CustomizedSteppers() {
 
   const dispatch = useAppDispatch();
 
+  const handleError = (defaultKey: string) => {
+    setErrorMessage(t(defaultKey));
+  };
+
   const createJob = async () => {
     const response = await jobsService.createJob();
     dispatch(setJobAC(response));
@@ -145,13 +152,16 @@ export default function CustomizedSteppers() {
       } else {
         dispatch(setJobAC(response));
       }
-    } catch (error) {
-      console.error('Error fetching latest draft:', error);
+    } catch {
+      handleError('errors.fetchFailed');
     }
   };
 
   useEffect(() => {
-    getLatestDraft();
+    const init = async () => {
+      await getLatestDraft();
+    };
+    init();
   }, []);
 
   const updateJob = async (jobId: string, updateData: Partial<IJob>) => {
@@ -170,15 +180,15 @@ export default function CustomizedSteppers() {
         },
       };
       await updateJob(currentJob?.id as string, data);
-    } catch (error) {
-      console.error('Error updating job:', error);
+    } catch {
+      handleError('errors.updateFailed');
     }
 
     if (activeStep === 2) {
       try {
         await jobsService.runAnalysis(currentJob?.id as string, localOriginalText);
-      } catch (error) {
-        console.error('Error running analysis:', error);
+      } catch {
+        handleError('errors.updateFailed');
       }
     }
   };
@@ -194,8 +204,8 @@ export default function CustomizedSteppers() {
         },
       };
       await updateJob(currentJob?.id as string, data);
-    } catch (error) {
-      console.error('Error going back:', error);
+    } catch {
+      handleError('errors.updateFailed');
     }
   };
 
@@ -317,6 +327,22 @@ export default function CustomizedSteppers() {
           </Box>
         )}
       </Box>
+
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setErrorMessage(null)}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 }

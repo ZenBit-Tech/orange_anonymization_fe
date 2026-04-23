@@ -57,12 +57,17 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const [isError, setIsError] = useState(false);
   const [results, setResults] = useState<JobResults | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const localOriginalText = useAppSelector((state) => state.jobs.localOriginalTexts[jobId]);
 
   const textToDisplay = localOriginalText || '';
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const handleError = (defaultKey: string) => {
+    setErrorMessage(t(defaultKey));
+  };
 
   const stopPolling = () => {
     if (intervalRef.current) {
@@ -93,13 +98,19 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
         setIsError(true);
         stopPolling();
       }
-    } catch (err) {
-      console.error('Polling error:', err);
+    } catch {
+      handleError('errors.network');
     }
   };
 
   useEffect(() => {
-    intervalRef.current = setInterval(checkStatus, 2000);
+    const startPolling = () => {
+      checkStatus();
+
+      intervalRef.current = setInterval(checkStatus, 2000);
+    };
+
+    startPolling();
 
     return () => stopPolling();
   }, [jobId]);
@@ -235,6 +246,22 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
       >
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           {t('common.copied')}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setErrorMessage(null)}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
         </Alert>
       </Snackbar>
     </Box>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import Tabs, { Tab } from '@/components/UI/Tabs';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Snackbar, TextField, Typography } from '@mui/material';
 import {
   Edit as EditIcon,
   ArrowCircleUpOutlined as ArrowCircleUpOutlinedIcon,
@@ -30,6 +30,7 @@ const DataInput = () => {
   const [error, setError] = useState<string | null>(null);
   const [isTouched, setIsTouched] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { currentJob } = useAppSelector((state) => state.jobs);
   const localOriginalText = useAppSelector(
@@ -39,6 +40,10 @@ const DataInput = () => {
   const [text, setText] = useState(localOriginalText || '');
 
   const dispatch = useAppDispatch();
+
+  const handleError = (defaultKey: string) => {
+    setErrorMessage(t(defaultKey));
+  };
 
   const updateJob = async (jobId: string, updateData: Partial<IJob>) => {
     const response = await jobsService.updateJob(jobId, updateData);
@@ -99,17 +104,21 @@ const DataInput = () => {
       return;
     }
 
-    const textContent = await file.text();
-    const response = await jobsService.uploadFile(currentJob?.id as string, file);
+    try {
+      const textContent = await file.text();
+      const response = await jobsService.uploadFile(currentJob?.id as string, file);
 
-    dispatch(
-      setLocalOriginalTextAC({
-        jobId: response.id,
-        text: textContent,
-      }),
-    );
+      dispatch(
+        setLocalOriginalTextAC({
+          jobId: response.id,
+          text: textContent,
+        }),
+      );
 
-    dispatch(setJobAC(response));
+      dispatch(setJobAC(response));
+    } catch {
+      handleError('deIdentify.input.validation.uploadFailed');
+    }
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -339,7 +348,7 @@ const DataInput = () => {
                   {currentJob?.wizardState?.inputData?.fileName
                     ? t('deIdentify.input.upload.replace')
                     : t('deIdentify.input.upload.browse')}
-                  <input type="file" hidden accept=".txt,.pdf" onChange={onFileInputChange} />
+                  <input type="file" hidden accept=".txt" onChange={onFileInputChange} />
                 </Button>
 
                 <Typography sx={{ mt: 2, fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
@@ -394,6 +403,22 @@ const DataInput = () => {
           </Box>
         </Tab>
       </Tabs>
+
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setErrorMessage(null)}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
