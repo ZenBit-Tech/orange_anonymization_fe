@@ -14,7 +14,14 @@
     "search": "Search",
     "noData": "No data available",
     "required": "This field is required",
-    "invalidEmail": "Please enter a valid email address"
+    "invalidEmail": "Please enter a valid email address",
+    "or": "or",
+    "copy": "Copy",
+    "download": "Download",
+    "retry": "Retry",
+    "continue": "Continue",
+    "finish": "Finish",
+    "analyze": "Analyze"
   },
   "nav": {
     "brand": "Clinical Data Studio",
@@ -296,56 +303,201 @@
   "deIdentify": {
     "title": "De-Identify Clinical Text",
     "subtitle": "Detect and anonymize PII in clinical documents",
+    "languageSelect": {
+      "search": "Search language...",
+      "recentlyUsed": "RECENTLY USED",
+      "allLanguages": "ALL LANGUAGES",
+      "noLanguages": "No languages found",
+      "autoDetected": "Auto-detected"
+    },
     "steps": {
-      "selectFramework": "Select Framework",
-      "inputText": "Input Text",
-      "settings": "Settings",
-      "results": "Results"
+      "compliance": "Compliance",
+      "dataInput": "Data Input",
+      "configuration": "Configuration",
+      "reviewAndRun": "Review & Run"
     },
     "framework": {
-      "title": "Choose Compliance Framework",
+      "title": "Select Compliance Framework",
+      "subtitle": "Ensure all data handling meets regulatory requirements.",
       "hipaa": {
-        "label": "HIPAA Safe Harbor",
-        "description": "Remove all 18 HIPAA PHI identifiers"
+        "title": "HIPAA",
+        "description": "Safe Harbor / Expert Determination",
+        "tag": "US Healthcare"
       },
-      "gdpr": {
-        "label": "GDPR Anonymization",
-        "description": "EU-compliant anonymization for research"
+      "euGdpr": {
+        "title": "EU GDPR",
+        "description": "General Data Protection Regulation",
+        "tag": "European Union"
       },
-      "custom": {
-        "label": "Custom Entity Selection",
-        "description": "Choose specific entity types to detect"
+      "ukGdpr": {
+        "title": "UK GDPR",
+        "description": "UK General Data Protection Regulation",
+        "tag": "United Kingdom"
+      },
+      "swissFadp": {
+        "title": "Swiss FADP",
+        "description": "Federal Act on Data Protection",
+        "tag": "Switzerland"
       }
     },
     "input": {
-      "title": "Enter Clinical Text",
+      "title": "Enter Your Data",
+      "subtitle": "Paste text or upload a file to anonymize",
       "label": "Clinical Text",
-      "placeholder": "Paste clinical notes, discharge summaries, or any clinical text containing patient information...",
+      "placeholder": "Paste your text here — minimum 50 characters required",
       "sampleText": "Load Sample Text",
-      "characterCount": "{{count}} characters",
+      "characterCount": "{{count}} / 5,000 characters",
+      "tabs": {
+        "text": "Enter Text",
+        "file": "Upload File"
+      },
+      "upload": {
+        "title": "Upload your file",
+        "dragDrop": "Drag & drop",
+        "replace": "Replace file",
+        "browse": "Browse file",
+        "supported": "Supported formats: .txt, .pdf — max 5 MB",
+        "required": "Upload a file to continue"
+      },
       "validation": {
         "required": "Please enter clinical text to analyze",
-        "minLength": "Text must be at least 50 characters"
+        "minLength": "Text must be at least 50 characters",
+        "tooLong": "Text cannot exceed 5000 characters",
+        "unsupportedFormat": "Unsupported format. Please upload .txt or .pdf",
+        "fileTooLarge": "File is too large. Max size is 5 MB"
       }
     },
     "settings": {
-      "title": "Anonymization Settings",
-      "strategy": "Strategy",
+      "title": "Configure De-Identification",
+      "subtitle": "Choose how patient data will be anonymized under HIPAA",
+      "sections": {
+        "method": "1. Choose Method",
+        "identifiers": "2. Applied Identifiers",
+        "output": "3. Output Settings"
+      },
+      "method": {
+        "safeHarbor": {
+          "title": "Safe Harbor",
+          "description": "Automatically removes all 18 HIPAA identifiers",
+          "comment": "Best for standard HIPAA workflows"
+        },
+        "expertDetermination": {
+          "title": "Expert Determination",
+          "description": "Customize which identifiers to remove",
+          "comment": "Requires expert validation before use"
+        },
+        "recommended": "Recommended"
+      },
+      "detection": {
+        "title": "Detection sensitivity",
+        "subtitle": "Controls how carefully the system detects sensitive data.",
+        "recommended": "Recommended",
+        "recommendedNote": "Balanced is recommended for most documents.",
+        "thresholds": {
+          "conservative": {
+            "title": "Conservative",
+            "description": "Fewer false alerts",
+            "info": "Detects only obvious identifiers. Best for structured data."
+          },
+          "balanced": {
+            "title": "Balanced",
+            "description": "Recommended for most documents",
+            "info": "Detects most sensitive entities while keeping false positives manageable."
+          },
+          "aggressive": {
+            "title": "Aggressive",
+            "description": "Catches potentially sensitive data",
+            "info": "Catches potentially sensitive data — may include false positives"
+          }
+        }
+      },
       "strategies": {
-        "replace": "Replace with placeholder",
-        "redact": "Redact (remove entirely)",
-        "hash": "Replace with hash",
-        "encrypt": "Encrypt value",
-        "synthetic": "Replace with synthetic data"
+        "title": "Strategy",
+        "categories": {
+          "remove": "REMOVE",
+          "replace": "REPLACE",
+          "protect": "PROTECT"
+        },
+        "redact": {
+          "title": "Redact — Remove entirely",
+          "description": "Replaces data with [REDACTED]"
+        },
+        "replace": {
+          "title": "Replace — Use placeholder",
+          "description": "Uses labels like [NAME], [DATE]"
+        },
+        "synthetic": {
+          "title": "Synthetic — Generate fake values",
+          "description": "Generates realistic fake values"
+        },
+        "mask": {
+          "title": "Mask — Hide partially",
+          "description": "Hides parts of the value"
+        },
+        "hash": {
+          "title": "Hash — Encrypt irreversibly",
+          "description": "Converts to irreversible hash, preserves uniqueness"
+        }
       },
       "entityTypes": "Entity Types to Detect",
       "confidence": "Minimum Confidence Score",
-      "language": "Language"
+      "language": "Language",
+      "languageSelect": {
+        "autoDetected": "Auto-detected",
+        "search": "Search language...",
+        "recentlyUsed": "RECENTLY USED",
+        "allLanguages": "ALL LANGUAGES",
+        "noLanguages": "No languages found"
+      },
+      "identifiers": {
+        "title": "All 18 HIPAA identifiers will be removed",
+        "description": "This includes names, dates, contact details, account numbers, medical identifiers, biometric data, and other HIPAA-defined identifiers.",
+        "customize": "Customize identifiers",
+        "fixed": "18 identifiers included",
+        "customizeSubtitle": "Select which identifiers you want to remove",
+        "fixedSubtitle": "All identifiers are fixed in Safe Harbor mode",
+        "expertTooltip": "Switch to Expert Determination to customize",
+        "groups": {
+          "personal": "PERSONAL INFORMATION",
+          "contact": "CONTACT INFORMATION",
+          "location": "LOCATION DATA",
+          "financial": "FINANCIAL INFORMATION",
+          "medical": "MEDICAL IDENTIFIERS",
+          "technical": "TECHNICAL IDENTIFIERS",
+          "biometric": "BIOMETRIC & UNIQUE"
+        },
+        "items": {
+          "names": "Names",
+          "dates": "Dates",
+          "fax": "Fax",
+          "email": "Email",
+          "phone": "Phone",
+          "address": "Address",
+          "geographic": "Geographic data",
+          "ssn": "SSN",
+          "account": "Account number",
+          "medical": "Medical record",
+          "health": "Health plan",
+          "beneficiary": "Beneficiary",
+          "ip": "IP address",
+          "device": "Device ID",
+          "url": "URL",
+          "fingerprints": "Fingerprints",
+          "photos": "Face photos",
+          "vehicle": "Vehicle ID",
+          "certificate": "Certificate"
+        }
+      }
     },
     "results": {
       "title": "De-Identification Results",
+      "analyzing": "Analyzing...",
+      "failed": "Anonymization Failed",
+      "retry": "Retry",
       "original": "Original Text",
+      "originalSubtitle": "Original text with detected entities highlighted",
       "anonymized": "Anonymized Text",
+      "anonymizedSubtitle": "De-identified text",
       "entities": "Detected Entities",
       "entityColumns": {
         "type": "Entity Type",
@@ -354,7 +506,8 @@
         "confidence": "Confidence",
         "position": "Position"
       },
-      "download": "Download Results",
+      "download": "Download",
+      "copy": "Copy",
       "processAnother": "Process Another Document",
       "stats": {
         "entitiesFound": "{{count}} entities found",

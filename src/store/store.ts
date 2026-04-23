@@ -1,21 +1,66 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
-import authReducer from './auth/auth.slice';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import jobsSlice from './slices/jobsSlice';
+import authSlice from './auth/auth.slice';
 import { AUTH_THUNK_TYPES } from './auth/auth.constants';
 
-export const store = configureStore({
-  reducer: {
-    auth: authReducer,
+const customSessionStorage = {
+  getItem: (key: string) => {
+    return Promise.resolve(sessionStorage.getItem(key));
   },
+  setItem: (key: string, value: string) => {
+    sessionStorage.setItem(key, value);
+    return Promise.resolve();
+  },
+  removeItem: (key: string) => {
+    sessionStorage.removeItem(key);
+    return Promise.resolve();
+  },
+};
+
+const persistConfig = {
+  key: 'jobs',
+  storage: customSessionStorage,
+  whitelist: ['localOriginalTexts'],
+};
+
+const rootReducer = combineReducers({
+  jobs: persistReducer(persistConfig, jobsSlice),
+  auth: authSlice,
+});
+
+export const store = configureStore({
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [`${AUTH_THUNK_TYPES.VERIFY_MAGIC_LINK}/fulfilled`],
+        ignoredActions: [
+          `${AUTH_THUNK_TYPES.VERIFY_MAGIC_LINK}/fulfilled`,
+          FLUSH,
+          REHYDRATE,
+          PAUSE,
+          PERSIST,
+          PURGE,
+          REGISTER,
+          'auth/verifyMagicLink/fulfilled',
+        ],
       },
     }),
   devTools: import.meta.env.DEV,
 });
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

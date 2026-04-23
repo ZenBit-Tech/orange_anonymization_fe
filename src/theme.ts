@@ -105,6 +105,11 @@ declare module '@mui/material/styles' {
       primaryAccent: string;
     };
     sidebar: SidebarPalette;
+    state: {
+      successBorder: string;
+      successBg: string;
+      errorBg: string;
+    };
   }
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
@@ -122,8 +127,16 @@ declare module '@mui/material/styles' {
       primaryAccent?: string;
     };
     sidebar?: SidebarPalette;
+    state?: {
+      successBorder?: string;
+      successBg?: string;
+      errorBg?: string;
+    };
   }
   interface PaletteColor {
+    50?: string;
+    100?: string;
+    200?: string;
     300?: string;
     400?: string;
     500?: string;
@@ -133,6 +146,9 @@ declare module '@mui/material/styles' {
     hover?: string;
   }
   interface SimplePaletteColorOptions {
+    50?: string;
+    100?: string;
+    200?: string;
     300?: string;
     400?: string;
     500?: string;
@@ -173,23 +189,35 @@ const BRAND = {
   dark: '#021430',
   greenOpacity: '#66D9C84D',
   accent: {
+    100: '#B2EDE5',
     400: '#00BFA5',
     500: '#00A68F',
   },
   neutral: {
+    50: '#F9FAFB',
+    100: '#F3F4F6',
+    200: '#E5E7EB',
     400: '#9CA3AF',
     500: '#6B7280',
     700: '#374151',
     900: '#111827',
   },
   primary: {
+    50: '#E8EFF7',
+    300: '#4F7FB8',
     500: '#1B3A6B',
+    600: '#152D54',
     800: '#01132F',
     lightest: '#E3F2FD',
     light: '#64B5F6',
     main: '#1565C0',
     dark: '#0D47A1',
     contrastText: WHITE,
+  },
+  state: {
+    successBorder: '#16A34A99',
+    successBg: '#16A34A05',
+    errorBg: '#DC262605',
   },
   entities: {
     PERSON: '#1565C0',
@@ -202,6 +230,11 @@ const BRAND = {
     IP_ADDRESS: '#1B5E20',
     MEDICAL_LICENSE: '#0D47A1',
     URL: '#4E342E',
+    IBAN_CODE: '#2E7D32',
+    US_DRIVER_LICENSE: '#C62828',
+    MEDICAL_RECORD_NUMBER: '#0277BD',
+    US_PASSPORT: '#1565C0',
+    US_ZIP_CODE: '#AD1457',
     DEFAULT: '#37474F',
   },
   secondary: {
@@ -212,7 +245,7 @@ const BRAND = {
     contrastText: WHITE,
   },
   success: {
-    main: '#2E7D32',
+    main: '#16A34A',
     light: '#4CAF50',
     contrastText: WHITE,
   },
