@@ -303,6 +303,13 @@
   "deIdentify": {
     "title": "De-Identify Clinical Text",
     "subtitle": "Detect and anonymize PII in clinical documents",
+    "languageSelect": {
+      "search": "Search language...",
+      "recentlyUsed": "RECENTLY USED",
+      "allLanguages": "ALL LANGUAGES",
+      "noLanguages": "No languages found",
+      "autoDetected": "Auto-detected"
+    },
     "steps": {
       "compliance": "Compliance",
       "dataInput": "Data Input",
