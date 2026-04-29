@@ -23,7 +23,9 @@ export const initializeAuth = createAsyncThunk(
       dispatch(setUser(mapUser(userResponse)));
     } catch {
       localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
       dispatch(clearUser());
+      return;
     } finally {
       dispatch(setInitialized(true));
     }
@@ -33,16 +35,26 @@ export const initializeAuth = createAsyncThunk(
 export const verifyMagicLink = createAsyncThunk(
   AUTH_THUNK_TYPES.VERIFY_MAGIC_LINK,
   async (token: string, { dispatch }) => {
-    const data = await verify(token);
+    try {
+      const data = await verify(token);
 
-    localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
-    localStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, Date.now().toString());
+      localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
+      localStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, Date.now().toString());
 
-    const userResponse = await getCurrentUser();
+      const userResponse = await getCurrentUser();
 
-    dispatch(setUser(mapUser(userResponse)));
+      dispatch(setUser(mapUser(userResponse)));
+      dispatch(setInitialized(true));
 
-    return userResponse;
+      return userResponse;
+    } catch (error) {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
+      dispatch(clearUser());
+      dispatch(setInitialized(true));
+
+      throw error;
+    }
   },
 );
 

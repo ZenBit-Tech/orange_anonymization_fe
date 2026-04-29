@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from '@/constants';
 import { useAppDispatch } from '@/store/store';
@@ -9,25 +9,26 @@ const TokenPage = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const ran = useRef(false);
 
   useEffect(() => {
-    const run = async () => {
-      try {
-        if (!token) {
-          navigate(ROUTES.LOGIN, { replace: true });
-          return;
-        }
+    if (ran.current) return;
+    ran.current = true;
 
-        await dispatch(verifyMagicLink(token)).unwrap();
+    if (!token) {
+      navigate(ROUTES.LOGIN, { replace: true });
+      return;
+    }
 
+    dispatch(verifyMagicLink(token))
+      .unwrap()
+      .then(() => {
         navigate(ROUTES.DASHBOARD, { replace: true });
-      } catch {
+      })
+      .catch(() => {
         navigate(ROUTES.LOGIN, { replace: true });
-      }
-    };
-
-    run();
-  }, [token, navigate, dispatch]);
+      });
+  }, [token, dispatch, navigate]);
 
   return <PageLoader />;
 };

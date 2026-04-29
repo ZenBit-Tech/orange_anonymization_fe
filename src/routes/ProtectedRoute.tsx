@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { PageLoader } from '@/components/common/PageLoader';
 import {
@@ -31,31 +31,20 @@ export function ProtectedRoute() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const initialized = useAppSelector(selectAuthInitialized);
-  const [isSessionExpired, setIsSessionExpired] = useState<boolean | null>(null);
+
+  const { hasToken, isExpired } = getSessionStatus();
 
   useEffect(() => {
-    const { hasToken, isExpired } = getSessionStatus();
-
     if (hasToken && isExpired) {
       dispatch(logout());
     }
-
-    const timeoutId = window.setTimeout(() => {
-      setIsSessionExpired(hasToken ? isExpired : false);
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [dispatch]);
+  }, [dispatch, hasToken, isExpired]);
 
   if (!initialized) {
     return <PageLoader />;
   }
 
-  if (isSessionExpired === null) {
-    return <PageLoader />;
-  }
-
-  if (isSessionExpired) {
+  if (hasToken && isExpired) {
     return <Navigate to={ROUTES.SESSION_EXPIRED} replace />;
   }
 
@@ -72,12 +61,14 @@ export const PublicRoute = () => {
   const location = useLocation();
   const isVerifyRoute = location.pathname.startsWith(ROUTES.VERIFY_BASE);
   const { hasToken, isExpired } = getSessionStatus();
+  const dispatch = useAppDispatch();
 
-  if (!initialized) {
+  if (!initialized && !isVerifyRoute) {
     return <PageLoader />;
   }
 
-  if (hasToken && isExpired) {
+  if (hasToken && isExpired && !isVerifyRoute) {
+    dispatch(logout());
     return <Navigate to={ROUTES.SESSION_EXPIRED} replace />;
   }
 

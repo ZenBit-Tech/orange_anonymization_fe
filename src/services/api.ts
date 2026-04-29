@@ -1,5 +1,5 @@
 import axios, { type AxiosError } from 'axios';
-import { API_BASE_URL, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
+import { API_BASE_URL, AUTH_TOKEN_KEY } from '@/constants';
 import type { ApiError } from '@/services/types';
 import { API_TIMEOUT } from '@/constants/api-config';
 import { store } from '@/store/store';
@@ -31,11 +31,11 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiError>) => {
     const status = error.response?.status;
+    const requestUrl = error.config?.url;
+    const isVerifyRequest = requestUrl?.includes('/auth/verify');
 
-    if (status === HTTP_STATUS.UNAUTHORIZED) {
+    if (status === HTTP_STATUS.UNAUTHORIZED && !isVerifyRequest) {
       store.dispatch(logout());
-      window.location.href = ROUTES.SESSION_EXPIRED;
-      return Promise.reject(new Error('Session expired. Please sign in again.'));
     }
 
     const serverMessage = error.response?.data?.message;
