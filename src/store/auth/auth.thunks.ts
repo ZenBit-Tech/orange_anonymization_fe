@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
+import { AUTH_SESSION_MAX_AGE_MS, AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
 import { getCurrentUser } from '@/services/user/user.api';
 import { verify } from '@/services/auth/auth.api';
 import { setUser, clearUser, setInitialized } from './auth.slice';
@@ -10,6 +10,21 @@ export const initializeAuth = createAsyncThunk(
   AUTH_THUNK_TYPES.INITIALIZE,
   async (_, { dispatch }) => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    const sessionStartedAt = localStorage.getItem(AUTH_SESSION_STARTED_AT_KEY);
+
+    const parsedSessionStartedAt = sessionStartedAt ? Number(sessionStartedAt) : NaN;
+
+    const isExpired =
+      !parsedSessionStartedAt || Date.now() - parsedSessionStartedAt >= AUTH_SESSION_MAX_AGE_MS;
+
+    if (token && isExpired) {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
+
+      dispatch(clearUser());
+      dispatch(setInitialized(true));
+      return;
+    }
 
     if (!token) {
       dispatch(clearUser());
@@ -19,10 +34,10 @@ export const initializeAuth = createAsyncThunk(
 
     try {
       const userResponse = await getCurrentUser();
-
       dispatch(setUser(mapUser(userResponse)));
     } catch {
       localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
       dispatch(clearUser());
     } finally {
       dispatch(setInitialized(true));
@@ -33,16 +48,26 @@ export const initializeAuth = createAsyncThunk(
 export const verifyMagicLink = createAsyncThunk(
   AUTH_THUNK_TYPES.VERIFY_MAGIC_LINK,
   async (token: string, { dispatch }) => {
-    const data = await verify(token);
+    try {
+      const data = await verify(token);
 
-    localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
-    localStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, Date.now().toString());
+      localStorage.setItem(AUTH_TOKEN_KEY, data.accessToken);
+      localStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, Date.now().toString());
 
-    const userResponse = await getCurrentUser();
+      const userResponse = await getCurrentUser();
 
-    dispatch(setUser(mapUser(userResponse)));
+      dispatch(setUser(mapUser(userResponse)));
+      dispatch(setInitialized(true));
 
-    return userResponse;
+      return userResponse;
+    } catch (error) {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
+      dispatch(clearUser());
+      dispatch(setInitialized(true));
+
+      throw error;
+    }
   },
 );
 
