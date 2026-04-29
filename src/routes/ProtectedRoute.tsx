@@ -44,12 +44,16 @@ export function ProtectedRoute() {
     return <PageLoader />;
   }
 
+  if (!hasToken) {
+    return <Navigate to={ROUTES.LOGIN} replace />;
+  }
+
   if (hasToken && isExpired) {
     return <Navigate to={ROUTES.SESSION_EXPIRED} replace />;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.LOGIN} replace />;
+    return <Navigate to={ROUTES.INACTIVITY} replace />;
   }
 
   return <Outlet />;
@@ -61,14 +65,12 @@ export const PublicRoute = () => {
   const location = useLocation();
   const isVerifyRoute = location.pathname.startsWith(ROUTES.VERIFY_BASE);
   const { hasToken, isExpired } = getSessionStatus();
-  const dispatch = useAppDispatch();
 
   if (!initialized && !isVerifyRoute) {
     return <PageLoader />;
   }
 
   if (hasToken && isExpired && !isVerifyRoute) {
-    dispatch(logout());
     return <Navigate to={ROUTES.SESSION_EXPIRED} replace />;
   }
 

@@ -1,10 +1,9 @@
 import axios, { type AxiosError } from 'axios';
-import { API_BASE_URL, AUTH_TOKEN_KEY } from '@/constants';
+import { API_BASE_URL, AUTH_TOKEN_KEY, ROUTES } from '@/constants';
 import type { ApiError } from '@/services/types';
 import { API_TIMEOUT } from '@/constants/api-config';
-import { store } from '@/store/store';
-import { logout } from '@/store/auth';
 import { HTTP_STATUS } from '@/constants/http-status';
+import { API_ROUTES } from '@/constants/api-routes';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -32,10 +31,10 @@ api.interceptors.response.use(
   (error: AxiosError<ApiError>) => {
     const status = error.response?.status;
     const requestUrl = error.config?.url;
-    const isVerifyRequest = requestUrl?.includes('/auth/verify');
+    const isVerifyRequest = requestUrl?.includes(API_ROUTES.AUTH_VERIFY);
 
     if (status === HTTP_STATUS.UNAUTHORIZED && !isVerifyRequest) {
-      store.dispatch(logout());
+      window.location.href = ROUTES.INACTIVITY;
     }
 
     const serverMessage = error.response?.data?.message;

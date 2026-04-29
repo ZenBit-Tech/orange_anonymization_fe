@@ -12,6 +12,7 @@ export const ROUTES = {
   LOGIN: '/auth/login',
   AUTH: '/auth/*',
   VERIFY_BASE: '/auth/verify',
+  INACTIVITY: '/inactivity',
   SESSION_EXPIRED: '/session-expired',
   TOKEN: '/auth/verify/token/:token',
   DASHBOARD: '/app',

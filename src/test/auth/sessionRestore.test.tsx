@@ -8,14 +8,14 @@ vi.mock('@/services/user/user.api', () => ({
   getCurrentUser: vi.fn(),
 }));
 
-describe('initializeAuth', () => {
+describe('session restore', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
     store.dispatch(clearUser());
   });
 
-  it('restores session from localStorage', async () => {
+  it('restores user session from localStorage token', async () => {
     localStorage.setItem(AUTH_TOKEN_KEY, 'token');
     localStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, Date.now().toString());
 

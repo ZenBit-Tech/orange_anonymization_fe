@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
+import { AUTH_SESSION_MAX_AGE_MS, AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
 import { getCurrentUser } from '@/services/user/user.api';
 import { verify } from '@/services/auth/auth.api';
 import { setUser, clearUser, setInitialized } from './auth.slice';
@@ -10,6 +10,21 @@ export const initializeAuth = createAsyncThunk(
   AUTH_THUNK_TYPES.INITIALIZE,
   async (_, { dispatch }) => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    const sessionStartedAt = localStorage.getItem(AUTH_SESSION_STARTED_AT_KEY);
+
+    const parsedSessionStartedAt = sessionStartedAt ? Number(sessionStartedAt) : NaN;
+
+    const isExpired =
+      !parsedSessionStartedAt || Date.now() - parsedSessionStartedAt >= AUTH_SESSION_MAX_AGE_MS;
+
+    if (token && isExpired) {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
+
+      dispatch(clearUser());
+      dispatch(setInitialized(true));
+      return;
+    }
 
     if (!token) {
       dispatch(clearUser());
@@ -19,13 +34,11 @@ export const initializeAuth = createAsyncThunk(
 
     try {
       const userResponse = await getCurrentUser();
-
       dispatch(setUser(mapUser(userResponse)));
     } catch {
       localStorage.removeItem(AUTH_TOKEN_KEY);
       localStorage.removeItem(AUTH_SESSION_STARTED_AT_KEY);
       dispatch(clearUser());
-      return;
     } finally {
       dispatch(setInitialized(true));
     }

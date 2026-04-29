@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/store/store';
 import { verifyMagicLink } from '@/store/auth';
 import { PageLoader } from '@/components/common/PageLoader';
 
-const TokenPage = () => {
+export const TokenPage = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const TokenPage = () => {
         navigate(ROUTES.DASHBOARD, { replace: true });
       })
       .catch(() => {
-        navigate(ROUTES.LOGIN, { replace: true });
+        navigate(ROUTES.INACTIVITY, { replace: true });
       });
   }, [token, dispatch, navigate]);
 
