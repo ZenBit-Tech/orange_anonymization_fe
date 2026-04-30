@@ -5,6 +5,7 @@
     "success": "Success",
     "save": "Save",
     "cancel": "Cancel",
+    "replace": "Replace",
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
@@ -365,6 +366,13 @@
         "tooLong": "Text cannot exceed 5000 characters",
         "unsupportedFormat": "Unsupported format. Please upload .txt or .pdf",
         "fileTooLarge": "File is too large. Max size is 5 MB"
+      },
+      "replaceDialog": {
+        "title": "Replace the current text?",
+        "message": "You already have text in the editor. Uploading a new file will replace it with the parsed file content.",
+        "reassurance": "You can continue editing the new text after it is inserted.",
+        "cancel": "Keep current text",
+        "confirm": "Replace text"
       }
     },
     "settings": {

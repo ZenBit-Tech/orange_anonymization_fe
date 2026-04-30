@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import Tabs, { Tab } from '@/components/UI/Tabs';
@@ -17,6 +17,15 @@ import { jobsService } from '@/services/jobsService';
 import type { IJob, WizardState } from '@/pages/DeIdentify/types';
 import { setJobAC, setLocalOriginalTextAC } from '@/store/slices/jobsSlice';
 import { FONT_SIZES } from '@/constants';
+import ReplaceTextPopup from '@/components/popups/ReplaceTextPopup';
+
+const SUPPORTED_FILE_TYPES = ['text/plain', 'application/pdf'];
+const SUPPORTED_FILE_EXTENSIONS = '.txt,.pdf';
+
+type PendingUpload = {
+  file: File;
+  parsedText: string;
+};
 
 const schema = yup
   .string()
@@ -24,22 +33,32 @@ const schema = yup
   .min(50, 'deIdentify.input.validation.minLength')
   .max(5000, 'deIdentify.input.validation.tooLong');
 
-const DataInput = () => {
+type DataInputContentProps = {
+  currentJob: IJob | null;
+  localOriginalText?: string;
+};
+
+const DataInputBody = ({ currentJob, localOriginalText }: DataInputContentProps) => {
   const { t } = useTranslation();
   const [currentTab, setCurrentTab] = useState(t('deIdentify.input.tabs.text'));
   const [error, setError] = useState<string | null>(null);
   const [isTouched, setIsTouched] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const { currentJob } = useAppSelector((state) => state.jobs);
-  const localOriginalText = useAppSelector(
-    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
-  );
+  const [replaceDialogOpen, setReplaceDialogOpen] = useState(false);
+  const [pendingUpload, setPendingUpload] = useState<PendingUpload | null>(null);
 
   const [text, setText] = useState(localOriginalText || '');
+  const [uploadedTextBaseline, setUploadedTextBaseline] = useState(() =>
+    currentJob?.wizardState?.inputData?.fileName ? localOriginalText || '' : '',
+  );
 
   const dispatch = useAppDispatch();
+
+  const hasUnsavedManualChanges = useMemo(
+    () => text !== uploadedTextBaseline,
+    [text, uploadedTextBaseline],
+  );
 
   const handleError = (defaultKey: string) => {
     setErrorMessage(t(defaultKey));
@@ -89,12 +108,29 @@ const DataInput = () => {
     }
   };
 
+  const applyUploadedText = async (file: File, parsedText: string) => {
+    if (!currentJob?.id) return;
+
+    const response = await jobsService.uploadFile(currentJob.id, file);
+
+    dispatch(
+      setLocalOriginalTextAC({
+        jobId: response.id,
+        text: parsedText,
+      }),
+    );
+
+    dispatch(setJobAC(response));
+    setText(parsedText);
+    setUploadedTextBaseline(parsedText);
+    setIsTouched(false);
+    validate(parsedText);
+  };
+
   const handleFileUpload = async (file: File) => {
     setFileError(null);
 
-    const allowedExtensions = ['text/plain', 'application/json', 'text/csv'];
-
-    if (!allowedExtensions.includes(file.type)) {
+    if (!SUPPORTED_FILE_TYPES.includes(file.type)) {
       setFileError(t('deIdentify.input.validation.unsupportedFormat'));
       return;
     }
@@ -106,19 +142,36 @@ const DataInput = () => {
 
     try {
       const textContent = await file.text();
-      const response = await jobsService.uploadFile(currentJob?.id as string, file);
 
-      dispatch(
-        setLocalOriginalTextAC({
-          jobId: response.id,
-          text: textContent,
-        }),
-      );
+      if (hasUnsavedManualChanges && text.length > 0) {
+        setPendingUpload({ file, parsedText: textContent });
+        setReplaceDialogOpen(true);
+        return;
+      }
 
-      dispatch(setJobAC(response));
+      await applyUploadedText(file, textContent);
     } catch {
       handleError('deIdentify.input.validation.uploadFailed');
     }
+  };
+
+  const handleConfirmReplace = async () => {
+    if (!pendingUpload) return;
+
+    const { file, parsedText } = pendingUpload;
+    setReplaceDialogOpen(false);
+    setPendingUpload(null);
+
+    try {
+      await applyUploadedText(file, parsedText);
+    } catch {
+      handleError('deIdentify.input.validation.uploadFailed');
+    }
+  };
+
+  const handleCloseReplaceDialog = () => {
+    setReplaceDialogOpen(false);
+    setPendingUpload(null);
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -348,7 +401,12 @@ const DataInput = () => {
                   {currentJob?.wizardState?.inputData?.fileName
                     ? t('deIdentify.input.upload.replace')
                     : t('deIdentify.input.upload.browse')}
-                  <input type="file" hidden accept=".txt" onChange={onFileInputChange} />
+                  <input
+                    type="file"
+                    hidden
+                    accept={SUPPORTED_FILE_EXTENSIONS}
+                    onChange={onFileInputChange}
+                  />
                 </Button>
 
                 <Typography sx={{ mt: 2, fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
@@ -372,7 +430,12 @@ const DataInput = () => {
                   endIcon={<ArrowCircleUpIcon />}
                 >
                   {t('deIdentify.input.upload.replace')}
-                  <input type="file" hidden accept=".txt,.pdf" onChange={onFileInputChange} />
+                  <input
+                    type="file"
+                    hidden
+                    accept={SUPPORTED_FILE_EXTENSIONS}
+                    onChange={onFileInputChange}
+                  />
                 </Button>
               </>
             )}
@@ -419,7 +482,28 @@ const DataInput = () => {
           {errorMessage}
         </Alert>
       </Snackbar>
+
+      <ReplaceTextPopup
+        isVisible={replaceDialogOpen}
+        onClose={handleCloseReplaceDialog}
+        onConfirm={handleConfirmReplace}
+      />
     </Box>
+  );
+};
+
+const DataInput = () => {
+  const { currentJob } = useAppSelector((state) => state.jobs);
+  const localOriginalText = useAppSelector(
+    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
+  );
+
+  return (
+    <DataInputBody
+      key={currentJob?.id ?? 'no-job'}
+      currentJob={currentJob}
+      localOriginalText={localOriginalText}
+    />
   );
 };
 
