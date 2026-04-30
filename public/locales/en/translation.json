@@ -444,6 +444,7 @@
       "language": "Language",
       "languageSelect": {
         "autoDetected": "Auto-detected",
+        "autoDetectedUnknown": "English",
         "search": "Search language...",
         "recentlyUsed": "RECENTLY USED",
         "allLanguages": "ALL LANGUAGES",
