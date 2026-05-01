@@ -12,7 +12,7 @@ import {
   Check as CheckIcon,
   ArrowUpward as ArrowUpwardIcon,
 } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useAppDispatch } from '@/store/store';
 import { jobsService } from '@/services/jobsService';
 import type { IJob, WizardState } from '@/pages/DeIdentify/types';
 import { setJobAC, setLocalOriginalTextAC } from '@/store/slices/jobsSlice';
@@ -38,7 +38,7 @@ type DataInputContentProps = {
   localOriginalText?: string;
 };
 
-const DataInputBody = ({ currentJob, localOriginalText }: DataInputContentProps) => {
+const DataInput = ({ currentJob, localOriginalText }: DataInputContentProps) => {
   const { t } = useTranslation();
   const [currentTab, setCurrentTab] = useState(t('deIdentify.input.tabs.text'));
   const [error, setError] = useState<string | null>(null);
@@ -489,21 +489,6 @@ const DataInputBody = ({ currentJob, localOriginalText }: DataInputContentProps)
         onConfirm={handleConfirmReplace}
       />
     </Box>
-  );
-};
-
-const DataInput = () => {
-  const { currentJob } = useAppSelector((state) => state.jobs);
-  const localOriginalText = useAppSelector(
-    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
-  );
-
-  return (
-    <DataInputBody
-      key={currentJob?.id ?? 'no-job'}
-      currentJob={currentJob}
-      localOriginalText={localOriginalText}
-    />
   );
 };
 
