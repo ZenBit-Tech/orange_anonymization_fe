@@ -154,7 +154,9 @@ const HIPAAConfiguration = () => {
       const currentLang = ALL_LANGUAGES.find((l) => l.code === currentLangCode);
       options.push({
         id: currentLangCode,
-        title: currentLang?.name || t('deIdentify.languageSelect.autoDetectedUnknown'),
+        title: currentLang
+          ? t(currentLang.name)
+          : t('deIdentify.languageSelect.autoDetectedUnknown'),
         category: '',
         rightElement: (
           <Chip
@@ -175,7 +177,7 @@ const HIPAAConfiguration = () => {
       RECENTLY_USED.forEach((l) => {
         options.push({
           id: l.code,
-          title: l.name,
+          title: t(l.name),
           category: t('deIdentify.languageSelect.recentlyUsed'),
           rightElement:
             l.code === currentLangCode ? (
@@ -185,11 +187,14 @@ const HIPAAConfiguration = () => {
       });
     }
 
-    const filteredAll = ALL_LANGUAGES.filter((l) => l.name.toLowerCase().includes(searchLower));
+    const filteredAll = ALL_LANGUAGES.map((l) => ({ ...l, translatedName: t(l.name) })).filter(
+      (l) => l.translatedName.toLowerCase().includes(searchLower),
+    );
+
     filteredAll.forEach((l) => {
       options.push({
         id: l.code,
-        title: l.name,
+        title: l.translatedName,
         category: langSearch ? '' : t('deIdentify.languageSelect.allLanguages'),
         rightElement:
           l.code === currentLangCode ? (
@@ -233,17 +238,36 @@ const HIPAAConfiguration = () => {
       'BENEFICIARY',
       'CERTIFICATE',
     ];
-    await updateJob(currentJob.id, {
+
+    const data: Partial<IJob> = {
       wizardState: {
-        ...currentJob.wizardState,
+        ...currentJob?.wizardState,
         configSettings: {
-          ...currentJob.wizardState.configSettings,
+          ...currentJob?.wizardState?.configSettings,
           method: method.title,
+          language: currentJob?.wizardState?.configSettings.language || 'en',
           strategies: method.id === 1 ? Object.fromEntries(entities.map((e) => [e, 'Redact'])) : {},
-          entities,
+          entities: entities,
         },
       },
-    });
+    };
+
+    await updateJob(currentJob?.id as string, data);
+  };
+
+  const selectThreshold = async (threshold: number) => {
+    if (!currentJob?.wizardState) return;
+
+    const data: Partial<IJob> = {
+      wizardState: {
+        ...currentJob?.wizardState,
+        configSettings: {
+          ...currentJob?.wizardState?.configSettings,
+          threshold,
+        },
+      },
+    };
+    await updateJob(currentJob?.id as string, data);
   };
 
   return (
@@ -272,26 +296,24 @@ const HIPAAConfiguration = () => {
                   onClick={() => selectMethod(method)}
                   sx={{
                     border: `${isActive ? 2 : 1}px solid`,
-                    borderColor: isActive ? 'primary.500' : 'neutral.200',
+                    borderColor: `${isActive ? 'primary.500' : 'neutral.200'}`,
                     borderRadius: '12px',
-                    bgcolor: isActive ? 'primary.50' : 'common.white',
-                    p: '20px',
+                    backgroundColor: `${isActive ? 'primary.50' : 'common.white'}`,
+                    boxShadow: (theme) => `0px 1px 3px ${alpha(theme.palette.common.black, 0.08)}`,
+                    padding: '20px',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    '&:hover': { transform: 'scale(1.01)' },
+                    transition: 'transform 0.3s',
+                    '&:hover': {
+                      transform: 'scale(1.02)',
+                    },
                   }}
                 >
                   <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      mb: 3,
-                    }}
+                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                   >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: '24px' }}>
                       {isActive ? (
-                        <RadioButtonCheckedOutlinedIcon color="primary" />
+                        <RadioButtonCheckedOutlinedIcon />
                       ) : (
                         <RadioButtonUncheckedOutlinedIcon sx={{ color: 'neutral.400' }} />
                       )}
@@ -305,23 +327,45 @@ const HIPAAConfiguration = () => {
                         {t(method.titleKey)}
                       </Typography>
                     </Box>
+                    {method.id === 1 && (
+                      <Box
+                        sx={{
+                          padding: '4px 12px',
+                          borderRadius: '999px',
+                          bgcolor: 'accent.100',
+                          color: 'accent.500',
+                          border: '1px solid',
+                          borderColor: 'accent.500',
+                          fontSize: FONT_SIZES.xs,
+                          fontWeight: 'fontWeightMedium',
+                        }}
+                      >
+                        {t('deIdentify.settings.method.recommended')}
+                      </Box>
+                    )}
                   </Box>
-                  <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md, mb: 1 }}>
+                  <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md }}>
                     {t(method.descKey)}
                   </Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      color: method.id === 1 ? 'neutral.500' : 'warning.main',
-                    }}
-                  >
-                    {method.id === 2 && (
-                      <ReportProblemOutlinedIcon sx={{ fontSize: FONT_SIZES.md }} />
-                    )}
-                    <Typography sx={{ fontSize: FONT_SIZES.sm }}>{t(method.commentKey)}</Typography>
-                  </Box>
+                  {method?.id === 1 ? (
+                    <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
+                      {t(method.commentKey)}
+                    </Typography>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        color: 'warning.main',
+                      }}
+                    >
+                      <ReportProblemOutlinedIcon sx={{ width: '16px', height: '16px' }} />
+                      <Typography sx={{ fontSize: FONT_SIZES.sm }}>
+                        {t(method.commentKey)}
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
               </Grid>
             );
@@ -419,41 +463,67 @@ const HIPAAConfiguration = () => {
               const isActive =
                 currentJob?.wizardState?.configSettings.threshold === threshold.score;
               return (
-                <Grid size={{ xs: 12, md: 4 }} key={threshold.id}>
+                <Grid size={{ xs: 12, md: 6, lg: 12, xl: 4 }} key={threshold.id}>
                   <Box
-                    onClick={() =>
-                      updateJob(currentJob!.id, {
-                        wizardState: {
-                          ...currentJob!.wizardState!,
-                          configSettings: {
-                            ...currentJob!.wizardState!.configSettings,
-                            threshold: threshold.score,
-                          },
-                        },
-                      })
-                    }
+                    onClick={() => selectThreshold(threshold.score)}
                     sx={{
                       border: `${isActive ? 2 : 1}px solid`,
-                      borderColor: isActive ? 'primary.500' : 'neutral.200',
+                      borderColor: (theme) =>
+                        isActive ? theme.palette.primary[500] : theme.palette.neutral[200],
                       borderRadius: '12px',
-                      bgcolor: isActive ? 'primary.50' : 'common.white',
-                      p: 2,
+                      backgroundColor: (theme) =>
+                        isActive ? theme.palette.primary[50] : theme.palette.common.white,
+                      boxShadow: (theme) =>
+                        `0px 1px 3px ${alpha(theme.palette.common.black, 0.08)}`,
+                      padding: '20px',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      '&:hover': { transform: 'scale(1.02)' },
+                      transition: 'transform 0.3s',
+                      '&:hover': {
+                        transform: 'scale(1.02)',
+                      },
                     }}
                   >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      {isActive ? (
-                        <RadioButtonCheckedOutlinedIcon color="primary" />
-                      ) : (
-                        <RadioButtonUncheckedOutlinedIcon sx={{ color: 'neutral.400' }} />
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: '24px' }}>
+                        {isActive ? (
+                          <RadioButtonCheckedOutlinedIcon />
+                        ) : (
+                          <RadioButtonUncheckedOutlinedIcon sx={{ color: 'neutral.400' }} />
+                        )}
+                        <Typography
+                          sx={{
+                            color: 'primary.500',
+                            fontWeight: 'fontWeightSemiBold',
+                            fontSize: FONT_SIZES.lg,
+                          }}
+                        >
+                          {t(threshold.titleKey)}
+                        </Typography>
+                      </Box>
+                      {threshold.id === 2 && (
+                        <Box
+                          sx={{
+                            padding: '4px 12px',
+                            borderRadius: '999px',
+                            bgcolor: 'accent.100',
+                            color: 'accent.500',
+                            border: '1px solid',
+                            borderColor: 'accent.500',
+                            fontSize: FONT_SIZES.xs,
+                            fontWeight: 'fontWeightMedium',
+                          }}
+                        >
+                          {t('deIdentify.settings.detection.recommended')}
+                        </Box>
                       )}
-                      <Typography sx={{ fontWeight: 'fontWeightSemiBold' }}>
-                        {t(threshold.titleKey)}
-                      </Typography>
                     </Box>
-                    <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.600' }}>
+                    <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md }}>
                       {t(threshold.descKey)}
                     </Typography>
                   </Box>
@@ -461,6 +531,24 @@ const HIPAAConfiguration = () => {
               );
             })}
           </Grid>
+
+          {currentJob?.wizardState?.configSettings.threshold === 0.5 && (
+            <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md }}>
+              {t('deIdentify.settings.detection.recommendedNote')}
+            </Typography>
+          )}
+
+          <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.xs }}>
+            {currentJob?.wizardState?.configSettings.threshold === 0.5 && (
+              <>{t('deIdentify.settings.detection.thresholds.balanced.info')}</>
+            )}
+            {currentJob?.wizardState?.configSettings.threshold === 0.3 && (
+              <>{t('deIdentify.settings.detection.thresholds.conservative.info')}</>
+            )}
+            {currentJob?.wizardState?.configSettings.threshold === 0.7 && (
+              <>{t('deIdentify.settings.detection.thresholds.aggressive.info')}</>
+            )}
+          </Typography>
         </Box>
       </Box>
     </Box>

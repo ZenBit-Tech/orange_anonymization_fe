@@ -38,4 +38,11 @@ export const jobsService = {
     const response = await api.get<IJob>(`/jobs/${id}`);
     return response.data;
   },
+
+  async toggleEntity(jobId: string, entityId: string, originalText: string): Promise<IJob> {
+    const response = await api.patch<IJob>(`/jobs/${jobId}/entities/${entityId}/toggle`, {
+      originalText,
+    });
+    return response.data;
+  },
 };
