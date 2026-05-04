@@ -1,0 +1,39 @@
+name: Deploy frontend to Heroku
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build & release Docker image
+    runs-on: ubuntu-latest
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_APP: ${{ vars.HEROKU_FE_APP_NAME }}
+      IMAGE: registry.heroku.com/${{ vars.HEROKU_FE_APP_NAME }}/web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Heroku Container Registry
+        run: |
+          echo "$HEROKU_API_KEY" \
+            | docker login \
+                --username "${{ secrets.HEROKU_EMAIL }}" \
+                --password-stdin \
+                registry.heroku.com
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg VITE_API_BASE_URL="${{ vars.VITE_API_BASE_URL }}" \
+            --tag "$IMAGE" \
+            .
+
+      - name: Push image to Heroku registry
+        run: docker push "$IMAGE"
+
+      - name: Release container on Heroku
+        run: heroku container:release web --app "$HEROKU_APP"
