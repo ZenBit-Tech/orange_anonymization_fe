@@ -1,3 +1,4 @@
+import type { EntityDetection } from '@/pages/DeIdentify/types';
 import { theme } from '@/theme';
 
 export function truncate(text: string, maxLength: number): string {
@@ -20,7 +21,7 @@ export function extractSpan(text: string, start: number, end: number): string {
 }
 
 export function formatDate(isoString: string): string {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -45,3 +46,25 @@ export function toCSV(rows: Record<string, unknown>[]): string {
   const lines = rows.map((row) => headers.map((h) => JSON.stringify(row[h] ?? '')).join(','));
   return [headers.join(','), ...lines].join('\n');
 }
+
+export const getUniqueEntities = (entities: EntityDetection[]): EntityDetection[] => {
+  return Array.from(new Map(entities.map((item) => [item.entity_type, item])).values());
+};
+
+export const presidioToHipaaMap: Record<string, string> = {
+  PERSON: 'BENEFICIARY',
+  DATE_TIME: 'DATE',
+  US_SSN: 'CERTIFICATE',
+  PHONE_NUMBER: 'FAX',
+  EMAIL_ADDRESS: 'EMAIL',
+  LOCATION: 'ZIP',
+  URL: 'URL',
+  IP_ADDRESS: 'DEVICE',
+  US_DRIVER_LICENSE: 'LICENSE',
+  US_PASSPORT: 'VEHICLE',
+  BIOMETRIC: 'BIOMETRIC',
+  PHOTO: 'PHOTO',
+  IBAN_CODE: 'ACCOUNT',
+  MEDICAL_RECORD_NUMBER: 'MRN',
+  US_HEALTH_NUMBER: 'HEALTH_PLAN',
+};

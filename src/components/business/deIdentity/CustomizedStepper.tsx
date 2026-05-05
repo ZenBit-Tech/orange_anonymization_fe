@@ -19,6 +19,8 @@ import {
   PostAdd as PostAddIcon,
   ArrowForward as ArrowForwardIcon,
   ArrowBack as ArrowBackIcon,
+  ArrowCircleDownOutlined as ArrowCircleDownOutlinedIcon,
+  Add as AddIcon,
 } from '@mui/icons-material';
 import { type StepIconProps } from '@mui/material/StepIcon';
 import { StepContent } from './StepContent';
@@ -170,6 +172,10 @@ export default function CustomizedSteppers() {
   };
 
   const handleNext = async () => {
+    if (activeStep === steps.length - 1) {
+      return;
+    }
+
     try {
       const data: Partial<IJob> = {
         wizardState: {
@@ -289,15 +295,27 @@ export default function CustomizedSteppers() {
                 zIndex: 10,
               }}
             >
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1, color: (theme) => theme.palette.neutral[700] }}
-                startIcon={<ArrowBackIcon />}
-              >
-                {t('common.back')}
-              </Button>
+              {activeStep === steps.length - 1 ? (
+                <Button
+                  color="inherit"
+                  onClick={createJob}
+                  sx={{ mr: 1, color: (theme) => theme.palette.accent[500] }}
+                  startIcon={<AddIcon />}
+                >
+                  {t('common.newAnalysis')}
+                </Button>
+              ) : (
+                <Button
+                  color="inherit"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ mr: 1, color: (theme) => theme.palette.neutral[700] }}
+                  startIcon={<ArrowBackIcon />}
+                >
+                  {t('common.back')}
+                </Button>
+              )}
+
               <Box sx={{ flex: '1 1 auto' }} />
               <Button
                 variant="contained"
@@ -315,10 +333,16 @@ export default function CustomizedSteppers() {
                   background: (theme) => theme.palette.primary[500],
                   '&:hover': { opacity: 0.9 },
                 }}
-                endIcon={activeStep === steps.length - 1 ? null : <ArrowForwardIcon />}
+                endIcon={
+                  activeStep === steps.length - 1 ? (
+                    <ArrowCircleDownOutlinedIcon />
+                  ) : (
+                    <ArrowForwardIcon />
+                  )
+                }
               >
                 {activeStep === steps.length - 1
-                  ? t('common.finish')
+                  ? t('common.diIdFile')
                   : activeStep === 2
                     ? t('common.analyze')
                     : t('common.continue')}
