@@ -1,1 +1,2 @@
 export const API_TIMEOUT = 30_000;
+export const REVIEW_RESULTS_POLL_INTERVAL_MS = 2_000;

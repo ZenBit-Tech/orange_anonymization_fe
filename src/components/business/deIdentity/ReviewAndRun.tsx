@@ -36,6 +36,7 @@ import {
 import { useCallback, useEffect, useState, type FC, useRef, type JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FONT_SIZES } from '@/constants';
+import { REVIEW_RESULTS_POLL_INTERVAL_MS } from '@/constants/api-config';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { getUniqueEntities, presidioToHipaaMap } from '@/utils';
@@ -172,7 +173,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
     checkStatus();
 
-    intervalRef.current = setInterval(checkStatus, 2000);
+    intervalRef.current = setInterval(checkStatus, REVIEW_RESULTS_POLL_INTERVAL_MS);
 
     return () => stopPolling();
   }, [dispatch, getResults, handleError, jobId]);
