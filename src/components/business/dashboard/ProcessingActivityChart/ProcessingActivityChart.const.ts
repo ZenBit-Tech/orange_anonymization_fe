@@ -1,12 +1,8 @@
-export const EMPTY_DATES = [
-  '2026-05-01',
-  '2026-05-02',
-  '2026-05-03',
-  '2026-05-04',
-  '2026-05-05',
-  '2026-05-06',
-  '2026-05-07',
-];
+export const EMPTY_DATES = Array.from({ length: 7 }, (_, i) => {
+  const d = new Date();
+  d.setDate(d.getDate() - (6 - i));
+  return d.toISOString().split('T')[0];
+});
 
 export const DATE_PAD_LENGTH = 2;
 export const DATE_PAD_CHAR = '0';

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '@/services/api';
 import type { DashboardData } from '@/pages/Dashboard/types';
+import { API_ROUTES } from '@/constants/api-routes';
 
 interface DashboardState {
   data: DashboardData | null;
@@ -18,10 +19,11 @@ export const fetchDashboardData = createAsyncThunk<DashboardData>(
   'dashboard/fetchData',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get<DashboardData>('/app/dashboard');
+      const response = await api.get<DashboardData>(API_ROUTES.DASHBOARD);
       return response.data;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      const message = error instanceof Error ? error.message : String(error);
+      return rejectWithValue(message);
     }
   },
 );

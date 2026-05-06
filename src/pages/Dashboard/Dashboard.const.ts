@@ -8,3 +8,12 @@ export const DEFAULT_METRICS: Metrics = {
 };
 
 export const DEFAULT_EMPTY_STATE = true;
+
+export const JOB_STATUS = {
+  COMPLETED: 'completed',
+  PROCESSING: 'processing',
+  FAILED: 'failed',
+  PENDING: 'pending',
+} as const;
+
+export type JobStatus = (typeof JOB_STATUS)[keyof typeof JOB_STATUS];

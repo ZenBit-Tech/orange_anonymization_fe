@@ -55,7 +55,6 @@ export const store = configureStore({
           PERSIST,
           PURGE,
           REGISTER,
-          'auth/verifyMagicLink/fulfilled',
         ],
       },
     }),

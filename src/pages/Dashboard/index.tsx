@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { fetchDashboardData } from '@/store/slices/dashboardSlice';
-import type { AppDispatch, RootState } from '@/store/store';
 import { MetricCard } from '@/components/business/dashboard/MetricCard/MetricCard';
 import { ProcessingActivityChart } from '@/components/business/dashboard/ProcessingActivityChart/ProcessingActivityChart';
 import { EmptyStateCard } from '@/components/business/dashboard/EmptyStateCard/EmptyStateCard';
@@ -17,7 +14,7 @@ import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?rea
 import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
 import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
 import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
-
+import { useDashboard } from './useDashboard';
 import {
   PageWrapper,
   WelcomeBanner,
@@ -33,20 +30,10 @@ import {
   SectionDivider,
   RecentActivityCard,
 } from './styled';
-import { DEFAULT_EMPTY_STATE, DEFAULT_METRICS } from './Dashboard.const';
 
 const Dashboard: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { data } = useSelector((state: RootState) => state.dashboard);
+  const { metrics, recentActivity, isEmpty } = useDashboard();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    dispatch(fetchDashboardData());
-  }, [dispatch]);
-
-  const metrics = data?.metrics ?? DEFAULT_METRICS;
-  const recentActivity = data?.recentActivity ?? [];
-  const isEmpty = data?.emptyState ?? DEFAULT_EMPTY_STATE;
 
   return (
     <PageWrapper>

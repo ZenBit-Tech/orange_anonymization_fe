@@ -1,3 +1,5 @@
+import type { JobStatus } from './Dashboard.const';
+
 export interface Metrics {
   totalDocuments: number;
   entitiesDetected: number;
@@ -13,7 +15,7 @@ export interface ChartData {
 export interface Job {
   id: string;
   document: string;
-  status: 'completed' | 'processing' | 'failed' | 'pending';
+  status: JobStatus;
   framework: string;
   entities: number;
   date: string;

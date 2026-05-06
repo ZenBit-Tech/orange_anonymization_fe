@@ -1,6 +1,6 @@
-import { BORDERS } from '@/theme';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { BORDERS } from '@/theme';
 
 export const CardWrapper = styled(Box)(({ theme }) => ({
   display: 'grid',

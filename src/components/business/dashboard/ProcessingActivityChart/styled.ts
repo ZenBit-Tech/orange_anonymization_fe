@@ -1,6 +1,6 @@
-import { theme } from '@/theme';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { theme } from '@/theme';
 import {
   GRID_STROKE_DASHARRAY,
   X_AXIS_STROKE_WIDTH,
