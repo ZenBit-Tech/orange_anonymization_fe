@@ -33,7 +33,7 @@ import {
   MenuItem,
   type SelectChangeEvent,
 } from '@mui/material';
-import { useEffect, useState, type FC, useRef, type JSX, useMemo } from 'react';
+import { useCallback, useEffect, useState, type FC, useRef, type JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FONT_SIZES } from '@/constants';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -95,11 +95,13 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const [selectedEntityTypes, setSelectedEntityTypes] = useState<string[]>([]);
   const [isToggling, setIsToggling] = useState(false);
 
-  const localOriginalText = useAppSelector((state) => state.jobs.localOriginalTexts[jobId]);
+  const localOriginalText = useAppSelector(
+    (state) => state.jobs.localOriginalTexts[jobId] || state.jobs.currentJob?.sourceText || '',
+  );
   const { currentJob } = useAppSelector((state) => state.jobs);
   const dispatch = useAppDispatch();
 
-  const textToDisplay = localOriginalText || '';
+  const textToDisplay = localOriginalText || currentJob?.sourceText || '';
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -127,9 +129,12 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
     setActiveTab(newValue);
   };
 
-  const handleError = (defaultKey: string) => {
-    setErrorMessage(t(defaultKey));
-  };
+  const handleError = useCallback(
+    (defaultKey: string) => {
+      setErrorMessage(t(defaultKey));
+    },
+    [t],
+  );
 
   const stopPolling = () => {
     if (intervalRef.current) {
@@ -138,7 +143,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
     }
   };
 
-  const getResults = async () => {
+  const getResults = useCallback(async () => {
     try {
       const response = await resultsService.getResults(jobId);
       setResults(response);
@@ -148,35 +153,31 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
       setIsError(true);
       stopPolling();
     }
-  };
-
-  const checkStatus = async () => {
-    try {
-      const job = await jobsService.getJobById(jobId);
-
-      if (job.status === JobStatus.SUCCEEDED) {
-        await getResults();
-        dispatch(setJobAC(job));
-      } else if (job.status === JobStatus.FAILED) {
-        setIsError(true);
-        stopPolling();
-      }
-    } catch {
-      handleError('errors.network');
-    }
-  };
+  }, [jobId]);
 
   useEffect(() => {
-    const startPolling = () => {
-      checkStatus();
+    const checkStatus = async () => {
+      try {
+        const job = await jobsService.getJobById(jobId);
 
-      intervalRef.current = setInterval(checkStatus, 2000);
+        if (job.status === JobStatus.SUCCEEDED) {
+          await getResults();
+          dispatch(setJobAC(job));
+        } else if (job.status === JobStatus.FAILED) {
+          setIsError(true);
+          stopPolling();
+        }
+      } catch {
+        handleError('errors.network');
+      }
     };
 
-    startPolling();
+    checkStatus();
+
+    intervalRef.current = setInterval(checkStatus, 2000);
 
     return () => stopPolling();
-  }, [jobId]);
+  }, [dispatch, getResults, handleError, jobId]);
 
   const handleSelectOption = (event: SelectChangeEvent<string>) => {
     setSelectedOptionId(event.target.value);

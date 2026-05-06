@@ -52,6 +52,7 @@ export interface IJob {
   userId: string;
   wizardState: WizardState | null;
   framework?: string;
+  sourceText?: string | null;
   anonymizedText?: string;
   processingTime?: number;
   errorMessage: string | null;
