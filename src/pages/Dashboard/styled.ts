@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { BORDERS } from '@/theme';
+import { RECENT_ACTIVITY_CARD_PADDING_BOTTOM } from './Dashboard.const';
 
 export const PageWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.neutral[50],
@@ -101,7 +102,7 @@ export const BottomGrid = styled(Box)(({ theme }) => ({
 }));
 
 export const RecentActivityCard = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2, 3, 5.5),
+  padding: theme.spacing(2, 3, RECENT_ACTIVITY_CARD_PADDING_BOTTOM),
   borderRadius: theme.shape.lg,
   border: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
   boxShadow: theme.customShadows.sm,

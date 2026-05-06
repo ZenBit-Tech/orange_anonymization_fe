@@ -17,3 +17,5 @@ export const JOB_STATUS = {
 } as const;
 
 export type JobStatus = (typeof JOB_STATUS)[keyof typeof JOB_STATUS];
+
+export const RECENT_ACTIVITY_CARD_PADDING_BOTTOM = 5.5;
