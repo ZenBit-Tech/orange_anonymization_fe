@@ -30,7 +30,7 @@ import PreviewIcon from '@/assets/icons/preview.svg?react';
 import ReviewAndRun from './ReviewAndRun';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { jobsService } from '@/services/jobsService';
-import { setJobAC, setLocalOriginalTextAC } from '@/store/slices/jobsSlice';
+import { setJobAC } from '@/store/slices/jobsSlice';
 import type { IJob } from '@/pages/DeIdentify/types';
 import { FONT_SIZES } from '@/constants';
 
@@ -116,8 +116,7 @@ export default function CustomizedSteppers() {
   const jobIdFromUrl = searchParams.get('jobId');
   const { currentJob } = useAppSelector((state) => state.jobs);
   const localOriginalText = useAppSelector(
-    (state) =>
-      state.jobs.localOriginalTexts[currentJob?.id as string] || currentJob?.sourceText || '',
+    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -194,14 +193,6 @@ export default function CustomizedSteppers() {
         try {
           const job = await jobsService.getJobById(jobIdFromUrl);
           dispatch(setJobAC(job));
-          if (job.sourceText) {
-            dispatch(
-              setLocalOriginalTextAC({
-                jobId: job.id,
-                text: job.sourceText,
-              }),
-            );
-          }
           syncJobIdInUrl(job.id);
           return;
         } catch {
@@ -218,16 +209,8 @@ export default function CustomizedSteppers() {
   useEffect(() => {
     if (currentJob?.id) {
       syncJobIdInUrl(currentJob.id);
-      if (currentJob.sourceText) {
-        dispatch(
-          setLocalOriginalTextAC({
-            jobId: currentJob.id,
-            text: currentJob.sourceText,
-          }),
-        );
-      }
     }
-  }, [currentJob?.id, currentJob?.sourceText, dispatch, syncJobIdInUrl]);
+  }, [currentJob?.id, syncJobIdInUrl]);
 
   const updateJob = async (jobId: string, updateData: Partial<IJob>) => {
     const response = await jobsService.updateJob(jobId, updateData);

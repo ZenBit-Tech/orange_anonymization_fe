@@ -13,8 +13,7 @@ interface IProps {
 export const StepContent: FC<IProps> = ({ step, jobId }) => {
   const { currentJob } = useAppSelector((state) => state.jobs);
   const localOriginalText = useAppSelector(
-    (state) =>
-      state.jobs.localOriginalTexts[currentJob?.id as string] || currentJob?.sourceText || '',
+    (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
   );
 
   switch (step) {

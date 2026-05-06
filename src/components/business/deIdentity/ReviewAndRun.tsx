@@ -95,13 +95,11 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const [selectedEntityTypes, setSelectedEntityTypes] = useState<string[]>([]);
   const [isToggling, setIsToggling] = useState(false);
 
-  const localOriginalText = useAppSelector(
-    (state) => state.jobs.localOriginalTexts[jobId] || state.jobs.currentJob?.sourceText || '',
-  );
+  const localOriginalText = useAppSelector((state) => state.jobs.localOriginalTexts[jobId]);
   const { currentJob } = useAppSelector((state) => state.jobs);
   const dispatch = useAppDispatch();
 
-  const textToDisplay = localOriginalText || currentJob?.sourceText || '';
+  const textToDisplay = localOriginalText || '';
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
