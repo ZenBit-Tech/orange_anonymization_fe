@@ -13,6 +13,7 @@ import {
 } from 'redux-persist';
 import jobsSlice from './slices/jobsSlice';
 import authSlice from './auth/auth.slice';
+import dashboardSlice from './slices/dashboardSlice';
 import { AUTH_THUNK_TYPES } from './auth/auth.constants';
 
 const customSessionStorage = {
@@ -38,6 +39,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   jobs: persistReducer(persistConfig, jobsSlice),
   auth: authSlice,
+  dashboard: dashboardSlice,
 });
 
 export const store = configureStore({
