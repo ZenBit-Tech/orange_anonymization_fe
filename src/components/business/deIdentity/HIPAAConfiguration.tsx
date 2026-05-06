@@ -13,7 +13,17 @@ import {
   LockClock as HashIcon,
   Language as LanguageIcon,
 } from '@mui/icons-material';
-import { Box, Grid, Typography, TextField, InputAdornment, Chip, alpha } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Typography,
+  TextField,
+  InputAdornment,
+  Chip,
+  alpha,
+  type Theme,
+  type SxProps,
+} from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { jobsService } from '@/services/jobsService';
@@ -21,6 +31,57 @@ import { FONT_SIZES, ALL_LANGUAGES, RECENTLY_USED } from '@/constants';
 import type { HIPAAMethodUI, IJob, RedactOption } from '@/pages/DeIdentify/types';
 import IdentifiersAccordion from './IdentifiersAccordion';
 import Dropdown from '@/components/UI/Dropdown';
+
+const sectionHeaderStyle = (isEnabled = true): SxProps<Theme> => ({
+  color: isEnabled ? 'neutral.900' : 'neutral.400',
+  fontWeight: 'fontWeightMedium',
+  mb: '10px',
+  fontSize: FONT_SIZES.xxl,
+});
+
+const sectionWrapperStyle: SxProps<Theme> = {
+  borderLeft: '4px solid',
+  borderColor: 'accent.100',
+  pl: 2,
+};
+
+const cardContainerStyle = (isActive: boolean): SxProps<Theme> => ({
+  border: `${isActive ? 2 : 1}px solid`,
+  borderColor: isActive ? 'primary.500' : 'neutral.200',
+  borderRadius: '12px',
+  backgroundColor: isActive ? 'primary.50' : 'common.white',
+  boxShadow: (theme: Theme) => `0px 1px 3px ${alpha(theme.palette.common.black, 0.08)}`,
+  padding: '20px',
+  cursor: 'pointer',
+  transition: 'transform 0.3s',
+  '&:hover': {
+    transform: 'scale(1.02)',
+  },
+});
+
+const cardHeaderStyle: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+
+const iconTitleGroupStyle: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 1,
+  mb: '24px',
+};
+
+const recommendedBadgeStyle: SxProps<Theme> = {
+  padding: '4px 12px',
+  borderRadius: '999px',
+  bgcolor: 'accent.100',
+  color: 'accent.500',
+  border: '1px solid',
+  borderColor: 'accent.500',
+  fontSize: FONT_SIZES.xs,
+  fontWeight: 'fontWeightMedium',
+};
 
 const HIPAAMethods: HIPAAMethodUI[] = [
   {
@@ -107,7 +168,6 @@ const HIPAAConfiguration = () => {
   const { t } = useTranslation();
   const { currentJob } = useAppSelector((state) => state.jobs);
   const dispatch = useAppDispatch();
-
   const [langSearch, setLangSearch] = useState('');
 
   const updateJob = async (jobId: string, updateData: Partial<IJob>) => {
@@ -115,10 +175,11 @@ const HIPAAConfiguration = () => {
     dispatch(setJobAC(response));
   };
 
-  const firstEntity = currentJob?.wizardState?.configSettings.entities?.[0];
-  const strategies =
-    (currentJob?.wizardState?.configSettings.strategies as Record<string, string>) || {};
+  const config = currentJob?.wizardState?.configSettings;
+  const firstEntity = config?.entities?.[0];
+  const strategies = (config?.strategies as Record<string, string>) || {};
   const selectedStrategyId = (firstEntity && strategies[firstEntity]) || 'Redact';
+  const currentLangCode = config?.language || 'en';
 
   const strategyOptions = useMemo(
     () =>
@@ -132,36 +193,30 @@ const HIPAAConfiguration = () => {
     [t],
   );
 
-  const handleStrategyChange = async (id: string) => {
-    if (!currentJob?.wizardState) return;
-    const entities = currentJob.wizardState.configSettings.entities || [];
-    const newStrategies = Object.fromEntries(entities.map((e) => [e, id]));
-    await updateJob(currentJob.id, {
-      wizardState: {
-        ...currentJob.wizardState,
-        configSettings: { ...currentJob.wizardState.configSettings, strategies: newStrategies },
-      },
-    });
-  };
-
-  const currentLangCode = currentJob?.wizardState?.configSettings.language || 'en';
-
   const languageOptions = useMemo(() => {
-    const options = [];
+    interface LanguageOption {
+      id: string;
+      title: string;
+      category: string;
+      rightElement: React.ReactNode;
+    }
+    const options: LanguageOption[] = [];
     const searchLower = langSearch.toLowerCase();
 
-    if (!langSearch && currentJob?.wizardState?.configSettings.isAutoDetected) {
+    if (!langSearch && config?.isAutoDetected) {
       const currentLang = ALL_LANGUAGES.find((l) => l.code === currentLangCode);
       options.push({
         id: currentLangCode,
-        title: currentLang?.name || t('deIdentify.languageSelect.autoDetectedUnknown'),
+        title: currentLang
+          ? t(currentLang.name)
+          : t('deIdentify.languageSelect.autoDetectedUnknown'),
         category: '',
         rightElement: (
           <Chip
             label={t('deIdentify.languageSelect.autoDetected')}
             size="small"
             sx={{
-              bgcolor: (theme) => alpha(theme.palette.accent[400]!, 0.1),
+              bgcolor: (theme: Theme) => alpha(theme.palette.accent[400]!, 0.1),
               color: 'accent.400',
               height: 20,
               fontSize: FONT_SIZES.xs,
@@ -175,7 +230,7 @@ const HIPAAConfiguration = () => {
       RECENTLY_USED.forEach((l) => {
         options.push({
           id: l.code,
-          title: l.name,
+          title: t(l.name),
           category: t('deIdentify.languageSelect.recentlyUsed'),
           rightElement:
             l.code === currentLangCode ? (
@@ -185,34 +240,44 @@ const HIPAAConfiguration = () => {
       });
     }
 
-    const filteredAll = ALL_LANGUAGES.filter((l) => l.name.toLowerCase().includes(searchLower));
-    filteredAll.forEach((l) => {
-      options.push({
-        id: l.code,
-        title: l.name,
-        category: langSearch ? '' : t('deIdentify.languageSelect.allLanguages'),
-        rightElement:
-          l.code === currentLangCode ? (
-            <CheckIcon sx={{ fontSize: FONT_SIZES.lg, color: 'primary.500' }} />
-          ) : null,
+    ALL_LANGUAGES.map((l) => ({ ...l, translatedName: t(l.name) }))
+      .filter((l) => l.translatedName.toLowerCase().includes(searchLower))
+      .forEach((l) => {
+        options.push({
+          id: l.code,
+          title: l.translatedName,
+          category: langSearch ? '' : t('deIdentify.languageSelect.allLanguages'),
+          rightElement:
+            l.code === currentLangCode ? (
+              <CheckIcon sx={{ fontSize: FONT_SIZES.lg, color: 'primary.500' }} />
+            ) : null,
+        });
       });
-    });
 
     return options;
-  }, [langSearch, currentLangCode, currentJob, t]);
+  }, [langSearch, currentLangCode, config, t]);
 
-  const handleLanguageChange = async (code: string) => {
+  const handleStrategyChange = async (id: string) => {
     if (!currentJob?.wizardState) return;
+    const entities = config?.entities || [];
+    const newStrategies = Object.fromEntries(entities.map((e) => [e, id]));
     await updateJob(currentJob.id, {
       wizardState: {
         ...currentJob.wizardState,
-        configSettings: { ...currentJob.wizardState.configSettings, language: code },
+        configSettings: { ...config!, strategies: newStrategies },
       },
     });
   };
 
-  const selectMethod = async (method: HIPAAMethodUI) => {
+  const handleLanguageChange = async (code: string) => {
     if (!currentJob?.wizardState) return;
+    await updateJob(currentJob.id, {
+      wizardState: { ...currentJob.wizardState, configSettings: { ...config!, language: code } },
+    });
+  };
+
+  const selectMethod = async (method: HIPAAMethodUI) => {
+    if (!currentJob?.wizardState || !currentJob.id) return;
     const entities = [
       'NAME',
       'DATE',
@@ -237,61 +302,39 @@ const HIPAAConfiguration = () => {
       wizardState: {
         ...currentJob.wizardState,
         configSettings: {
-          ...currentJob.wizardState.configSettings,
+          ...config!,
           method: method.title,
           strategies: method.id === 1 ? Object.fromEntries(entities.map((e) => [e, 'Redact'])) : {},
           entities,
+          language: currentJob?.wizardState?.configSettings.language || 'en',
         },
       },
+    });
+  };
+
+  const selectThreshold = async (threshold: number) => {
+    if (!currentJob?.wizardState || !currentJob.id) return;
+    await updateJob(currentJob.id, {
+      wizardState: { ...currentJob.wizardState, configSettings: { ...config!, threshold } },
     });
   };
 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ mb: '48px' }}>
-        <Typography
-          sx={{
-            color: 'neutral.900',
-            fontWeight: 'fontWeightMedium',
-            mb: '10px',
-            fontSize: FONT_SIZES.xxl,
-          }}
-        >
+        <Typography sx={sectionHeaderStyle()}>
           {t('deIdentify.settings.sections.method')}
         </Typography>
-        <Grid
-          container
-          spacing={2}
-          sx={{ borderLeft: '4px solid', borderColor: 'accent.100', pl: 2 }}
-        >
+        <Grid container spacing={2} sx={sectionWrapperStyle}>
           {HIPAAMethods.map((method) => {
-            const isActive = currentJob?.wizardState?.configSettings.method === method.title;
+            const isActive = config?.method === method.title;
             return (
               <Grid size={{ xs: 12, md: 6 }} key={method.id}>
-                <Box
-                  onClick={() => selectMethod(method)}
-                  sx={{
-                    border: `${isActive ? 2 : 1}px solid`,
-                    borderColor: isActive ? 'primary.500' : 'neutral.200',
-                    borderRadius: '12px',
-                    bgcolor: isActive ? 'primary.50' : 'common.white',
-                    p: '20px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    '&:hover': { transform: 'scale(1.01)' },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      mb: 3,
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box onClick={() => selectMethod(method)} sx={cardContainerStyle(isActive)}>
+                  <Box sx={cardHeaderStyle}>
+                    <Box sx={iconTitleGroupStyle}>
                       {isActive ? (
-                        <RadioButtonCheckedOutlinedIcon color="primary" />
+                        <RadioButtonCheckedOutlinedIcon />
                       ) : (
                         <RadioButtonUncheckedOutlinedIcon sx={{ color: 'neutral.400' }} />
                       )}
@@ -305,20 +348,26 @@ const HIPAAConfiguration = () => {
                         {t(method.titleKey)}
                       </Typography>
                     </Box>
+                    {method.id === 1 && (
+                      <Box sx={recommendedBadgeStyle}>
+                        {t('deIdentify.settings.method.recommended')}
+                      </Box>
+                    )}
                   </Box>
-                  <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md, mb: 1 }}>
+                  <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md }}>
                     {t(method.descKey)}
                   </Typography>
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 1,
+                      gap: '8px',
+                      mt: 1,
                       color: method.id === 1 ? 'neutral.500' : 'warning.main',
                     }}
                   >
-                    {method.id === 2 && (
-                      <ReportProblemOutlinedIcon sx={{ fontSize: FONT_SIZES.md }} />
+                    {method.id !== 1 && (
+                      <ReportProblemOutlinedIcon sx={{ width: 16, height: 16 }} />
                     )}
                     <Typography sx={{ fontSize: FONT_SIZES.sm }}>{t(method.commentKey)}</Typography>
                   </Box>
@@ -330,19 +379,12 @@ const HIPAAConfiguration = () => {
       </Box>
 
       <Box sx={{ mb: '48px' }}>
-        <Typography
-          sx={{
-            color: currentJob?.wizardState?.configSettings.method ? 'neutral.900' : 'neutral.400',
-            fontWeight: 'fontWeightMedium',
-            mb: '10px',
-            fontSize: FONT_SIZES.xxl,
-          }}
-        >
+        <Typography sx={sectionHeaderStyle(!!config?.method)}>
           {t('deIdentify.settings.sections.identifiers')}
         </Typography>
-        <Box sx={{ borderLeft: '4px solid', borderColor: 'accent.100', pl: 2 }}>
+        <Box sx={sectionWrapperStyle}>
           <IdentifiersAccordion
-            isExpertMode={currentJob?.wizardState?.configSettings.method === 'Expert Determination'}
+            isExpertMode={config?.method === 'Expert Determination'}
             updateJob={updateJob}
             currentJob={currentJob}
           />
@@ -350,18 +392,10 @@ const HIPAAConfiguration = () => {
       </Box>
 
       <Box sx={{ mb: '48px' }}>
-        <Typography
-          sx={{
-            color: 'neutral.900',
-            fontWeight: 'fontWeightMedium',
-            mb: '10px',
-            fontSize: FONT_SIZES.xxl,
-          }}
-        >
+        <Typography sx={sectionHeaderStyle()}>
           {t('deIdentify.settings.sections.output')}
         </Typography>
-
-        <Box sx={{ borderLeft: '4px solid', borderColor: 'accent.100', pl: 2 }}>
+        <Box sx={sectionWrapperStyle}>
           <Typography sx={{ fontWeight: 'fontWeightMedium', fontSize: FONT_SIZES.md }}>
             {t('deIdentify.settings.strategies.title')}
           </Typography>
@@ -416,44 +450,37 @@ const HIPAAConfiguration = () => {
           </Typography>
           <Grid container spacing={2}>
             {thresholds.map((threshold) => {
-              const isActive =
-                currentJob?.wizardState?.configSettings.threshold === threshold.score;
+              const isActive = config?.threshold === threshold.score;
               return (
-                <Grid size={{ xs: 12, md: 4 }} key={threshold.id}>
+                <Grid size={{ xs: 12, md: 6, lg: 12, xl: 4 }} key={threshold.id}>
                   <Box
-                    onClick={() =>
-                      updateJob(currentJob!.id, {
-                        wizardState: {
-                          ...currentJob!.wizardState!,
-                          configSettings: {
-                            ...currentJob!.wizardState!.configSettings,
-                            threshold: threshold.score,
-                          },
-                        },
-                      })
-                    }
-                    sx={{
-                      border: `${isActive ? 2 : 1}px solid`,
-                      borderColor: isActive ? 'primary.500' : 'neutral.200',
-                      borderRadius: '12px',
-                      bgcolor: isActive ? 'primary.50' : 'common.white',
-                      p: 2,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      '&:hover': { transform: 'scale(1.02)' },
-                    }}
+                    onClick={() => selectThreshold(threshold.score)}
+                    sx={cardContainerStyle(isActive)}
                   >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      {isActive ? (
-                        <RadioButtonCheckedOutlinedIcon color="primary" />
-                      ) : (
-                        <RadioButtonUncheckedOutlinedIcon sx={{ color: 'neutral.400' }} />
+                    <Box sx={cardHeaderStyle}>
+                      <Box sx={iconTitleGroupStyle}>
+                        {isActive ? (
+                          <RadioButtonCheckedOutlinedIcon />
+                        ) : (
+                          <RadioButtonUncheckedOutlinedIcon sx={{ color: 'neutral.400' }} />
+                        )}
+                        <Typography
+                          sx={{
+                            color: 'primary.500',
+                            fontWeight: 'fontWeightSemiBold',
+                            fontSize: FONT_SIZES.lg,
+                          }}
+                        >
+                          {t(threshold.titleKey)}
+                        </Typography>
+                      </Box>
+                      {threshold.id === 2 && (
+                        <Box sx={recommendedBadgeStyle}>
+                          {t('deIdentify.settings.detection.recommended')}
+                        </Box>
                       )}
-                      <Typography sx={{ fontWeight: 'fontWeightSemiBold' }}>
-                        {t(threshold.titleKey)}
-                      </Typography>
                     </Box>
-                    <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.600' }}>
+                    <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md }}>
                       {t(threshold.descKey)}
                     </Typography>
                   </Box>
@@ -461,6 +488,21 @@ const HIPAAConfiguration = () => {
               );
             })}
           </Grid>
+
+          {config?.threshold === 0.5 && (
+            <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md, mt: 2 }}>
+              {t('deIdentify.settings.detection.recommendedNote')}
+            </Typography>
+          )}
+
+          <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.xs, mt: 1 }}>
+            {config?.threshold === 0.5 &&
+              t('deIdentify.settings.detection.thresholds.balanced.info')}
+            {config?.threshold === 0.3 &&
+              t('deIdentify.settings.detection.thresholds.conservative.info')}
+            {config?.threshold === 0.7 &&
+              t('deIdentify.settings.detection.thresholds.aggressive.info')}
+          </Typography>
         </Box>
       </Box>
     </Box>

@@ -60,11 +60,13 @@ export interface IJob {
 }
 
 export interface EntityDetection {
+  id: string;
   start: number;
   end: number;
   score: number;
   entity_type: string;
   analysis_explanation: string | null;
+  isExcluded?: boolean;
 }
 
 export interface JobMainContent {
@@ -87,6 +89,11 @@ export interface JobResults {
   mainContent: JobMainContent;
   entityTable: EntityDetection[];
   auditTrail: JobAuditTrail;
+  stats: {
+    detected: number;
+    processed: number;
+    avgConfidence: number;
+  };
 }
 
 export interface Language {

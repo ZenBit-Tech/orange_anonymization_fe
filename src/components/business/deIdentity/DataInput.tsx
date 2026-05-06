@@ -368,7 +368,7 @@ const DataInput = ({ currentJob, localOriginalText }: DataInputContentProps) => 
                       </Button>
                     </Box>
                     <Typography sx={{ mb: 3, color: 'neutral.500', fontSize: FONT_SIZES.xs }}>
-                      {`${((currentJob?.wizardState?.inputData.fileSize ?? 0) / (1024 * 1024)).toFixed(1)} MB - ${currentJob?.wizardState?.inputData.fileName?.split('.').pop()?.toUpperCase()}`}
+                      {`${((currentJob?.wizardState?.inputData.fileSize ?? 0) / (1024 * 1024)).toFixed(1)} ${t('common.mb', { defaultValue: 'MB' })} - ${currentJob?.wizardState?.inputData.fileName?.split('.').pop()?.toUpperCase()}`}
                     </Typography>
                   </>
                 )}

@@ -306,6 +306,7 @@ const BRAND = {
     contrastText: WHITE,
   },
   warning: {
+    100: '#FEF9C3',
     main: '#B45309',
     light: '#FFB300',
     contrastText: WHITE,
