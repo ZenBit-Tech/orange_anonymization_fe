@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import { BORDERS, LAYOUT } from '@/theme';
 
 export const CardWrapper = styled(Box)(({ theme }) => ({

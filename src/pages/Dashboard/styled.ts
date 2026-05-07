@@ -1,7 +1,9 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import { BORDERS } from '@/theme';
-import { RECENT_ACTIVITY_CARD_PADDING_BOTTOM } from './Dashboard.const';
+
+const RECENT_ACTIVITY_CARD_PADDING_BOTTOM = 5.5;
 
 export const PageWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.neutral[50],

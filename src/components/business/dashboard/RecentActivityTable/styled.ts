@@ -1,11 +1,11 @@
 import { Box, Table, TableCell } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import { BORDERS } from '@/theme';
-import {
-  EMPTY_CELL_HEIGHT,
-  TABLE_MIN_WIDTH_SPACING,
-  TABLE_WRAPPER_MARGIN_X,
-} from './RecentActivityTable.const';
+
+const TABLE_WRAPPER_MARGIN_X = -3;
+const TABLE_MIN_WIDTH_SPACING = 75;
+const EMPTY_CELL_HEIGHT = 6;
 
 export const TableWrapper = styled(Box)(({ theme }) => ({
   overflowX: 'auto',

@@ -1,4 +1,4 @@
-import type { JobStatus } from './Dashboard.const';
+type JobStatus = 'completed' | 'processing' | 'failed' | 'pending';
 
 export interface Metrics {
   totalDocuments: number;

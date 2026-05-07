@@ -1,12 +1,12 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import { BORDERS } from '@/theme';
-import { CARD_GRID_ROW_SPAN, EMPTY_BODY_GAP, EMPTY_BODY_PADDING_Y } from './EmptyStateCard.const';
 
 export const CardWrapper = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateRows: 'subgrid',
-  gridRow: `span ${CARD_GRID_ROW_SPAN}`,
+  gridRow: 'span 3',
   padding: theme.spacing(2),
   backgroundColor: theme.palette.common.white,
   borderRadius: theme.shape.lg,
@@ -37,8 +37,8 @@ export const EmptyBody = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: theme.spacing(EMPTY_BODY_PADDING_Y, 0),
-  gap: theme.spacing(EMPTY_BODY_GAP),
+  padding: theme.spacing(4.7, 0),
+  gap: theme.spacing(1.25),
 }));
 
 export const EmptyLabel = styled('div')(({ theme }) => ({

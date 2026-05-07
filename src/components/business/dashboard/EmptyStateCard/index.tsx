@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { CardWrapper, Title, Subtitle, EmptyBody, EmptyLabel, SectionDivider } from './styled';
 
 interface EmptyStateCardProps {

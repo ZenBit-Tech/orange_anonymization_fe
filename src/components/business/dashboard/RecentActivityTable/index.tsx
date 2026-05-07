@@ -1,13 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { TableHead, TableBody, TableRow } from '@mui/material';
-import { StyledTable, HeadCell, TableWrapper, EmptyCell } from './styled';
-import { COLUMN_TRANSLATION_KEYS } from './RecentActivityTable.const';
+
 import type { Job } from '@/pages/Dashboard/types';
+
+import { StyledTable, HeadCell, TableWrapper, EmptyCell } from './styled';
 
 interface RecentActivityTableProps {
   rows: Job[];
 }
+
+const COLUMN_TRANSLATION_KEYS = [
+  'dashboard.recentActivity.columns.document',
+  'dashboard.recentActivity.columns.status',
+  'dashboard.recentActivity.columns.framework',
+  'dashboard.recentActivity.columns.entities',
+  'dashboard.recentActivity.columns.date',
+  'dashboard.recentActivity.columns.action',
+] as const;
 
 export const RecentActivityTable: React.FC<RecentActivityTableProps> = ({ rows }) => {
   const { t } = useTranslation();

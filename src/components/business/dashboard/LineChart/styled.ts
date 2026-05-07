@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import { theme } from '@/theme';
-import {
-  GRID_STROKE_DASHARRAY,
-  X_AXIS_STROKE_WIDTH,
-  X_AXIS_TICK_DY,
-} from './ProcessingActivityChart.const';
+
+const X_AXIS_TICK_DY = 10;
+const GRID_STROKE_DASHARRAY = '4 3';
+const X_AXIS_STROKE_WIDTH = 1;
 
 export const ChartWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
+
 import { CardWrapper, IconWrapper, Label, TopBar, Value } from './styled';
 
 interface MetricCardProps {

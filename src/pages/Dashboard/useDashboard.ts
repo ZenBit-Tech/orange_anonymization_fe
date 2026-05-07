@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { fetchDashboardData } from '@/store/slices/dashboardSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import { DEFAULT_EMPTY_STATE, DEFAULT_METRICS } from './Dashboard.const';
 
 export const useDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,8 +13,13 @@ export const useDashboard = () => {
   }, [dispatch]);
 
   return {
-    metrics: data?.metrics ?? DEFAULT_METRICS,
+    metrics: data?.metrics ?? {
+      totalDocuments: 0,
+      entitiesDetected: 0,
+      anonymizationRate: 0,
+      syntheticRecords: 0,
+    },
     recentActivity: data?.recentActivity ?? [],
-    isEmpty: data?.emptyState ?? DEFAULT_EMPTY_STATE,
+    isEmpty: data?.emptyState ?? true,
   };
 };

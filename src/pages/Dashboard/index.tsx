@@ -1,10 +1,13 @@
 import React from 'react';
+
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { MetricCard } from '@/components/business/dashboard/MetricCard/MetricCard';
-import { ProcessingActivityChart } from '@/components/business/dashboard/ProcessingActivityChart/ProcessingActivityChart';
-import { EmptyStateCard } from '@/components/business/dashboard/EmptyStateCard/EmptyStateCard';
-import { RecentActivityTable } from '@/components/business/dashboard/RecentActivityTable/RecentActivityTable';
+
+import { MetricCard } from '@/components/business/dashboard/MetricCard';
+import { LineChart } from '@/components/business/dashboard/LineChart';
+import { EmptyStateCard } from '@/components/business/dashboard/EmptyStateCard';
+import { RecentActivityTable } from '@/components/business/dashboard/RecentActivityTable';
+
 import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
 import DescriptionIcon from '@/assets/icons/dashboard/MetricCard/description.svg?react';
@@ -14,6 +17,7 @@ import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?rea
 import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
 import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
 import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
+
 import { useDashboard } from './useDashboard';
 import {
   PageWrapper,
@@ -76,7 +80,7 @@ const Dashboard: React.FC = () => {
         <SectionTitle>{t('dashboard.chart.activityTitle')}</SectionTitle>
         <SectionSubtitle>{t('dashboard.chart.activitySubtitle')}</SectionSubtitle>
         <SectionDivider />
-        <ProcessingActivityChart />
+        <LineChart />
       </Card>
 
       <BottomGrid>
