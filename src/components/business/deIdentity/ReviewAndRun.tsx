@@ -33,9 +33,10 @@ import {
   MenuItem,
   type SelectChangeEvent,
 } from '@mui/material';
-import { useEffect, useState, type FC, useRef, type JSX, useMemo } from 'react';
+import { useCallback, useEffect, useState, type FC, useRef, type JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FONT_SIZES } from '@/constants';
+import { REVIEW_RESULTS_POLL_INTERVAL_MS } from '@/constants/api-config';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { getUniqueEntities, presidioToHipaaMap } from '@/utils';
@@ -127,9 +128,12 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
     setActiveTab(newValue);
   };
 
-  const handleError = (defaultKey: string) => {
-    setErrorMessage(t(defaultKey));
-  };
+  const handleError = useCallback(
+    (defaultKey: string) => {
+      setErrorMessage(t(defaultKey));
+    },
+    [t],
+  );
 
   const stopPolling = () => {
     if (intervalRef.current) {
@@ -138,7 +142,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
     }
   };
 
-  const getResults = async () => {
+  const getResults = useCallback(async () => {
     try {
       const response = await resultsService.getResults(jobId);
       setResults(response);
@@ -148,35 +152,31 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
       setIsError(true);
       stopPolling();
     }
-  };
-
-  const checkStatus = async () => {
-    try {
-      const job = await jobsService.getJobById(jobId);
-
-      if (job.status === JobStatus.SUCCEEDED) {
-        await getResults();
-        dispatch(setJobAC(job));
-      } else if (job.status === JobStatus.FAILED) {
-        setIsError(true);
-        stopPolling();
-      }
-    } catch {
-      handleError('errors.network');
-    }
-  };
+  }, [jobId]);
 
   useEffect(() => {
-    const startPolling = () => {
-      checkStatus();
+    const checkStatus = async () => {
+      try {
+        const job = await jobsService.getJobById(jobId);
 
-      intervalRef.current = setInterval(checkStatus, 2000);
+        if (job.status === JobStatus.SUCCEEDED) {
+          await getResults();
+          dispatch(setJobAC(job));
+        } else if (job.status === JobStatus.FAILED) {
+          setIsError(true);
+          stopPolling();
+        }
+      } catch {
+        handleError('errors.network');
+      }
     };
 
-    startPolling();
+    checkStatus();
+
+    intervalRef.current = setInterval(checkStatus, REVIEW_RESULTS_POLL_INTERVAL_MS);
 
     return () => stopPolling();
-  }, [jobId]);
+  }, [dispatch, getResults, handleError, jobId]);
 
   const handleSelectOption = (event: SelectChangeEvent<string>) => {
     setSelectedOptionId(event.target.value);
