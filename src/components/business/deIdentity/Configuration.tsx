@@ -1,9 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@/store/store';
 import { Box, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import HIPAAConfiguration from './HIPAAConfiguration';
 import { FONT_SIZES } from '@/constants';
+import { ComplianceFramework } from '@/pages/DeIdentify/types';
 import StandardComplianceConfiguration from './StandardComplianceConfiguration';
+import HIPAAConfiguration from './HIPAAConfiguration';
 
 const Configuration = () => {
   const { t } = useTranslation();
@@ -22,12 +23,12 @@ const Configuration = () => {
         {t('deIdentify.settings.title')}
       </Typography>
       <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm, mb: '48px' }}>
-        {currentJob?.wizardState?.frameworkSelection === 'hipaa'
+        {currentJob?.wizardState?.frameworkSelection === ComplianceFramework.HIPAA
           ? t('deIdentify.settings.subtitle')
           : t('deIdentify.settings.subtitleStandard')}
       </Typography>
 
-      {currentJob?.wizardState?.frameworkSelection === 'hipaa' ? (
+      {currentJob?.wizardState?.frameworkSelection === ComplianceFramework.HIPAA ? (
         <HIPAAConfiguration />
       ) : (
         <StandardComplianceConfiguration />

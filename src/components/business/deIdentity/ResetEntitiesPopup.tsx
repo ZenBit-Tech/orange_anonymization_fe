@@ -1,11 +1,11 @@
-import BasePopup from '@/components/popups/BasePopup';
+import { useTranslation } from 'react-i18next';
+import type { FC } from 'react';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { useTranslation } from 'react-i18next';
-import type { FC } from 'react';
+import BasePopup from '@/components/popups/BasePopup';
 
 interface IProps {
   isVisible: boolean;

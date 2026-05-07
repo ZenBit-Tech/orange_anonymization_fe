@@ -1,4 +1,5 @@
-import { FONT_SIZES } from '@/constants';
+import { type ElementType, type FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   alpha,
   Box,
@@ -8,7 +9,6 @@ import {
   type SvgIconProps,
   type Theme,
 } from '@mui/material';
-import { type ElementType, type FC, useMemo } from 'react';
 import {
   ArrowForward as ArrowForwardIcon,
   Close as CloseIcon,
@@ -27,8 +27,8 @@ import {
   ImageOutlined as PhotoIcon,
   CorporateFareOutlined as BusinessIcon,
 } from '@mui/icons-material';
-import type { IJob } from '@/pages/DeIdentify/types';
-import { useTranslation } from 'react-i18next';
+import { FONT_SIZES } from '@/constants';
+import { ComplianceFramework, type IJob } from '@/pages/DeIdentify/types';
 
 type IconComponent = ElementType<SvgIconProps>;
 
@@ -53,15 +53,15 @@ interface IProps {
 }
 
 const FRAMEWORK_STYLING: Record<string, { labelKey: string; noticeKey: string }> = {
-  'eu-gdpr': {
+  [ComplianceFramework.EU_GDPR]: {
     labelKey: 'deIdentify.settings.logicDrawer.frameworks.euGdpr.label',
     noticeKey: 'deIdentify.settings.logicDrawer.frameworks.euGdpr.notice',
   },
-  'uk-gdpr': {
+  [ComplianceFramework.UK_GDPR]: {
     labelKey: 'deIdentify.settings.logicDrawer.frameworks.ukGdpr.label',
     noticeKey: 'deIdentify.settings.logicDrawer.frameworks.ukGdpr.notice',
   },
-  'swiss-fadp': {
+  [ComplianceFramework.SWISS_FADP]: {
     labelKey: 'deIdentify.settings.logicDrawer.frameworks.swissFadp.label',
     noticeKey: 'deIdentify.settings.logicDrawer.frameworks.swissFadp.notice',
   },

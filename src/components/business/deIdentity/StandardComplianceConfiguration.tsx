@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ALL_LANGUAGES, DEFAULT_STRATEGIES, FONT_SIZES, RECENTLY_USED } from '@/constants';
 import {
   alpha,
@@ -22,25 +24,23 @@ import {
   Language as LanguageIcon,
 } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { useMemo, useState } from 'react';
-import type { IJob } from '@/pages/DeIdentify/types';
+import { ComplianceFramework, Threshold, type IJob } from '@/pages/DeIdentify/types';
 import { jobsService } from '@/services/jobsService';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import Dropdown from '@/components/UI/Dropdown';
-import { useTranslation } from 'react-i18next';
 import ConfigurationLogicDrawer from './ConfigurationLogicDrawer';
 import EntityConfigurationAccordion from './EntityConfigurationAccordion';
 
 const FRAMEWORK_INFO: Record<string, { descriptionKey: string; warningKey: string }> = {
-  'eu-gdpr': {
+  [ComplianceFramework.EU_GDPR]: {
     descriptionKey: 'deIdentify.settings.frameworkInfo.euGdpr.description',
     warningKey: 'deIdentify.settings.frameworkInfo.euGdpr.warning',
   },
-  'uk-gdpr': {
+  [ComplianceFramework.UK_GDPR]: {
     descriptionKey: 'deIdentify.settings.frameworkInfo.ukGdpr.description',
     warningKey: 'deIdentify.settings.frameworkInfo.ukGdpr.warning',
   },
-  'swiss-fadp': {
+  [ComplianceFramework.SWISS_FADP]: {
     descriptionKey: 'deIdentify.settings.frameworkInfo.swissFadp.description',
     warningKey: 'deIdentify.settings.frameworkInfo.swissFadp.warning',
   },
@@ -56,19 +56,19 @@ const thresholds = [
     id: 1,
     titleKey: 'deIdentify.settings.detection.thresholds.low.title',
     descKey: 'deIdentify.settings.detection.thresholds.low.description',
-    score: 0.3,
+    score: Threshold.LOW,
   },
   {
     id: 2,
     titleKey: 'deIdentify.settings.detection.thresholds.medium.title',
     descKey: 'deIdentify.settings.detection.thresholds.medium.description',
-    score: 0.5,
+    score: Threshold.MIDDLE,
   },
   {
     id: 3,
     titleKey: 'deIdentify.settings.detection.thresholds.high.title',
     descKey: 'deIdentify.settings.detection.thresholds.high.description',
-    score: 0.7,
+    score: Threshold.HIGH,
   },
 ];
 
@@ -98,6 +98,13 @@ const cardContainerStyle = (isActive: boolean): SxProps<Theme> => ({
   '&:hover': { transform: 'scale(1.02)' },
 });
 
+interface LanguageOption {
+  id: string;
+  title: string;
+  category: string;
+  rightElement: React.ReactNode;
+}
+
 const StandardComplianceConfiguration = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -107,17 +114,11 @@ const StandardComplianceConfiguration = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const config = currentJob?.wizardState?.configSettings;
-  const currentLangCode = config?.language || 'en';
+  const currentLangCode = config?.language || t('languages.en');
   const frameworkKey = currentJob?.wizardState?.frameworkSelection || '';
   const activeFramework = FRAMEWORK_INFO[frameworkKey] || DEFAULT_INFO;
 
   const languageOptions = useMemo(() => {
-    interface LanguageOption {
-      id: string;
-      title: string;
-      category: string;
-      rightElement: React.ReactNode;
-    }
     const options: LanguageOption[] = [];
     const searchLower = langSearch.toLowerCase();
 
@@ -175,12 +176,16 @@ const StandardComplianceConfiguration = () => {
     return options;
   }, [langSearch, currentLangCode, config, t]);
 
-  const updateJob = async (jobId: string, updateData: Partial<IJob>) => {
-    const response = await jobsService.updateJob(jobId, updateData);
-    dispatch(setJobAC(response));
+  const updateJob = async (jobId: string, updateData: Partial<IJob>): Promise<void> => {
+    try {
+      const response = await jobsService.updateJob(jobId, updateData);
+      dispatch(setJobAC(response));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const selectThreshold = async (threshold: number) => {
+  const selectThreshold = async (threshold: number): Promise<void> => {
     if (!currentJob?.wizardState || !currentJob.id) return;
     await updateJob(currentJob.id, {
       wizardState: {
@@ -188,7 +193,7 @@ const StandardComplianceConfiguration = () => {
         configSettings: {
           ...config!,
           threshold,
-          language: config?.language || 'en',
+          language: config?.language || t('languages.en'),
           strategies: currentJob?.wizardState.configSettings.strategies || DEFAULT_STRATEGIES,
           entities: Object.keys(DEFAULT_STRATEGIES),
         },
@@ -196,7 +201,7 @@ const StandardComplianceConfiguration = () => {
     });
   };
 
-  const handleLanguageChange = async (code: string) => {
+  const handleLanguageChange = async (code: string): Promise<void> => {
     if (!currentJob?.wizardState) return;
     await updateJob(currentJob.id, {
       wizardState: { ...currentJob.wizardState, configSettings: { ...config!, language: code } },
@@ -264,7 +269,7 @@ const StandardComplianceConfiguration = () => {
         </Grid>
       </Box>
 
-      {config?.threshold === 0.3 && (
+      {config?.threshold === Threshold.LOW && (
         <Box
           sx={{
             width: '100%',

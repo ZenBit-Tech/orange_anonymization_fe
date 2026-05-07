@@ -1,4 +1,5 @@
 import React, { type FC, type ElementType, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
@@ -40,10 +41,9 @@ import {
   ImageOutlined as PhotoIcon,
 } from '@mui/icons-material';
 import Dropdown from '@/components/UI/Dropdown';
-import type { IJob } from '@/pages/DeIdentify/types';
+import { ComplianceFramework, type IJob } from '@/pages/DeIdentify/types';
 import { DEFAULT_STRATEGIES, FONT_SIZES } from '@/constants';
 import ResetEntitiesPopup from './ResetEntitiesPopup';
-import { useTranslation } from 'react-i18next';
 
 interface EntityConfig {
   id: string;
@@ -59,9 +59,9 @@ interface IProps {
 }
 
 const FRAMEWORK_LABELS: Record<string, string> = {
-  'eu-gdpr': 'deIdentify.settings.logicDrawer.frameworks.euGdpr.label',
-  'uk-gdpr': 'deIdentify.settings.logicDrawer.frameworks.ukGdpr.label',
-  'swiss-fadp': 'deIdentify.settings.logicDrawer.frameworks.swissFadp.label',
+  [ComplianceFramework.EU_GDPR]: 'deIdentify.settings.logicDrawer.frameworks.euGdpr.label',
+  [ComplianceFramework.UK_GDPR]: 'deIdentify.settings.logicDrawer.frameworks.ukGdpr.label',
+  [ComplianceFramework.SWISS_FADP]: 'deIdentify.settings.logicDrawer.frameworks.swissFadp.label',
 };
 
 const ALL_STRATEGIES = [
@@ -267,30 +267,39 @@ const EntityConfigurationAccordion: FC<IProps> = ({ currentJob, updateJob }) => 
   const handleEntityStrategyChange = async (entityId: string, strategyId: string) => {
     if (!currentJob?.id || !currentJob.wizardState) return;
 
-    await updateJob(currentJob.id, {
-      wizardState: {
-        ...currentJob.wizardState,
-        configSettings: {
-          ...currentJob.wizardState.configSettings,
-          strategies: { ...strategies, [entityId]: strategyId },
+    try {
+      await updateJob(currentJob.id, {
+        wizardState: {
+          ...currentJob.wizardState,
+          configSettings: {
+            ...currentJob.wizardState.configSettings,
+            strategies: { ...strategies, [entityId]: strategyId },
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleReset = async () => {
     if (!currentJob?.id || !currentJob.wizardState) return;
 
-    await updateJob(currentJob.id, {
-      wizardState: {
-        ...currentJob.wizardState,
-        configSettings: {
-          ...currentJob.wizardState.configSettings,
-          strategies: DEFAULT_STRATEGIES,
+    try {
+      await updateJob(currentJob.id, {
+        wizardState: {
+          ...currentJob.wizardState,
+          configSettings: {
+            ...currentJob.wizardState.configSettings,
+            strategies: DEFAULT_STRATEGIES,
+          },
         },
-      },
-    });
-    setIsResetEntitiesPopupOpen(false);
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsResetEntitiesPopupOpen(false);
+    }
   };
 
   const handleResetClick = (e: React.MouseEvent) => {
@@ -394,7 +403,7 @@ const EntityConfigurationAccordion: FC<IProps> = ({ currentJob, updateJob }) => 
 
               {ENTITIES_DATA.filter((e) => e.categoryKey === catKey).map((entity) => {
                 const EntityIcon = entity.icon;
-                const currentStrategyId = strategies[entity.id] || 'Redact';
+                const currentStrategyId = strategies[entity.id] || t('common.reduct');
 
                 return (
                   <Box

@@ -27,7 +27,8 @@
     "newAnalysis": "New Analysis",
     "copied": "Copied to clipboard",
     "mb": "MB",
-    "na": "N/A"
+    "na": "N/A",
+    "reduct": "Reduct"
   },
   "nav": {
     "brand": "Clinical Data Studio",

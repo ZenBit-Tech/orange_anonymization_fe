@@ -30,7 +30,7 @@ import ReviewAndRun from './ReviewAndRun';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { jobsService } from '@/services/jobsService';
 import { setJobAC } from '@/store/slices/jobsSlice';
-import type { IJob } from '@/pages/DeIdentify/types';
+import { ComplianceFramework, type IJob } from '@/pages/DeIdentify/types';
 import { FONT_SIZES } from '@/constants';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -324,7 +324,7 @@ export default function CustomizedSteppers() {
                   (activeStep === 1 && (!text || text.length < 50 || text.length > 5000)) ||
                   (activeStep === 2 &&
                     ((!currentJob?.wizardState?.configSettings.method &&
-                      currentJob?.wizardState?.frameworkSelection === 'hipaa') ||
+                      currentJob?.wizardState?.frameworkSelection === ComplianceFramework.HIPAA) ||
                       !currentJob?.wizardState?.configSettings.strategies ||
                       !currentJob?.wizardState?.configSettings.language ||
                       !currentJob?.wizardState?.configSettings.threshold))

@@ -28,7 +28,12 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { jobsService } from '@/services/jobsService';
 import { FONT_SIZES, ALL_LANGUAGES, RECENTLY_USED } from '@/constants';
-import type { HIPAAMethodUI, IJob, RedactOption } from '@/pages/DeIdentify/types';
+import {
+  Threshold,
+  type HIPAAMethodUI,
+  type IJob,
+  type RedactOption,
+} from '@/pages/DeIdentify/types';
 import IdentifiersAccordion from './IdentifiersAccordion';
 import Dropdown from '@/components/UI/Dropdown';
 
@@ -105,19 +110,19 @@ const thresholds = [
     id: 1,
     titleKey: 'deIdentify.settings.detection.thresholds.conservative.title',
     descKey: 'deIdentify.settings.detection.thresholds.conservative.description',
-    score: 0.3,
+    score: Threshold.LOW,
   },
   {
     id: 2,
     titleKey: 'deIdentify.settings.detection.thresholds.balanced.title',
     descKey: 'deIdentify.settings.detection.thresholds.balanced.description',
-    score: 0.5,
+    score: Threshold.MIDDLE,
   },
   {
     id: 3,
     titleKey: 'deIdentify.settings.detection.thresholds.aggressive.title',
     descKey: 'deIdentify.settings.detection.thresholds.aggressive.description',
-    score: 0.7,
+    score: Threshold.HIGH,
   },
 ];
 
@@ -179,7 +184,7 @@ const HIPAAConfiguration = () => {
   const firstEntity = config?.entities?.[0];
   const strategies = (config?.strategies as Record<string, string>) || {};
   const selectedStrategyId = (firstEntity && strategies[firstEntity]) || 'Redact';
-  const currentLangCode = config?.language || 'en';
+  const currentLangCode = config?.language || t('languages.en');
 
   const strategyOptions = useMemo(
     () =>
@@ -489,18 +494,18 @@ const HIPAAConfiguration = () => {
             })}
           </Grid>
 
-          {config?.threshold === 0.5 && (
+          {config?.threshold === Threshold.MIDDLE && (
             <Typography sx={{ color: 'neutral.700', fontSize: FONT_SIZES.md, mt: 2 }}>
               {t('deIdentify.settings.detection.recommendedNote')}
             </Typography>
           )}
 
           <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.xs, mt: 1 }}>
-            {config?.threshold === 0.5 &&
+            {config?.threshold === Threshold.MIDDLE &&
               t('deIdentify.settings.detection.thresholds.balanced.info')}
-            {config?.threshold === 0.3 &&
+            {config?.threshold === Threshold.LOW &&
               t('deIdentify.settings.detection.thresholds.conservative.info')}
-            {config?.threshold === 0.7 &&
+            {config?.threshold === Threshold.HIGH &&
               t('deIdentify.settings.detection.thresholds.aggressive.info')}
           </Typography>
         </Box>
