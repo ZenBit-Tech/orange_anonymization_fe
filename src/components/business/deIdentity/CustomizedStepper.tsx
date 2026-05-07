@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import {
   Stack,
@@ -111,6 +112,8 @@ function ColorlibStepIcon(props: StepIconProps) {
 
 export default function CustomizedSteppers() {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const jobIdFromUrl = searchParams.get('jobId');
   const { currentJob } = useAppSelector((state) => state.jobs);
   const localOriginalText = useAppSelector(
     (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
@@ -136,35 +139,78 @@ export default function CustomizedSteppers() {
 
   const dispatch = useAppDispatch();
 
-  const handleError = (defaultKey: string) => {
-    setErrorMessage(t(defaultKey));
-  };
+  const handleError = useCallback(
+    (defaultKey: string) => {
+      setErrorMessage(t(defaultKey));
+    },
+    [t],
+  );
 
-  const createJob = async () => {
+  const syncJobIdInUrl = useCallback(
+    (jobId?: string) => {
+      setSearchParams(
+        (params) => {
+          const nextParams = new URLSearchParams(params);
+
+          if (jobId) {
+            nextParams.set('jobId', jobId);
+          } else {
+            nextParams.delete('jobId');
+          }
+
+          return nextParams;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
+
+  const createJob = useCallback(async () => {
     const response = await jobsService.createJob();
     dispatch(setJobAC(response));
-  };
+    syncJobIdInUrl(response.id);
+  }, [dispatch, syncJobIdInUrl]);
 
-  const getLatestDraft = async () => {
+  const getLatestDraft = useCallback(async () => {
     try {
       const response = await jobsService.getLatestDraft();
 
       if (!response) {
-        createJob();
+        await createJob();
       } else {
         dispatch(setJobAC(response));
+        syncJobIdInUrl(response.id);
       }
     } catch {
       handleError('errors.fetchFailed');
     }
-  };
+  }, [createJob, dispatch, handleError, syncJobIdInUrl]);
 
   useEffect(() => {
     const init = async () => {
+      if (jobIdFromUrl) {
+        try {
+          const job = await jobsService.getJobById(jobIdFromUrl);
+          dispatch(setJobAC(job));
+          syncJobIdInUrl(job.id);
+          return;
+        } catch {
+          handleError('errors.notFound');
+          syncJobIdInUrl();
+        }
+      }
+
       await getLatestDraft();
     };
     init();
-  }, []);
+  }, [dispatch, getLatestDraft, handleError, jobIdFromUrl, syncJobIdInUrl]);
+
+  useEffect(() => {
+    if (currentJob?.id) {
+      syncJobIdInUrl(currentJob.id);
+    }
+  }, [currentJob?.id, syncJobIdInUrl]);
 
   const updateJob = async (jobId: string, updateData: Partial<IJob>) => {
     const response = await jobsService.updateJob(jobId, updateData);
