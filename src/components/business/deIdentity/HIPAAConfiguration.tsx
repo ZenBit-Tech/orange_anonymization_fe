@@ -184,7 +184,7 @@ const HIPAAConfiguration = () => {
   const firstEntity = config?.entities?.[0];
   const strategies = (config?.strategies as Record<string, string>) || {};
   const selectedStrategyId = (firstEntity && strategies[firstEntity]) || 'Redact';
-  const currentLangCode = config?.language || t('languages.en');
+  const currentLangCode = config?.language || t('languages.english');
 
   const strategyOptions = useMemo(
     () =>

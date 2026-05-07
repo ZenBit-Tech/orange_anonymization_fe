@@ -114,7 +114,7 @@ const StandardComplianceConfiguration = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const config = currentJob?.wizardState?.configSettings;
-  const currentLangCode = config?.language || t('languages.en');
+  const currentLangCode = config?.language || t('languages.english');
   const frameworkKey = currentJob?.wizardState?.frameworkSelection || '';
   const activeFramework = FRAMEWORK_INFO[frameworkKey] || DEFAULT_INFO;
 
@@ -193,7 +193,7 @@ const StandardComplianceConfiguration = () => {
         configSettings: {
           ...config!,
           threshold,
-          language: config?.language || t('languages.en'),
+          language: config?.language || t('languages.english'),
           strategies: currentJob?.wizardState.configSettings.strategies || DEFAULT_STRATEGIES,
           entities: Object.keys(DEFAULT_STRATEGIES),
         },

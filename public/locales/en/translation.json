@@ -761,7 +761,8 @@
     "th": "Thai",
     "tr": "Turkish",
     "uk": "Ukrainian",
-    "vi": "Vietnamese"
+    "vi": "Vietnamese",
+    "english": "en"
   },
   "syntheticData": {
     "title": "Synthetic Data Generation",
