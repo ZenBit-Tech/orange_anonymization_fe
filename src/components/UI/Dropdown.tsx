@@ -175,7 +175,7 @@ const Dropdown = ({
           <>
             <Box
               onClick={() => setIsOpen(false)}
-              sx={{ position: 'fixed', inset: 0, zIndex: 10, bgcolor: 'transparent' }}
+              sx={{ position: 'fixed', inset: 0, zIndex: 20, bgcolor: 'transparent' }}
             />
 
             <Box
@@ -189,7 +189,7 @@ const Dropdown = ({
                 [dropUp ? 'bottom' : 'top']: '100%',
                 left: 0,
                 right: 0,
-                zIndex: 11,
+                zIndex: 30,
                 bgcolor: 'common.white',
                 borderRadius: '8px',
                 boxShadow: (theme) => `0px 10px 30px ${alpha(theme.palette.common.black, 0.15)}`,

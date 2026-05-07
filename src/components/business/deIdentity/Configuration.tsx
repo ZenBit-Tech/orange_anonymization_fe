@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import HIPAAConfiguration from './HIPAAConfiguration';
 import { FONT_SIZES } from '@/constants';
+import StandardComplianceConfiguration from './StandardComplianceConfiguration';
 
 const Configuration = () => {
   const { t } = useTranslation();
@@ -21,13 +22,15 @@ const Configuration = () => {
         {t('deIdentify.settings.title')}
       </Typography>
       <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm, mb: '48px' }}>
-        {t('deIdentify.settings.subtitle')}
+        {currentJob?.wizardState?.frameworkSelection === 'hipaa'
+          ? t('deIdentify.settings.subtitle')
+          : t('deIdentify.settings.subtitleStandard')}
       </Typography>
 
       {currentJob?.wizardState?.frameworkSelection === 'hipaa' ? (
         <HIPAAConfiguration />
       ) : (
-        <Box></Box>
+        <StandardComplianceConfiguration />
       )}
     </Box>
   );

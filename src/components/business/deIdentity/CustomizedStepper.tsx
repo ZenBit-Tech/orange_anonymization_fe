@@ -323,7 +323,8 @@ export default function CustomizedSteppers() {
                   (activeStep === 0 && !selectedFramework) ||
                   (activeStep === 1 && (!text || text.length < 50 || text.length > 5000)) ||
                   (activeStep === 2 &&
-                    (!currentJob?.wizardState?.configSettings.method ||
+                    ((!currentJob?.wizardState?.configSettings.method &&
+                      currentJob?.wizardState?.frameworkSelection === 'hipaa') ||
                       !currentJob?.wizardState?.configSettings.strategies ||
                       !currentJob?.wizardState?.configSettings.language ||
                       !currentJob?.wizardState?.configSettings.threshold))
