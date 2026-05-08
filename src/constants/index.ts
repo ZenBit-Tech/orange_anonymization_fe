@@ -160,3 +160,24 @@ export const IDENTIFIER_GROUPS = [
     ],
   },
 ];
+
+export const DEFAULT_STRATEGIES: Record<string, string> = {
+  PERSON: 'Replace',
+  ORGANIZATION: 'Mask',
+  LOCATION: 'Generalise',
+  DATE: 'Generalise',
+  IP: 'Generalise',
+  GEOPOINT: 'Generalise',
+  NATIONAL_ID: 'Redact',
+  ID_NUMBER: 'Redact',
+  PASSPORT: 'Redact',
+  CREDIT_CARD: 'Redact',
+  BANK_ACCOUNT: 'Redact',
+  EMAIL: 'Redact',
+  PHONE: 'Redact',
+  BIOLOGICAL_DATA: 'Redact',
+  PHOTO: 'Redact',
+  MEDICAL_RECORD_NUMBER: 'Pseudonymise',
+  DEVICE_ID: 'Hash',
+  FREE_TEXT: 'NLP',
+};

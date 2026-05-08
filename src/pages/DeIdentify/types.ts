@@ -1,3 +1,20 @@
+export const ComplianceFramework = {
+  HIPAA: 'hipaa',
+  EU_GDPR: 'eu-gdpr',
+  UK_GDPR: 'uk-gdpr',
+  SWISS_FADP: 'swiss-fadp',
+} as const;
+
+export type ComplianceFramework = (typeof ComplianceFramework)[keyof typeof ComplianceFramework];
+
+export const Threshold = {
+  HIGH: 0.7,
+  MIDDLE: 0.5,
+  LOW: 0.3,
+} as const;
+
+export type Threshold = (typeof Threshold)[keyof typeof Threshold];
+
 export const JobStatus = {
   DRAFT: 'draft',
   CONFIGURED: 'configured',
@@ -11,7 +28,7 @@ export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus];
 
 export interface IComplianceFramework {
   id: number;
-  slug: string;
+  slug: ComplianceFramework;
   title: string;
   description: string;
   tag: string;
@@ -40,7 +57,7 @@ export interface JobConfigSettings {
 
 export interface WizardState {
   currentStep: number;
-  frameworkSelection: string | null;
+  frameworkSelection: ComplianceFramework | null;
   inputData: JobInputData | null;
   configSettings: JobConfigSettings;
   analysisMetadata?: Record<string, unknown>;
@@ -51,7 +68,7 @@ export interface IJob {
   status: JobStatus;
   userId: string;
   wizardState: WizardState | null;
-  framework?: string;
+  framework?: ComplianceFramework;
   anonymizedText?: string;
   processingTime?: number;
   errorMessage: string | null;
@@ -80,7 +97,7 @@ export interface JobTimestamps {
 
 export interface JobAuditTrail {
   jobId: string;
-  framework: string;
+  framework: ComplianceFramework;
   timestamps: JobTimestamps;
   processingTime: number;
 }

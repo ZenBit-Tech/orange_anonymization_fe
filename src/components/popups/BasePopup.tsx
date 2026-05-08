@@ -23,7 +23,7 @@ const BasePopup: FC<IProps> = ({ isVisible, onClose, children }) => {
         <>
           <motion.div
             key="backdrop"
-            className="fixed inset-0 z-10"
+            className="fixed inset-0 z-100"
             style={{ backgroundColor: theme.palette.backdrop }}
             onClick={handleClose}
             initial={{ opacity: 0 }}
@@ -34,7 +34,7 @@ const BasePopup: FC<IProps> = ({ isVisible, onClose, children }) => {
           <motion.div
             key="modal"
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-120 m-0
-                       z-50 shadow-lg p-4"
+                       z-500 shadow-lg p-4"
             style={{
               backgroundColor: theme.palette.background.paper,
               borderRadius: theme.shape.borderRadius,

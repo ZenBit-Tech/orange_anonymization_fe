@@ -648,7 +648,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
                         [
                         {currentJob?.wizardState?.configSettings.strategies?.[
                           presidioToHipaaMap[entity.entity_type]
-                        ] || 'REDACTED'}
+                        ] || t('deIdentify.results.redacted')}
                         ]
                       </Typography>
                     </Box>

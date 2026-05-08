@@ -2,7 +2,12 @@ import { alpha, Box, Grid, Typography } from '@mui/material';
 import { Check as CheckIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import type { IComplianceFramework, IJob, WizardState } from '@/pages/DeIdentify/types';
+import {
+  ComplianceFramework,
+  type IComplianceFramework,
+  type IJob,
+  type WizardState,
+} from '@/pages/DeIdentify/types';
 import { jobsService } from '@/services/jobsService';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { FONT_SIZES } from '@/constants';
@@ -14,28 +19,28 @@ const complianceFrameworks: (Omit<IComplianceFramework, 'title' | 'description' 
 })[] = [
   {
     id: 1,
-    slug: 'hipaa',
+    slug: ComplianceFramework.HIPAA,
     titleKey: 'deIdentify.framework.hipaa.title',
     descriptionKey: 'deIdentify.framework.hipaa.description',
     tagKey: 'deIdentify.framework.hipaa.tag',
   },
   {
     id: 2,
-    slug: 'eu-gdpr',
+    slug: ComplianceFramework.EU_GDPR,
     titleKey: 'deIdentify.framework.euGdpr.title',
     descriptionKey: 'deIdentify.framework.euGdpr.description',
     tagKey: 'deIdentify.framework.euGdpr.tag',
   },
   {
     id: 3,
-    slug: 'uk-gdpr',
+    slug: ComplianceFramework.UK_GDPR,
     titleKey: 'deIdentify.framework.ukGdpr.title',
     descriptionKey: 'deIdentify.framework.ukGdpr.description',
     tagKey: 'deIdentify.framework.ukGdpr.tag',
   },
   {
     id: 4,
-    slug: 'swiss-fadp',
+    slug: ComplianceFramework.SWISS_FADP,
     titleKey: 'deIdentify.framework.swissFadp.title',
     descriptionKey: 'deIdentify.framework.swissFadp.description',
     tagKey: 'deIdentify.framework.swissFadp.tag',

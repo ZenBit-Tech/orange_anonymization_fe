@@ -11,6 +11,7 @@ import {
   SECTION_IDS,
 } from '@/pages/Landing/constants';
 import { LandingH1, LandingH4 } from '@/pages/Landing/typography';
+import { ComplianceFramework } from '@/pages/DeIdentify/types';
 
 export interface HeroSectionProps {
   onGetStarted: () => void;
@@ -76,7 +77,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             flexWrap: 'wrap',
           }}
         >
-          {(['hipaa', 'gdpr', 'accuracy'] as const).map((badge) => (
+          {([ComplianceFramework.HIPAA, 'gdpr', 'accuracy'] as const).map((badge) => (
             <Box
               key={badge}
               sx={{ display: 'flex', alignItems: 'center', gap: LANDING_SIZES.heroBadgeIconGap }}
