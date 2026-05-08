@@ -36,7 +36,7 @@ import {
 } from './styled';
 
 const Dashboard: React.FC = () => {
-  const { metrics, recentActivity, isEmpty } = useDashboard();
+  const { metrics, isEmpty } = useDashboard();
   const { t } = useTranslation();
 
   return (
@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
       <RecentActivityCard>
         <SectionTitle>{t('dashboard.recentActivity.title')}</SectionTitle>
         <SectionSubtitle>{t('dashboard.recentActivity.subtitle')}</SectionSubtitle>
-        <RecentActivityTable rows={recentActivity} />
+        <RecentActivityTable rows={[]} />
       </RecentActivityCard>
     </PageWrapper>
   );

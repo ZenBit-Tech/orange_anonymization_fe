@@ -96,10 +96,12 @@ export const BottomGrid = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(3),
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: theme.spacing(2),
+  gridTemplateRows: 'auto auto auto',
+  columnGap: theme.spacing(2),
 
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
+    rowGap: theme.spacing(2),
   },
 }));
 
