@@ -284,6 +284,9 @@
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Overview of your de-identification activity",
+    "newAnalysis": "New analysis",
+    "welcomeTitle": "Welcome to De-ID Studio",
+    "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",
     "metrics": {
       "totalDocuments": "Total Documents",
       "entitiesDetected": "Entities Detected",
@@ -292,19 +295,38 @@
     },
     "recentActivity": {
       "title": "Recent Activity",
+      "subtitle": "Last 5 analyses across all compliance frameworks",
       "noActivity": "No recent activity",
       "columns": {
         "document": "Document",
         "status": "Status",
+        "framework": "Framework",
         "entities": "Entities",
-        "date": "Date"
+        "date": "Date",
+        "action": "Action"
       }
     },
     "chart": {
-      "activityTitle": "Processing Activity (Last 30 Days)",
+      "activityTitle": "Processing Activity",
+      "activitySubtitle": "Based on selected date range",
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
       "entities": "Entities"
+    },
+    "emptyState": {
+      "noAnalysesFound": "No analyses found",
+      "deIdentification": {
+        "title": "De-Identification Method Usage",
+        "subtitle": "Methods will appear after your first analysis"
+      },
+      "compliance": {
+        "title": "Compliance Framework Usage",
+        "subtitle": "Framework distribution will appear after your first analysis"
+      },
+      "entityTypes": {
+        "title": "Entity Types Detected",
+        "subtitle": "Entity breakdown will appear after your first analysis"
+      }
     }
   },
   "deIdentify": {

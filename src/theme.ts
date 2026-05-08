@@ -33,6 +33,37 @@ declare module '@mui/material/styles' {
     sidebar?: SidebarPalette;
     landing?: LandingPalette;
   }
+  interface Shape {
+    xs: number;
+    sm: number;
+    lg: number;
+  }
+
+  interface ShapeOptions {
+    xs?: number;
+    sm: number;
+    lg: number;
+  }
+
+  interface Theme {
+    customShadows: {
+      sm: string;
+      card: string;
+    };
+    radius: {
+      circle: string;
+    };
+  }
+
+  interface ThemeOptions {
+    customShadows?: {
+      sm?: string;
+      card?: string;
+    };
+    radius?: {
+      circle?: string;
+    };
+  }
 }
 
 const WHITE = '#FFFFFF';
@@ -70,6 +101,19 @@ export const LAYOUT = {
     avatarIconSize: 32,
     menuIconSize: 28,
   },
+  icon: {
+    md: 40,
+  },
+  topBar: {
+    offset: -1.5,
+    height: 3,
+  },
+} as const;
+
+export const BORDERS = {
+  card: 1,
+  divider: 1,
+  dividerRadius: 1,
 } as const;
 
 export const SHADOWS = {
@@ -134,24 +178,28 @@ declare module '@mui/material/styles' {
     };
   }
   interface PaletteColor {
+    lightest?: string;
     50?: string;
     100?: string;
     200?: string;
     300?: string;
     400?: string;
     500?: string;
+    600?: string;
     700?: string;
     800?: string;
     900?: string;
     hover?: string;
   }
   interface SimplePaletteColorOptions {
+    lightest?: string;
     50?: string;
     100?: string;
     200?: string;
     300?: string;
     400?: string;
     500?: string;
+    600?: string;
     700?: string;
     800?: string;
     900?: string;
@@ -170,11 +218,17 @@ declare module '@mui/material/styles' {
   interface TypographyVariants {
     fontWeightSemiBold: number;
     fontWeightExtraBold: number;
+    labelMd: React.CSSProperties;
+    labelSm: React.CSSProperties;
+    bodyMd: React.CSSProperties;
   }
 
   interface TypographyVariantsOptions {
     fontWeightSemiBold?: number;
     fontWeightExtraBold?: number;
+    labelMd?: React.CSSProperties;
+    labelSm?: React.CSSProperties;
+    bodyMd?: React.CSSProperties;
   }
 }
 
@@ -204,7 +258,9 @@ const BRAND = {
   },
   primary: {
     50: '#E8EFF7',
+    200: '#2563EB',
     300: '#4F7FB8',
+    400: '#2A5A9A',
     500: '#1B3A6B',
     600: '#152D54',
     800: '#01132F',
@@ -347,11 +403,40 @@ export const theme = createTheme({
     body1: { fontSize: '1rem', lineHeight: 1.6 },
     body2: { fontSize: '0.875rem', lineHeight: 1.57 },
     caption: { fontSize: '0.75rem', lineHeight: 1.5 },
+    labelMd: {
+      fontWeight: 500,
+      fontSize: '0.875rem',
+      lineHeight: 1.43,
+    },
+
+    labelSm: {
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 1.33,
+    },
+
+    bodyMd: {
+      fontWeight: 500,
+      fontSize: '1rem',
+      lineHeight: 1.5,
+    },
     button: { fontWeight: 600, letterSpacing: '0.02em', textTransform: 'none' },
   } as import('@mui/material/styles').TypographyOptions,
 
   shape: {
     borderRadius: 10,
+    xs: 4,
+    sm: 8,
+    lg: 16,
+  },
+
+  customShadows: {
+    sm: '0px 1px 3px 0px rgba(0, 0, 0, 0.08)',
+    card: '0px 10px 30px rgba(0, 0, 0, 0.1)',
+  },
+
+  radius: {
+    circle: '50%',
   },
 
   spacing: 8,
