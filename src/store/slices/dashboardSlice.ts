@@ -1,7 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { api } from '@/services/api';
-import type { DashboardData } from '@/pages/Dashboard/types';
-import { API_ROUTES } from '@/constants/api-routes';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import { getStats } from '@/services/dashboard/dashboardService';
+import type { DashboardData } from '@/services/dashboard/types';
+
+const DASHBOARD_FETCH_ERROR = 'Failed to fetch dashboard data';
 
 interface DashboardState {
   data: DashboardData | null;
@@ -15,14 +17,13 @@ const initialState: DashboardState = {
   error: null,
 };
 
-export const fetchDashboardData = createAsyncThunk<DashboardData>(
+export const fetchDashboardData = createAsyncThunk<DashboardData, void, { rejectValue: string }>(
   'dashboard/fetchData',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get<DashboardData>(API_ROUTES.DASHBOARD);
-      return response.data;
+      return await getStats();
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : DASHBOARD_FETCH_ERROR;
       return rejectWithValue(message);
     }
   },
@@ -41,10 +42,11 @@ const dashboardSlice = createSlice({
       .addCase(fetchDashboardData.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
+        state.error = null;
       })
       .addCase(fetchDashboardData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload ?? DASHBOARD_FETCH_ERROR;
       });
   },
 });

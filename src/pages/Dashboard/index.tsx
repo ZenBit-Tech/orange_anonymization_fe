@@ -3,40 +3,40 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { MetricCard } from '@/components/business/dashboard/MetricCard';
-import { LineChart } from '@/components/business/dashboard/LineChart';
-import { EmptyStateCard } from '@/components/business/dashboard/EmptyStateCard';
-import { RecentActivityTable } from '@/components/business/dashboard/RecentActivityTable';
-
-import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
+import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?react';
 import DescriptionIcon from '@/assets/icons/dashboard/MetricCard/description.svg?react';
 import ManageSearchIcon from '@/assets/icons/dashboard/MetricCard/manage_search.svg?react';
 import VerifiedIcon from '@/assets/icons/dashboard/MetricCard/verified.svg?react';
-import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?react';
-import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
-import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
 import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
+import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
+import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
+import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
+
+import { EmptyStateCard } from '@/pages/Dashboard/components/EmptyStateCard';
+import { LineChart } from '@/pages/Dashboard/components/LineChart';
+import { MetricCard } from '@/pages/Dashboard/components/MetricCard';
+import { RecentActivityTable } from '@/pages/Dashboard/components/RecentActivityTable';
 
 import { useDashboard } from './useDashboard';
 import {
+  BottomGrid,
+  Card,
+  MetricsRow,
+  NewAnalysisButton,
   PageWrapper,
+  RecentActivityCard,
+  SectionDivider,
+  SectionSubtitle,
+  SectionTitle,
   WelcomeBanner,
+  WelcomeSubtitle,
   WelcomeText,
   WelcomeTitle,
-  WelcomeSubtitle,
-  NewAnalysisButton,
-  MetricsRow,
-  BottomGrid,
-  SectionTitle,
-  SectionSubtitle,
-  Card,
-  SectionDivider,
-  RecentActivityCard,
 } from './styled';
 
 const Dashboard: React.FC = () => {
-  const { metrics, isEmpty } = useDashboard();
+  const { metrics, isEmpty, loading, error } = useDashboard();
   const { t } = useTranslation();
 
   return (
@@ -57,22 +57,30 @@ const Dashboard: React.FC = () => {
         <MetricCard
           icon={<DescriptionIcon />}
           label={t('dashboard.metrics.totalDocuments')}
-          value={metrics.totalDocuments}
+          value={metrics?.totalDocuments ?? 0}
+          loading={loading}
+          error={error}
         />
         <MetricCard
           icon={<ManageSearchIcon />}
           label={t('dashboard.metrics.entitiesDetected')}
-          value={metrics.entitiesDetected}
+          value={metrics?.entitiesDetected ?? 0}
+          loading={loading}
+          error={error}
         />
         <MetricCard
           icon={<VerifiedIcon />}
-          label={t('dashboard.metrics.anonymizationRate')}
-          value={metrics.anonymizationRate}
+          label={t('dashboard.metrics.averageConfidenceRate')}
+          value={`${metrics?.averageConfidenceRate ?? 0}%`}
+          loading={loading}
+          error={error}
         />
         <MetricCard
           icon={<AnalyticsIcon />}
           label={t('dashboard.metrics.syntheticRecords')}
-          value={metrics.syntheticRecords}
+          value={metrics?.syntheticRecords ?? 0}
+          loading={loading}
+          error={error}
         />
       </MetricsRow>
 

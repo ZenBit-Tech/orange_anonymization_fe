@@ -290,7 +290,7 @@
     "metrics": {
       "totalDocuments": "Total Documents",
       "entitiesDetected": "Entities Detected",
-      "anonymizationRate": "Anonymization Rate",
+      "averageConfidenceRate": "Anonymization Rate",
       "syntheticRecords": "Synthetic Records"
     },
     "recentActivity": {

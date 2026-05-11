@@ -6,20 +6,17 @@ import type { AppDispatch, RootState } from '@/store/store';
 
 export const useDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data } = useSelector((state: RootState) => state.dashboard);
+  const { data, loading, error } = useSelector((state: RootState) => state.dashboard);
 
   useEffect(() => {
     dispatch(fetchDashboardData());
   }, [dispatch]);
 
   return {
-    metrics: data?.metrics ?? {
-      totalDocuments: 0,
-      entitiesDetected: 0,
-      anonymizationRate: 0,
-      syntheticRecords: 0,
-    },
+    metrics: data?.metrics ?? null,
     recentActivity: data?.recentActivity ?? [],
-    isEmpty: data?.emptyState ?? true,
+    isEmpty: (data?.metrics.totalDocuments ?? 0) === 0,
+    loading,
+    error,
   };
 };
