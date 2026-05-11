@@ -3,10 +3,10 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { MetricCard } from '@/components/business/dashboard/MetricCard';
-import { LineChart } from '@/components/business/dashboard/LineChart';
-import { EmptyStateCard } from '@/components/business/dashboard/EmptyStateCard';
-import { RecentActivityTable } from '@/components/business/dashboard/RecentActivityTable';
+import { MetricCard } from '@/pages/Dashboard/components/MetricCard';
+import { LineChart } from '@/pages/Dashboard/components/LineChart';
+import { EmptyStateCard } from '@/pages/Dashboard/components/EmptyStateCard';
+import { RecentActivityTable } from '@/pages/Dashboard/components/RecentActivityTable';
 
 import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
