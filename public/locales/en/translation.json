@@ -27,7 +27,8 @@
     "newAnalysis": "New Analysis",
     "copied": "Copied to clipboard",
     "mb": "MB",
-    "na": "N/A"
+    "na": "N/A",
+    "reduct": "Reduct"
   },
   "nav": {
     "brand": "Clinical Data Studio",
@@ -405,10 +406,13 @@
     "settings": {
       "title": "Configure De-Identification",
       "subtitle": "Choose how patient data will be anonymized under HIPAA",
+      "subtitleStandard": "Select a privacy risk level or customize how each entity type is handled",
       "sections": {
         "method": "1. Choose Method",
         "identifiers": "2. Applied Identifiers",
-        "output": "3. Output Settings"
+        "output": "3. Output Settings",
+        "privacyRisk": "1. Choose privacy risk level",
+        "entityConfiguration": "2. Entity Configuration"
       },
       "method": {
         "safeHarbor": {
@@ -443,6 +447,165 @@
             "title": "Aggressive",
             "description": "Catches potentially sensitive data",
             "info": "Catches potentially sensitive data — may include false positives"
+          },
+          "low": {
+            "title": "Low",
+            "description": "Minimal anonymization. Higher data utility."
+          },
+          "medium": {
+            "title": "Medium",
+            "description": "Balanced privacy and utility. Meets standard GDPR guidelines."
+          },
+          "high": {
+            "title": "High",
+            "description": "Maximum anonymization. Reduced data usability."
+          }
+        }
+      },
+      "howItWorks": {
+        "title": "How this configuration works",
+        "viewLogic": "View logic"
+      },
+      "frameworkInfo": {
+        "euGdpr": {
+          "description": "Methods are automatically selected based on GDPR risk guidelines and entity sensitivity levels. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data. Biological data and photos will still be removed (Art. 9)."
+        },
+        "ukGdpr": {
+          "description": "Methods are automatically selected based on UK GDPR guidelines and entity sensitivity levels. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data. Biological data and photos will still be removed (UK GDPR Art. 9)."
+        },
+        "swissFadp": {
+          "description": "Methods are automatically selected based on Swiss FADP guidelines and entity sensitivity levels. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data. Biological data and photos will still be removed (FADP Art. 5)."
+        },
+        "default": {
+          "description": "Methods are automatically selected based on regulatory guidelines. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data."
+        }
+      },
+      "entityConfig": {
+        "title": "Entity configuration",
+        "autoConfigured": "{{count}} types · Auto-configured",
+        "resetToDefault": "Reset to default",
+        "customize": "Customize",
+        "sensitive": "Sensitive",
+        "chooseIdentifiers": "Choose which identifiers to remove from your document.",
+        "deselectedByDefault": "All categories are deselected by default",
+        "categories": {
+          "identity": "IDENTITY",
+          "datesLocation": "DATES & LOCATION",
+          "sensitiveIdentifiers": "SENSITIVE IDENTIFIERS",
+          "unstructuredData": "UNSTRUCTURED DATA",
+          "specialCategory": "SPECIAL CATEGORY"
+        }
+      },
+      "resetDialog": {
+        "title": "Reset to Medium defaults?",
+        "message": "Your custom settings will be lost.",
+        "confirm": "Reset"
+      },
+      "logicDrawer": {
+        "title": "Configuration Logic",
+        "subtitle": "Methods are automatically selected based on GDPR risk level. You can review how each entity is processed below.",
+        "sections": {
+          "identity": "Identity",
+          "datesLocation": "Dates & Location",
+          "sensitiveIdentifiers": "Sensitive identifiers",
+          "unstructuredData": "Unstructured data",
+          "specialCategory": "Special Category — "
+        },
+        "frameworks": {
+          "euGdpr": {
+            "label": "GDPR Art. 9",
+            "notice": "These entity types are legally protected under GDPR Article 9. Only Remove is permitted."
+          },
+          "ukGdpr": {
+            "label": "UK GDPR Art. 9",
+            "notice": "These entity types are legally protected under UK GDPR Article 9. Only Remove is permitted."
+          },
+          "swissFadp": {
+            "label": "FADP Art. 5",
+            "notice": "These entity types are legally protected under FADP Article 5. Only Remove is permitted."
+          },
+          "default": {
+            "notice": "These entity types are subject to strict legal protection. Only Remove is permitted."
+          }
+        },
+        "entities": {
+          "person": {
+            "title": "Person",
+            "method": "Replace with stable token",
+            "description": "Assigns a consistent token, allows re-linking if legally required"
+          },
+          "organization": {
+            "title": "Organization",
+            "method": "Mask",
+            "description": "Hides part of the value if organisation is considered sensitive"
+          },
+          "dateTime": {
+            "title": "Date/Time",
+            "method": "Generalise",
+            "description": "Converts DOB to age range (e.g. 40–50). Timestamps rounded to month or quarter"
+          },
+          "location": {
+            "title": "Location",
+            "method": "Generalise",
+            "description": "Reduces to region or 3-digit postcode. EDPB recommends geographic generalisation"
+          },
+          "ip": {
+            "title": "IP",
+            "method": "Generalise",
+            "description": "Last segment of the IP address is removed. Only the network range is kept."
+          },
+          "geopoint": {
+            "title": "Geopoint",
+            "method": "Generalise",
+            "description": "Exact coordinates rounded to city or regional centroid"
+          },
+          "nationalId": {
+            "title": "National_ID",
+            "method": "Remove",
+            "description": "One-way removal. No plaintext mapping stored in dataset"
+          },
+          "idNumber": { "title": "ID_Number" },
+          "passport": { "title": "Passport" },
+          "creditCard": {
+            "title": "Credit_Card",
+            "method": "Remove",
+            "description": "Removes full numbers. BIN or last 4 digits may be kept only if business-necessary."
+          },
+          "bankAccount": { "title": "Bank_Account" },
+          "email": {
+            "title": "Email",
+            "method": "Redact",
+            "description": "Full address and number removed. Domain may be preserved if business-necessary"
+          },
+          "phone": { "title": "Phone" },
+          "mrn": {
+            "title": "Medical_Record_Number",
+            "method": "Pseudonymise",
+            "description": "Stable token assigned. Mapping stored server-side under access control"
+          },
+          "deviceId": {
+            "title": "Device_ID",
+            "method": "Hash",
+            "description": "One-way encryption with salt. Keys stored under strict access control"
+          },
+          "freeText": {
+            "title": "Free_Text (PHI)",
+            "method": "NLP redaction",
+            "description": "NLP model scans unstructured text. Manual QA recommended before sharing"
+          },
+          "biologicalData": {
+            "title": "Biological_Data",
+            "method": "Remove",
+            "description": "Treated as highest-risk data. No alternative methods permitted"
+          },
+          "photo": {
+            "title": "Photo / Image",
+            "method": "Remove",
+            "description": "Biometric data. Removal mandatory under Art. 9"
           }
         }
       },
@@ -451,7 +614,8 @@
         "categories": {
           "remove": "REMOVE",
           "replace": "REPLACE",
-          "protect": "PROTECT"
+          "protect": "PROTECT",
+          "transform": "TRANSFORM"
         },
         "redact": {
           "title": "Redact — Remove entirely",
@@ -460,6 +624,10 @@
         "replace": {
           "title": "Replace — Use placeholder",
           "description": "Uses labels like [NAME], [DATE]"
+        },
+        "token": {
+          "title": "Replace with token — Stable pseudonym",
+          "description": "Assigns a consistent token, allows re-linking"
         },
         "synthetic": {
           "title": "Synthetic — Generate fake values",
@@ -470,10 +638,23 @@
           "description": "Hides parts of the value"
         },
         "hash": {
-          "title": "Hash — Encrypt irreversibly",
-          "description": "Converts to irreversible hash, preserves uniqueness"
+          "title": "Hash — One-way encryption",
+          "description": "Converts to irreversible hash"
+        },
+        "generalise": {
+          "title": "Generalise — Reduce precision",
+          "description": "Converts to broader category or range"
+        },
+        "pseudonymise": {
+          "title": "Pseudonymise — Store mapping",
+          "description": "Replaces with token, mapping stored securely"
+        },
+        "nlp": {
+          "title": "NLP redaction — Free text PHI",
+          "description": "Applies NLP model to unstructured text"
         }
       },
+
       "entityTypes": "Entity Types to Detect",
       "confidence": "Minimum Confidence Score",
       "language": "Language",
@@ -554,6 +735,7 @@
       "included": "Included",
       "toggling": "Toggling...",
       "noEntitiesFound": "No entities found",
+      "redacted": "REDACTED",
       "entityColumns": {
         "type": "Entity Type",
         "text": "Original Value",
@@ -601,7 +783,8 @@
     "th": "Thai",
     "tr": "Turkish",
     "uk": "Ukrainian",
-    "vi": "Vietnamese"
+    "vi": "Vietnamese",
+    "english": "en"
   },
   "syntheticData": {
     "title": "Synthetic Data Generation",

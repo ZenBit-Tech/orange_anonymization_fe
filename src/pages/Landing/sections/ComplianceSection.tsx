@@ -10,8 +10,9 @@ import {
   LANDING_TYPOGRAPHY,
 } from '@/pages/Landing/constants';
 import { LandingH1, LandingH2, LandingH3, LandingH4 } from '@/pages/Landing/typography';
+import { ComplianceFramework } from '@/pages/DeIdentify/types';
 
-const FRAMEWORK_KEYS = ['gdpr', 'hipaa', 'ukDpa', 'swissDsg'] as const;
+const FRAMEWORK_KEYS = ['gdpr', ComplianceFramework.HIPAA, 'ukDpa', 'swissDsg'] as const;
 
 const ComplianceSection = () => {
   const { t } = useTranslation();

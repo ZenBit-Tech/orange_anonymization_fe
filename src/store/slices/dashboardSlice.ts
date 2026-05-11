@@ -24,7 +24,6 @@ export const fetchDashboardData = createAsyncThunk<DashboardData, void, { reject
       return await getStats();
     } catch (error) {
       const message = error instanceof Error ? error.message : DASHBOARD_FETCH_ERROR;
-
       return rejectWithValue(message);
     }
   },

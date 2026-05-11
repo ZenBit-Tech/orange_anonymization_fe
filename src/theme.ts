@@ -316,6 +316,11 @@ const BRAND = {
     light: '#EF5350',
     contrastText: WHITE,
   },
+  info: {
+    main: '#2563EB',
+    light: '#DBEAFE',
+    contrastText: WHITE,
+  },
   grey: {
     50: '#F8FAFC',
     100: '#F1F5F9',
@@ -350,6 +355,7 @@ export const theme = createTheme({
     entities: BRAND.entities,
     success: BRAND.success,
     warning: BRAND.warning,
+    info: BRAND.info,
     error: BRAND.error,
     background: {
       default: BRAND.grey[50],
