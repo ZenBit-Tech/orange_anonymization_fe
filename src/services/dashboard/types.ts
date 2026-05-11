@@ -14,9 +14,11 @@ export interface ChartData {
 
 export interface Job {
   id: string;
+  document: string;
   status: JobStatus;
   framework: string | null;
-  createdAt: string;
+  entities: number;
+  date: string;
 }
 
 export interface DashboardData {

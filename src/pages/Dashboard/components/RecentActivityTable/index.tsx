@@ -2,7 +2,7 @@ import React from 'react';
 import { TableCell } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import type { Job } from '@/pages/Dashboard/types';
+import type { Job } from '@/services/dashboard/types';
 import type { ColumnDef } from '@/components/common/DataTable/types';
 import { DataTable } from '@/components/common/DataTable';
 
