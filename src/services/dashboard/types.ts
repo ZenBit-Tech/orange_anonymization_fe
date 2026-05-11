@@ -1,30 +1,26 @@
-type JobStatus = 'completed' | 'processing' | 'failed' | 'pending';
+type JobStatus = 'draft' | 'processing' | 'completed' | 'failed';
 
 export interface Metrics {
   totalDocuments: number;
   entitiesDetected: number;
-  anonymizationRate: number;
+  averageConfidenceRate: number;
   syntheticRecords: number;
 }
 
 export interface ChartData {
   date: string;
-  count: number | string;
+  count: number;
 }
 
 export interface Job {
   id: string;
-  document: string;
   status: JobStatus;
-  framework: string;
-  entities: number;
-  date: string;
+  framework: string | null;
+  createdAt: string;
 }
 
 export interface DashboardData {
   metrics: Metrics;
   chartData: ChartData[];
   recentActivity: Job[];
-  message?: string;
-  emptyState?: boolean;
 }
