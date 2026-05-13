@@ -9,7 +9,8 @@ export interface Metrics {
 
 export interface ChartData {
   date: string;
-  count: number;
+  documents: number;
+  entities: number;
 }
 
 export interface Job {

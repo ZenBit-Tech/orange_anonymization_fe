@@ -311,7 +311,9 @@
       "activitySubtitle": "Based on selected date range",
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
-      "entities": "Entities"
+      "entities": "Entities",
+      "empty": "No processing activity yet",
+      "error": "Failed to load processing activity"
     },
     "emptyState": {
       "noAnalysesFound": "No analyses found",

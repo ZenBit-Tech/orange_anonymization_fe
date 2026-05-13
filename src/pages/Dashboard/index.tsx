@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
@@ -8,17 +8,21 @@ import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?rea
 import DescriptionIcon from '@/assets/icons/dashboard/MetricCard/description.svg?react';
 import ManageSearchIcon from '@/assets/icons/dashboard/MetricCard/manage_search.svg?react';
 import VerifiedIcon from '@/assets/icons/dashboard/MetricCard/verified.svg?react';
+
 import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
 import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
 import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
+
 import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 
 import { EmptyStateCard } from '@/pages/Dashboard/components/EmptyStateCard';
-import { LineChart } from '@/pages/Dashboard/components/LineChart';
 import { MetricCard } from '@/pages/Dashboard/components/MetricCard';
 import { RecentActivityTable } from '@/pages/Dashboard/components/RecentActivityTable';
 
-import { useDashboard } from './useDashboard';
+import { ActivityChart } from './components/ActivityChart';
+import { ChartControls } from './components/ActivityChart/ChartControls';
+import { CHART_TYPES, type ChartType } from './components/ActivityChart/types';
+
 import {
   BottomGrid,
   Card,
@@ -33,11 +37,16 @@ import {
   WelcomeSubtitle,
   WelcomeText,
   WelcomeTitle,
+  ChartHeaderRow,
+  ChartLoaderWrapper,
 } from './styled';
 
+import { useDashboard } from './useDashboard';
+
 const Dashboard: React.FC = () => {
-  const { metrics, isEmpty, loading, error } = useDashboard();
+  const { metrics, chartData, isEmpty, loading, error } = useDashboard();
   const { t } = useTranslation();
+  const [chartType, setChartType] = useState<ChartType>(CHART_TYPES.DOCUMENTS);
 
   return (
     <PageWrapper>
@@ -85,10 +94,24 @@ const Dashboard: React.FC = () => {
       </MetricsRow>
 
       <Card>
-        <SectionTitle>{t('dashboard.chart.activityTitle')}</SectionTitle>
-        <SectionSubtitle>{t('dashboard.chart.activitySubtitle')}</SectionSubtitle>
+        <ChartHeaderRow>
+          <Box>
+            <SectionTitle>{t('dashboard.chart.activityTitle')}</SectionTitle>
+            <SectionSubtitle>{t('dashboard.chart.activitySubtitle')}</SectionSubtitle>
+          </Box>
+
+          <ChartControls chartType={chartType} setChartType={setChartType} />
+        </ChartHeaderRow>
+
         <SectionDivider />
-        <LineChart />
+
+        {loading ? (
+          <ChartLoaderWrapper>
+            <CircularProgress color="inherit" />
+          </ChartLoaderWrapper>
+        ) : (
+          <ActivityChart chartData={chartData} chartType={chartType} error={Boolean(error)} />
+        )}
       </Card>
 
       <BottomGrid>
