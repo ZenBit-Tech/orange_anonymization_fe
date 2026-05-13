@@ -18,10 +18,10 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { useSyntheticDataForm } from './useSyntheticDataForm';
 
 const DATASET_TYPES = [
-  { value: 'patientRecords' },
-  { value: 'clinicalNotes' },
-  { value: 'labResults' },
-  { value: 'prescriptions' },
+  { value: 'Patient Records' },
+  { value: 'Clinical Notes' },
+  { value: 'Lab Results' },
+  { value: 'Prescriptions' },
 ];
 
 const OUTPUT_FORMATS = [{ value: 'csv' }, { value: 'json' }, { value: 'xlsx' }];
