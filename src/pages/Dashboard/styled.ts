@@ -56,6 +56,7 @@ export const MetricsRow = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(4, 1fr)',
   gap: theme.spacing(2),
+  marginTop: theme.spacing(3),
   marginBottom: theme.spacing(3),
 
   [theme.breakpoints.down('md')]: {

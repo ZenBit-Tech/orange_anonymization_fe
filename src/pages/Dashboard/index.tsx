@@ -21,7 +21,15 @@ import { RecentActivityTable } from '@/pages/Dashboard/components/RecentActivity
 
 import { ActivityChart } from './components/ActivityChart';
 import { ChartControls } from './components/ActivityChart/ChartControls';
-import { CHART_TYPES, type ChartType } from './components/ActivityChart/types';
+import { DashboardFilters } from './components/DashboardFilters';
+import { FRAMEWORK_VALUES, type FrameworkValue } from './components/DashboardFilters/types';
+
+import {
+  CHART_RANGES,
+  CHART_TYPES,
+  type ChartType,
+  type Range,
+} from './components/ActivityChart/types';
 
 import {
   BottomGrid,
@@ -47,20 +55,35 @@ const Dashboard: React.FC = () => {
   const { metrics, chartData, isEmpty, loading, error } = useDashboard();
   const { t } = useTranslation();
   const [chartType, setChartType] = useState<ChartType>(CHART_TYPES.DOCUMENTS);
+  const [range, setRange] = useState<Range>(CHART_RANGES.DAYS_7);
+  const [framework, setFramework] = useState<FrameworkValue>(FRAMEWORK_VALUES.ALL);
 
   return (
     <PageWrapper>
-      <WelcomeBanner>
-        <WelcomeText>
-          <InfoIcon />
-          <Box>
-            <WelcomeTitle>{t('dashboard.welcomeTitle')}</WelcomeTitle>
-            <WelcomeSubtitle>{t('dashboard.welcomeSubtitle')}</WelcomeSubtitle>
-          </Box>
-        </WelcomeText>
+      {isEmpty ? (
+        <WelcomeBanner>
+          <WelcomeText>
+            <InfoIcon />
 
-        <NewAnalysisButton startIcon={<AddIcon />}>{t('dashboard.newAnalysis')}</NewAnalysisButton>
-      </WelcomeBanner>
+            <Box>
+              <WelcomeTitle>{t('dashboard.welcomeTitle')}</WelcomeTitle>
+
+              <WelcomeSubtitle>{t('dashboard.welcomeSubtitle')}</WelcomeSubtitle>
+            </Box>
+          </WelcomeText>
+
+          <NewAnalysisButton startIcon={<AddIcon />}>
+            {t('dashboard.newAnalysis')}
+          </NewAnalysisButton>
+        </WelcomeBanner>
+      ) : (
+        <DashboardFilters
+          range={range}
+          framework={framework}
+          setRange={setRange}
+          setFramework={setFramework}
+        />
+      )}
 
       <MetricsRow>
         <MetricCard
@@ -110,7 +133,12 @@ const Dashboard: React.FC = () => {
             <CircularProgress color="inherit" />
           </ChartLoaderWrapper>
         ) : (
-          <ActivityChart chartData={chartData} chartType={chartType} error={Boolean(error)} />
+          <ActivityChart
+            chartData={chartData}
+            chartType={chartType}
+            range={range}
+            error={Boolean(error)}
+          />
         )}
       </Card>
 

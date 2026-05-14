@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { useTheme } from '@mui/material';
-import { eachDayOfInterval, format, subDays, subMonths } from 'date-fns';
+import { eachDayOfInterval, format, startOfDay, subDays, subMonths } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import {
   Area,
@@ -50,44 +50,55 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
-
   const isDocuments = chartType === CHART_TYPES.DOCUMENTS;
-
   const strokeColor = isDocuments ? theme.palette.primary[500] : theme.palette.accent[400];
-
   const dataKey = isDocuments ? CHART_TYPES.DOCUMENTS : CHART_TYPES.ENTITIES;
 
   const { from, to } = useMemo(() => {
     const now = new Date();
 
     switch (range) {
+      case CHART_RANGES.TODAY:
+        return {
+          from: startOfDay(now),
+          to: startOfDay(now),
+        };
+      case CHART_RANGES.YESTERDAY: {
+        const yesterday = startOfDay(subDays(now, 1));
+        return {
+          from: yesterday,
+          to: yesterday,
+        };
+      }
       case CHART_RANGES.DAYS_14:
         return {
-          from: subDays(now, 14),
+          from: subDays(now, 13),
           to: now,
         };
-
       case CHART_RANGES.DAYS_30:
         return {
-          from: subDays(now, 30),
+          from: subDays(now, 29),
           to: now,
         };
-
       case CHART_RANGES.MONTHS_3:
         return {
           from: subMonths(now, 3),
           to: now,
         };
-
       case CHART_RANGES.MONTHS_6:
         return {
           from: subMonths(now, 6),
           to: now,
         };
-
+      case CHART_RANGES.CUSTOM:
+        return {
+          from: subDays(now, 6),
+          to: now,
+        };
+      case CHART_RANGES.DAYS_7:
       default:
         return {
-          from: subDays(now, 7),
+          from: subDays(now, 6),
           to: now,
         };
     }
@@ -104,31 +115,52 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   }, [chartData]);
 
   const normalizedData = useMemo(() => {
-    const days = eachDayOfInterval({
-      start: from,
-      end: to,
-    });
+    const days = eachDayOfInterval({ start: from, end: to });
 
     return days.map((day) => {
       const formattedDate = format(day, CHART_CONSTANTS.DATE_FORMAT);
-
       const existingData = dataMap.get(formattedDate);
 
       return {
         date: formattedDate,
-        documents: existingData?.documents ?? 0,
-        entities: existingData?.entities ?? 0,
+        documents: existingData?.documents ?? null,
+        entities: existingData?.entities ?? null,
       };
     });
   }, [dataMap, from, to]);
 
+  const xAxisTicks = useMemo(() => {
+    const data = normalizedData;
+    const total = data.length;
+
+    if (range === CHART_RANGES.DAYS_7 || range === CHART_RANGES.DAYS_14) {
+      return data.map((i) => i.date);
+    }
+
+    if (range === CHART_RANGES.DAYS_30) {
+      const step = Math.ceil(total / 8);
+      return data.filter((_, i) => i % step === 0).map((i) => i.date);
+    }
+
+    if (range === CHART_RANGES.MONTHS_3) {
+      const step = Math.ceil(total / 10);
+      return data.filter((_, i) => i % step === 0).map((i) => i.date);
+    }
+
+    if (range === CHART_RANGES.MONTHS_6) {
+      const step = Math.ceil(total / 12);
+      return data.filter((_, i) => i % step === 0).map((i) => i.date);
+    }
+
+    return data.map((i) => i.date);
+  }, [normalizedData, range]);
+
   const isEmptyChart = useMemo(() => {
-    return normalizedData.every((item) => item.documents === 0 && item.entities === 0);
-  }, [normalizedData]);
+    return normalizedData.every((item) => (item[dataKey] ?? 0) === 0);
+  }, [normalizedData, dataKey]);
 
   const maxValue = useMemo(() => {
     const values = normalizedData.map((item) => item[dataKey] ?? 0);
-
     return Math.max(...values, 1);
   }, [dataKey, normalizedData]);
 
@@ -142,9 +174,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   const renderChartDot =
     (innerRadius: number, opacity: number) =>
     ({ cx, cy }: DotProps) => {
-      if (cx == null || cy == null) {
-        return null;
-      }
+      if (cx == null || cy == null) return null;
 
       return (
         <g>
@@ -155,7 +185,6 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
             fill={strokeColor}
             opacity={opacity}
           />
-
           <circle
             cx={cx}
             cy={cy}
@@ -195,7 +224,6 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
                 stopColor={strokeColor}
                 stopOpacity={CHART_CONSTANTS.GRADIENT.TOP_OPACITY}
               />
-
               <stop
                 offset="100%"
                 stopColor={strokeColor}
@@ -208,7 +236,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
 
           <XAxis
             dataKey="date"
-            interval={0}
+            ticks={xAxisTicks}
             tickFormatter={formatChartDate}
             tick={getXAxisTickStyles(theme)}
             axisLine={getXAxisLine(theme)}
