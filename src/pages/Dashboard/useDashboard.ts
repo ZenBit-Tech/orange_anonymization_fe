@@ -14,6 +14,7 @@ export const useDashboard = () => {
 
   return {
     metrics: data?.metrics ?? null,
+    chartData: data?.chartData ?? [],
     recentActivity: data?.recentActivity ?? [],
     isEmpty: (data?.metrics.totalDocuments ?? 0) === 0,
     loading,

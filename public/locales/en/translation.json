@@ -285,6 +285,21 @@
     "title": "Dashboard",
     "subtitle": "Overview of your de-identification activity",
     "newAnalysis": "New analysis",
+    "filters": {
+      "allFrameworks": "All frameworks",
+      "hipaa": "HIPAA",
+      "gdpr": "EU GDPR",
+      "fadp": "Swiss FADP",
+      "ukDpi": "UK DPI",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7Days": "Last 7 days",
+      "last14Days": "Last 14 days",
+      "last30Days": "Last 30 days",
+      "last3Months": "Last 3 months",
+      "last6Months": "Last 6 months",
+      "customRange": "Custom range..."
+    },
     "welcomeTitle": "Welcome to De-ID Studio",
     "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",
     "metrics": {
@@ -311,7 +326,9 @@
       "activitySubtitle": "Based on selected date range",
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
-      "entities": "Entities"
+      "entities": "Entities",
+      "empty": "No processing activity yet",
+      "error": "Failed to load processing activity"
     },
     "emptyState": {
       "noAnalysesFound": "No analyses found",
