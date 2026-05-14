@@ -795,7 +795,6 @@
     "dataSource": "Data source",
     "datasetType": "Dataset type",
     "uploadYourFile": "Upload your file",
-    "dragDrop": "Drag & drop",
     "or": "or",
     "browseFile": "Browse file",
     "supportedFormats": "Supported formats: .xlsx, .csv, .json — max 5 MB",

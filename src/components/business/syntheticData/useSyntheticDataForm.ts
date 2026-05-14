@@ -3,9 +3,7 @@ import { ComplianceFramework } from '@/pages/DeIdentify/types';
 import { syntheticDataService } from '@/services/syntheticDataService';
 import { useTranslation } from 'react-i18next';
 
-export type GeneratePayload = {
-  datasetType: string;
-  useDeidentified: boolean;
+type GeneratePayload = {
   records: number;
   framework: string;
   outputFormat: string;
@@ -17,16 +15,13 @@ const limits = {
 
 export function useSyntheticDataForm() {
   const { t } = useTranslation();
-  const [datasetType, setDatasetType] = useState<string>('patientRecords');
-  const [file, setFile] = useState<File | null>(null);
-  const [useDeidentified, setUseDeidentified] = useState<boolean>(false);
   const [records, setRecords] = useState<number>(1000);
   const [framework, setFramework] = useState<string>(ComplianceFramework.HIPAA);
   const [outputFormat, setOutputFormat] = useState<string>('csv');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [deidentifiedPreview, setDeidentifiedPreview] = useState<string | null>(null);
+  const deidentifiedPreview: string | null = null;
 
   const frameworks = useMemo(
     () => [
@@ -55,25 +50,11 @@ export function useSyntheticDataForm() {
   );
 
   const isValid = useMemo(() => {
-    if (!datasetType) return false;
     if (!framework) return false;
     if (!outputFormat) return false;
     if (records < 1 || records > limits.maxRecords) return false;
     return true;
-  }, [datasetType, framework, outputFormat, records]);
-
-  const handleFileChange = (f: File | null): void => {
-    setFile(f);
-  };
-
-  const handleDrop = (f: File | null): void => {
-    setFile(f);
-  };
-
-  const handleToggleChange = (checked: boolean): void => {
-    setUseDeidentified(checked);
-    setDeidentifiedPreview(null);
-  };
+  }, [framework, outputFormat, records]);
 
   const handleSubmit = async (): Promise<void> => {
     if (!isValid) return;
@@ -81,14 +62,12 @@ export function useSyntheticDataForm() {
     setError(null);
     try {
       const payload: GeneratePayload = {
-        datasetType,
-        useDeidentified,
         records,
         framework,
         outputFormat,
       };
       try {
-        await syntheticDataService.generate(payload, file ?? undefined);
+        await syntheticDataService.generate(payload);
         setSuccess(t('syntheticData.generatedSuccess'));
       } catch (serviceErr: unknown) {
         const message =
@@ -106,9 +85,6 @@ export function useSyntheticDataForm() {
   };
 
   return {
-    datasetType,
-    file,
-    useDeidentified,
     records,
     framework,
     outputFormat,
@@ -118,13 +94,9 @@ export function useSyntheticDataForm() {
     deidentifiedPreview,
     frameworks,
     isValid,
-    setDatasetType,
     setRecords,
     setFramework,
     setOutputFormat,
-    handleFileChange,
-    handleDrop,
-    handleToggleChange,
     handleSubmit,
     setError,
     setSuccess,
