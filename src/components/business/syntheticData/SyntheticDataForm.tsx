@@ -58,7 +58,7 @@ const layout = {
 };
 
 const limits = {
-  maxRecords: 1000000,
+  maxRecords: 100000,
 };
 
 export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProps) {
