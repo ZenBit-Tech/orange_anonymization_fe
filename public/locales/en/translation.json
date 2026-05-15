@@ -305,7 +305,7 @@
     "metrics": {
       "totalDocuments": "Total Documents",
       "entitiesDetected": "Entities Detected",
-      "averageConfidenceRate": "Anonymization Rate",
+      "anonymizationRate": "Anonymization Rate",
       "syntheticRecords": "Synthetic Records"
     },
     "recentActivity": {
@@ -327,8 +327,11 @@
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
       "entities": "Entities",
-      "empty": "No processing activity yet",
-      "error": "Failed to load processing activity"
+      "empty": "No processing activity yet"
+    },
+    "errors": {
+      "failedToLoadProcessingActivity": "Failed to load processing activity",
+      "failedToLoadAnalysesActivity": "Failed to load analyses activity"
     },
     "emptyState": {
       "noAnalysesFound": "No analyses found",

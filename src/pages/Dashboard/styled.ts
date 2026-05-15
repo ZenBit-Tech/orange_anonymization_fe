@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 
 import { BORDERS } from '@/theme';
 
-import { CHART_CONSTANTS } from './components/ActivityChart/constants';
-
 const RECENT_ACTIVITY_CARD_PADDING_BOTTOM = 5.5;
 
 export const PageWrapper = styled(Box)(({ theme }) => ({
@@ -120,12 +118,4 @@ export const RecentActivityCard = styled(Box)(({ theme }) => ({
   border: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
   boxShadow: theme.customShadows.sm,
   backgroundColor: theme.palette.common.white,
-}));
-
-export const ChartLoaderWrapper = styled(Box)(({ theme }) => ({
-  height: CHART_CONSTANTS.CHART_HEIGHT,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.primary[500],
 }));

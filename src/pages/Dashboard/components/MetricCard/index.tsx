@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Box, Skeleton } from '@mui/material';
 
+import type { DashboardState } from '@/pages/Dashboard/types';
+
 import { CardWrapper, IconWrapper, Label, TopBar, Value } from './styled';
 
 const SKELETON_WIDTH = 60;
@@ -11,17 +13,16 @@ interface MetricCardProps {
   icon: React.ReactNode;
   label: string;
   value: number | string;
-  loading?: boolean;
-  error?: string | null;
+  state: DashboardState;
 }
 
-export const MetricCard: React.FC<MetricCardProps> = ({ icon, label, value, loading, error }) => {
+export const MetricCard: React.FC<MetricCardProps> = ({ icon, label, value, state }) => {
   const renderValue = () => {
-    if (loading) {
+    if (state === 'loading') {
       return <Skeleton width={SKELETON_WIDTH} height={SKELETON_HEIGHT} />;
     }
 
-    if (error) {
+    if (state === 'error') {
       return <Value>—</Value>;
     }
 

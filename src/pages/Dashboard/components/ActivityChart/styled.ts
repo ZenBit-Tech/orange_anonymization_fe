@@ -103,3 +103,11 @@ export const ChartErrorState = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   color: theme.palette.error.main,
 }));
+
+export const ChartLoaderWrapper = styled(Box)(({ theme }) => ({
+  height: CHART_CONSTANTS.CHART_HEIGHT,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: theme.spacing(1),
+}));
