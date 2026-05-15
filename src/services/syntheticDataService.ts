@@ -4,6 +4,9 @@ interface GeneratePayload {
   records: number;
   framework: string;
   outputFormat: string;
+  useDeidentifiedSource?: boolean;
+  sourceJobId?: string;
+  sourceText?: string;
 }
 
 export const syntheticDataService = {

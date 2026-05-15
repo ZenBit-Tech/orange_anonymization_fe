@@ -15,6 +15,10 @@ import { useTranslation } from 'react-i18next';
 import StarIcon from '@mui/icons-material/Star';
 import { useSyntheticDataForm } from './useSyntheticDataForm';
 
+interface SyntheticDataFormProps {
+  sourceJobId?: string;
+}
+
 const OUTPUT_FORMATS = [{ value: 'csv' }, { value: 'json' }, { value: 'xlsx' }];
 
 const tokens = {
@@ -57,13 +61,14 @@ const limits = {
   maxRecords: 1000000,
 };
 
-export default function SyntheticDataForm() {
+export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProps) {
   const { t } = useTranslation();
   const {
     records,
     framework,
     outputFormat,
     loading,
+    previewLoading,
     error,
     success,
     deidentifiedPreview,
@@ -75,7 +80,7 @@ export default function SyntheticDataForm() {
     handleSubmit,
     setError,
     setSuccess,
-  } = useSyntheticDataForm();
+  } = useSyntheticDataForm(sourceJobId);
 
   return (
     <Box
@@ -289,33 +294,37 @@ export default function SyntheticDataForm() {
                 </Typography>
               </Box>
 
-              {deidentifiedPreview && (
-                <Box
+              <Box
+                sx={{
+                  p: 1.5,
+                  minHeight: '72px',
+                  backgroundColor: tokens.cardBg,
+                  border: `1px solid ${tokens.border}`,
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Typography
+                  title={previewLoading ? t('common.loading') : (deidentifiedPreview ?? '')}
                   sx={{
-                    p: 2,
-                    backgroundColor: tokens.cardBg,
-                    border: `1px solid ${tokens.border}`,
-                    borderRadius: '8px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 0.5,
+                    width: '100%',
+                    color: deidentifiedPreview ? tokens.neutral700 : tokens.muted,
+                    fontSize: '12px',
+                    lineHeight: '16px',
+                    whiteSpace: 'pre-wrap',
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 2,
+                    textOverflow: 'ellipsis',
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontWeight: 400,
-                      color: tokens.neutral700,
-                      fontSize: '12px',
-                      lineHeight: '16px',
-                    }}
-                  >
-                    {deidentifiedPreview}
-                  </Typography>
-                  <Typography sx={{ color: tokens.muted, fontSize: '12px' }}>
-                    {t('syntheticData.passedFromCurrentSession')}
-                  </Typography>
-                </Box>
-              )}
+                  {previewLoading
+                    ? t('common.loading')
+                    : (deidentifiedPreview ?? t('syntheticData.passedFromCurrentSession'))}
+                </Typography>
+              </Box>
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>

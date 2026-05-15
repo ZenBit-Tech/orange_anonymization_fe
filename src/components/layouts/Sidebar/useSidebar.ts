@@ -5,6 +5,7 @@ import FindReplaceOutlinedIcon from '@mui/icons-material/FindReplaceOutlined';
 import StorageOutlinedIcon from '@mui/icons-material/StorageOutlined';
 import { ROUTES } from '@/constants';
 import { useAppDispatch } from '@/store/store';
+import { useAppSelector } from '@/store/store';
 import { logout } from '@/store/auth';
 
 interface NavItem {
@@ -24,11 +25,16 @@ export function useSidebar(onNavigate?: () => void) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const currentJobId = useAppSelector((state) => state.jobs.currentJob?.id);
 
   const isActive = (path: string): boolean => location.pathname === path;
 
   const handleNavigate = (path: string) => {
-    navigate(path);
+    if (path === ROUTES.SYNTHETIC_DATA && currentJobId) {
+      navigate(`${path}?jobId=${encodeURIComponent(currentJobId)}#settings`);
+    } else {
+      navigate(path);
+    }
     onNavigate?.();
   };
 

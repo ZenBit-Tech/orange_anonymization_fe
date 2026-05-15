@@ -1,10 +1,14 @@
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import SyntheticDataForm from '@/components/business/syntheticData/SyntheticDataForm';
+import { useAppSelector } from '@/store/store';
 
 const SyntheticData = () => {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const currentJobId = useAppSelector((state) => state.jobs.currentJob?.id);
+  const jobIdFromUrl = searchParams.get('jobId') || currentJobId || undefined;
 
   useEffect(() => {
     if (location.hash === '#settings') {
@@ -26,7 +30,7 @@ const SyntheticData = () => {
       }}
     >
       <Box id="settings">
-        <SyntheticDataForm />
+        <SyntheticDataForm sourceJobId={jobIdFromUrl} />
       </Box>
     </Box>
   );

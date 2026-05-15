@@ -105,7 +105,7 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
           return (
             <List key={`${item.path}-sub`} sx={{ pl: 4 }}>
               <ListItemButton
-                onClick={() => handleNavigate(`${ROUTES.SYNTHETIC_DATA}#settings`)}
+                onClick={() => handleNavigate(ROUTES.SYNTHETIC_DATA)}
                 sx={(theme) => ({
                   borderRadius: 1,
                   mb: 0.5,
