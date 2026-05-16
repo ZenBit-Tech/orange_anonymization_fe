@@ -70,26 +70,10 @@ export function useSyntheticDataForm(sourceJobId?: string) {
 
   const frameworks = useMemo(
     () => [
-      {
-        value: ComplianceFramework.HIPAA,
-        label: 'HIPAA',
-        desc: 'Removes all 18 HIPAA identifiers (Safe Harbor)',
-      },
-      {
-        value: ComplianceFramework.EU_GDPR,
-        label: 'EU GDPR',
-        desc: 'Applies GDPR risk-based anonymisation rules',
-      },
-      {
-        value: ComplianceFramework.SWISS_FADP,
-        label: 'Swiss FADP',
-        desc: 'Applies Swiss data protection rules (nDSG)',
-      },
-      {
-        value: ComplianceFramework.UK_GDPR,
-        label: 'UK DPI',
-        desc: 'Applies UK GDPR anonymisation requirements',
-      },
+      { value: ComplianceFramework.HIPAA },
+      { value: ComplianceFramework.EU_GDPR },
+      { value: ComplianceFramework.SWISS_FADP },
+      { value: ComplianceFramework.UK_GDPR },
     ],
     [],
   );

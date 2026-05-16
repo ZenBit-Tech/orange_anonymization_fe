@@ -14,52 +14,13 @@ import {
 import { useTranslation } from 'react-i18next';
 import StarIcon from '@mui/icons-material/Star';
 import { useSyntheticDataForm } from './useSyntheticDataForm';
+import synthetic, { layout, metrics, limits } from './styles';
 
 interface SyntheticDataFormProps {
   sourceJobId?: string;
 }
 
 const OUTPUT_FORMATS = [{ value: 'csv' }, { value: 'json' }, { value: 'xlsx' }];
-
-const tokens = {
-  primary: 'primary.500',
-  background: 'grey.50',
-  cardBg: 'background.paper',
-  border: 'grey.200',
-  muted: 'text.secondary',
-  subtle: 'grey.300',
-  neutral600: 'text.secondary',
-  neutral700: 'text.secondary',
-  neutral900: 'text.primary',
-  iconGray: 'grey.400',
-  shadow: '0px 2px 12px rgba(0, 0, 0, 0.06)',
-  shadowSm: '0px 1px 3px rgba(0, 0, 0, 0.08)',
-  primaryHover: 'primary.600',
-  disabledBg: 'grey.300',
-  disabledColor: 'grey.400',
-  error: 'error.main',
-  textPrimary: 'text.primary',
-  warningBg: 'warning.light',
-  warning: 'warning.main',
-  lightGray: 'grey.100',
-};
-
-const metrics = {
-  estimateMultiplier: 2.3,
-  kb: 1024,
-  mbDivider: 1000,
-};
-
-const layout = {
-  cardWidth: 1040,
-  contentPadding: 2,
-  gap: 4,
-  fieldGap: 1.5,
-};
-
-const limits = {
-  maxRecords: 100000,
-};
 
 export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProps) {
   const { t } = useTranslation();
@@ -83,92 +44,58 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
   } = useSyntheticDataForm(sourceJobId);
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: tokens.background,
-        minHeight: '100vh',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '24px 32px',
-          gap: '16px',
-          backgroundColor: tokens.background,
-          overflowY: 'auto',
-          flex: 1,
-        }}
-      >
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: layout.cardWidth,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: layout.gap,
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+    <Box sx={synthetic.root}>
+      <Box sx={synthetic.pageInner}>
+        <Box sx={synthetic.container}>
+          <Box sx={synthetic.titleGroup}>
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontWeight: 600,
-                color: tokens.neutral900,
+                color: theme.palette.text.primary,
                 fontSize: '18px',
                 lineHeight: '26px',
-              }}
+              })}
             >
               {t('syntheticData.generationSettings')}
             </Typography>
             <Typography
-              sx={{ color: tokens.muted, fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+              sx={(theme) => ({
+                color: theme.palette.text.secondary,
+                fontSize: '14px',
+                lineHeight: '20px',
+                fontWeight: 400,
+              })}
             >
               {t('syntheticData.configureParameters')}
             </Typography>
           </Box>
 
-          <Paper
-            sx={{
-              width: '100%',
-              p: layout.contentPadding,
-              backgroundColor: tokens.cardBg,
-              border: `1.5px solid ${tokens.border}`,
-              boxShadow: tokens.shadow,
-              borderRadius: '8px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: layout.gap,
-            }}
-          >
+          <Paper sx={synthetic.paper}>
             <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+              <Box sx={synthetic.headerRow}>
                 <Typography
                   sx={{
                     fontWeight: 500,
                     fontSize: '16px',
                     lineHeight: '24px',
-                    color: tokens.neutral700,
+                    color: (theme) => theme.palette.text.secondary,
                   }}
                 >
                   {t('syntheticData.configuration')}
                 </Typography>
-                <Box sx={{ flex: 1, height: '1px', backgroundColor: tokens.lightGray }} />
+                <Box sx={synthetic.dividerLine} />
               </Box>
             </Box>
 
             <Box>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontWeight: 500,
                   mb: layout.fieldGap,
                   fontSize: '12px',
                   lineHeight: '16px',
-                  color: tokens.muted,
-                }}
+                  color: theme.palette.text.secondary,
+                })}
               >
                 {t('syntheticData.numberOfRecords')}
               </Typography>
@@ -179,30 +106,36 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                 onChange={(e) => setRecords(Number(e.target.value))}
                 size="small"
                 inputProps={{ min: 1, max: limits.maxRecords }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: tokens.background,
-                  },
-                }}
+                sx={synthetic.textField}
               />
-              <Typography sx={{ display: 'block', mt: 0.5, color: tokens.muted, fontSize: '12px' }}>
+              <Typography
+                sx={(theme) => ({
+                  display: 'block',
+                  mt: 0.5,
+                  color: theme.palette.text.secondary,
+                  fontSize: '12px',
+                })}
+              >
                 {t('syntheticData.maxRecords')}
               </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', gap: layout.gap }}>
+            <Box sx={synthetic.twoColumnRow}>
               <Box sx={{ flex: 1 }}>
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontWeight: 500,
                     mb: layout.fieldGap,
                     fontSize: '12px',
                     lineHeight: '16px',
-                    color: tokens.muted,
-                  }}
+                    color: theme.palette.text.secondary,
+                  })}
                 >
                   {t('syntheticData.chooseFramework')}
-                  <Typography component="span" sx={{ color: tokens.error }}>
+                  <Typography
+                    component="span"
+                    sx={(theme) => ({ color: theme.palette.error.main })}
+                  >
                     *
                   </Typography>
                 </Typography>
@@ -210,21 +143,26 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                   <Select
                     value={framework}
                     onChange={(e) => setFramework(String(e.target.value))}
-                    sx={{
-                      backgroundColor: tokens.background,
+                    sx={(theme) => ({
+                      backgroundColor: theme.palette.background.default,
                       '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: tokens.border,
+                        borderColor: theme.palette.divider,
                       },
-                    }}
+                    })}
                   >
                     {frameworks.map((f) => (
                       <MenuItem key={f.value} value={f.value}>
                         <Box>
                           <Typography sx={{ fontSize: '16px', lineHeight: '24px' }}>
-                            {f.label}
+                            {t(`syntheticData.frameworks.${f.value}.label`, String(f.value))}
                           </Typography>
-                          <Typography sx={{ color: tokens.muted, fontSize: '12px' }}>
-                            {t(`syntheticData.frameworks.${f.value}.desc`, f.desc)}
+                          <Typography
+                            sx={(theme) => ({
+                              color: theme.palette.text.secondary,
+                              fontSize: '12px',
+                            })}
+                          >
+                            {t(`syntheticData.frameworks.${f.value}.desc`)}
                           </Typography>
                         </Box>
                       </MenuItem>
@@ -235,13 +173,13 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
 
               <Box sx={{ flex: 1 }}>
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontWeight: 500,
                     mb: layout.fieldGap,
                     fontSize: '12px',
                     lineHeight: '25px',
-                    color: tokens.muted,
-                  }}
+                    color: theme.palette.text.secondary,
+                  })}
                 >
                   {t('syntheticData.chooseFormat')}
                 </Typography>
@@ -249,12 +187,12 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                   <Select
                     value={outputFormat}
                     onChange={(e) => setOutputFormat(String(e.target.value))}
-                    sx={{
-                      backgroundColor: tokens.background,
+                    sx={(theme) => ({
+                      backgroundColor: theme.palette.background.default,
                       '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: tokens.border,
+                        borderColor: theme.palette.divider,
                       },
-                    }}
+                    })}
                   >
                     {OUTPUT_FORMATS.map((o) => (
                       <MenuItem key={o.value} value={o.value}>
@@ -266,59 +204,38 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
               </Box>
             </Box>
 
-            <Box
-              sx={{
-                p: 2,
-                backgroundColor: tokens.lightGray,
-                border: `1px solid ${tokens.lightGray}`,
-                boxShadow: tokens.shadowSm,
-                borderRadius: '8px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 0.5,
-              }}
-            >
+            <Box sx={synthetic.previewSection}>
               <Box>
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontWeight: 500,
-                    color: tokens.neutral900,
+                    color: theme.palette.text.primary,
                     fontSize: '14px',
                     lineHeight: '20px',
-                  }}
+                  })}
                 >
                   {t('syntheticData.useDeidentified')}
                 </Typography>
-                <Typography sx={{ color: tokens.muted, mt: 0.5, fontSize: '12px' }}>
+                <Typography
+                  sx={(theme) => ({
+                    color: theme.palette.text.secondary,
+                    mt: 0.5,
+                    fontSize: '12px',
+                  })}
+                >
                   {t('syntheticData.usePreviouslyDeidentified')}
                 </Typography>
               </Box>
 
-              <Box
-                sx={{
-                  p: 1.5,
-                  minHeight: '72px',
-                  backgroundColor: tokens.cardBg,
-                  border: `1px solid ${tokens.border}`,
-                  borderRadius: '8px',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                }}
-              >
+              <Box sx={synthetic.previewBox}>
                 <Typography
                   title={previewLoading ? t('common.loading') : (deidentifiedPreview ?? '')}
-                  sx={{
-                    width: '100%',
-                    color: deidentifiedPreview ? tokens.neutral700 : tokens.muted,
-                    fontSize: '12px',
-                    lineHeight: '16px',
-                    whiteSpace: 'pre-wrap',
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: 2,
-                    textOverflow: 'ellipsis',
-                  }}
+                  sx={(theme) => ({
+                    ...synthetic.previewText(),
+                    color: deidentifiedPreview
+                      ? theme.palette.text.secondary
+                      : theme.palette.text.secondary,
+                  })}
                 >
                   {previewLoading
                     ? t('common.loading')
@@ -327,48 +244,43 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
               </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-              <Typography sx={{ color: tokens.muted, fontSize: '12px' }}>
+            <Box sx={synthetic.footerRow}>
+              <Typography
+                sx={(theme) => ({ color: theme.palette.text.secondary, fontSize: '12px' })}
+              >
                 {t('syntheticData.estimatedOutput')}
               </Typography>
-              <Typography sx={{ fontWeight: 600, color: tokens.neutral700, fontSize: '12px' }}>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  color: (theme) => theme.palette.text.secondary,
+                  fontSize: '12px',
+                }}
+              >
                 {(records * metrics.estimateMultiplier) / metrics.mbDivider} MB
               </Typography>
             </Box>
 
             {!isValid && (
-              <Typography sx={{ color: tokens.warning, fontSize: '12px', textAlign: 'right' }}>
+              <Typography
+                sx={(theme) => ({
+                  color: theme.palette.warning.main,
+                  fontSize: '12px',
+                  textAlign: 'right',
+                })}
+              >
                 {t('syntheticData.completeRequiredFields')}
               </Typography>
             )}
           </Paper>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2 }}>
+          <Box sx={synthetic.actionRow}>
             <Button
               variant="contained"
               disabled={!isValid || loading}
               onClick={handleSubmit}
               startIcon={<StarIcon />}
-              sx={{
-                width: '249px',
-                height: '40px',
-                backgroundColor: tokens.primary,
-                color: tokens.cardBg,
-                border: `2px solid ${tokens.primary}`,
-                '&:hover': {
-                  backgroundColor: tokens.primaryHover,
-                  borderColor: tokens.primaryHover,
-                },
-                '&:disabled': {
-                  backgroundColor: tokens.disabledBg,
-                  color: tokens.disabledColor,
-                  borderColor: tokens.disabledBg,
-                },
-                fontSize: '14px',
-                fontWeight: 500,
-                lineHeight: '20px',
-                textTransform: 'none',
-              }}
+              sx={synthetic.generateButton}
             >
               {loading ? (
                 <>
