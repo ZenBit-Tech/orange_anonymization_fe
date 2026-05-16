@@ -14,11 +14,20 @@ import {
 import { useTranslation } from 'react-i18next';
 import StarIcon from '@mui/icons-material/Star';
 import { useSyntheticDataForm } from './useSyntheticDataForm';
-import synthetic, { layout, metrics, limits } from './styles';
+import synthetic from './styles';
 
 interface SyntheticDataFormProps {
   sourceJobId?: string;
 }
+const metrics = {
+  estimateMultiplier: 2.3,
+  kb: 1024,
+  mbDivider: 1000,
+};
+
+const limits = {
+  maxRecords: 100000,
+};
 
 const OUTPUT_FORMATS = [{ value: 'csv' }, { value: 'json' }, { value: 'xlsx' }];
 
@@ -48,24 +57,8 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
       <Box sx={synthetic.pageInner}>
         <Box sx={synthetic.container}>
           <Box sx={synthetic.titleGroup}>
-            <Typography
-              sx={(theme) => ({
-                fontWeight: 600,
-                color: theme.palette.text.primary,
-                fontSize: '18px',
-                lineHeight: '26px',
-              })}
-            >
-              {t('syntheticData.generationSettings')}
-            </Typography>
-            <Typography
-              sx={(theme) => ({
-                color: theme.palette.text.secondary,
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: 400,
-              })}
-            >
+            <Typography sx={synthetic.title}>{t('syntheticData.generationSettings')}</Typography>
+            <Typography sx={synthetic.subtitle}>
               {t('syntheticData.configureParameters')}
             </Typography>
           </Box>
@@ -73,14 +66,7 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
           <Paper sx={synthetic.paper}>
             <Box>
               <Box sx={synthetic.headerRow}>
-                <Typography
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: '16px',
-                    lineHeight: '24px',
-                    color: (theme) => theme.palette.text.secondary,
-                  }}
-                >
+                <Typography sx={synthetic.headerTitle}>
                   {t('syntheticData.configuration')}
                 </Typography>
                 <Box sx={synthetic.dividerLine} />
@@ -88,15 +74,7 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
             </Box>
 
             <Box>
-              <Typography
-                sx={(theme) => ({
-                  fontWeight: 500,
-                  mb: layout.fieldGap,
-                  fontSize: '12px',
-                  lineHeight: '16px',
-                  color: theme.palette.text.secondary,
-                })}
-              >
+              <Typography sx={synthetic.numberLabel}>
                 {t('syntheticData.numberOfRecords')}
               </Typography>
               <TextField
@@ -108,34 +86,14 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                 inputProps={{ min: 1, max: limits.maxRecords }}
                 sx={synthetic.textField}
               />
-              <Typography
-                sx={(theme) => ({
-                  display: 'block',
-                  mt: 0.5,
-                  color: theme.palette.text.secondary,
-                  fontSize: '12px',
-                })}
-              >
-                {t('syntheticData.maxRecords')}
-              </Typography>
+              <Typography sx={synthetic.helperText}>{t('syntheticData.maxRecords')}</Typography>
             </Box>
 
             <Box sx={synthetic.twoColumnRow}>
               <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={(theme) => ({
-                    fontWeight: 500,
-                    mb: layout.fieldGap,
-                    fontSize: '12px',
-                    lineHeight: '16px',
-                    color: theme.palette.text.secondary,
-                  })}
-                >
+                <Typography sx={synthetic.numberLabel}>
                   {t('syntheticData.chooseFramework')}
-                  <Typography
-                    component="span"
-                    sx={(theme) => ({ color: theme.palette.error.main })}
-                  >
+                  <Typography component="span" sx={synthetic.requiredAsterisk}>
                     *
                   </Typography>
                 </Typography>
@@ -153,15 +111,10 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                     {frameworks.map((f) => (
                       <MenuItem key={f.value} value={f.value}>
                         <Box>
-                          <Typography sx={{ fontSize: '16px', lineHeight: '24px' }}>
+                          <Typography sx={synthetic.frameworkLabel}>
                             {t(`syntheticData.frameworks.${f.value}.label`, String(f.value))}
                           </Typography>
-                          <Typography
-                            sx={(theme) => ({
-                              color: theme.palette.text.secondary,
-                              fontSize: '12px',
-                            })}
-                          >
+                          <Typography sx={synthetic.frameworkDesc}>
                             {t(`syntheticData.frameworks.${f.value}.desc`)}
                           </Typography>
                         </Box>
@@ -172,15 +125,7 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
               </Box>
 
               <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={(theme) => ({
-                    fontWeight: 500,
-                    mb: layout.fieldGap,
-                    fontSize: '12px',
-                    lineHeight: '25px',
-                    color: theme.palette.text.secondary,
-                  })}
-                >
+                <Typography sx={synthetic.formatLabel}>
                   {t('syntheticData.chooseFormat')}
                 </Typography>
                 <FormControl fullWidth size="small">
@@ -206,23 +151,10 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
 
             <Box sx={synthetic.previewSection}>
               <Box>
-                <Typography
-                  sx={(theme) => ({
-                    fontWeight: 500,
-                    color: theme.palette.text.primary,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                  })}
-                >
+                <Typography sx={synthetic.previewTitle}>
                   {t('syntheticData.useDeidentified')}
                 </Typography>
-                <Typography
-                  sx={(theme) => ({
-                    color: theme.palette.text.secondary,
-                    mt: 0.5,
-                    fontSize: '12px',
-                  })}
-                >
+                <Typography sx={synthetic.previewSubtitle}>
                   {t('syntheticData.usePreviouslyDeidentified')}
                 </Typography>
               </Box>
@@ -245,30 +177,16 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
             </Box>
 
             <Box sx={synthetic.footerRow}>
-              <Typography
-                sx={(theme) => ({ color: theme.palette.text.secondary, fontSize: '12px' })}
-              >
+              <Typography sx={synthetic.footerLabel}>
                 {t('syntheticData.estimatedOutput')}
               </Typography>
-              <Typography
-                sx={{
-                  fontWeight: 600,
-                  color: (theme) => theme.palette.text.secondary,
-                  fontSize: '12px',
-                }}
-              >
+              <Typography sx={synthetic.footerValue}>
                 {(records * metrics.estimateMultiplier) / metrics.mbDivider} MB
               </Typography>
             </Box>
 
             {!isValid && (
-              <Typography
-                sx={(theme) => ({
-                  color: theme.palette.warning.main,
-                  fontSize: '12px',
-                  textAlign: 'right',
-                })}
-              >
+              <Typography sx={synthetic.warningText}>
                 {t('syntheticData.completeRequiredFields')}
               </Typography>
             )}

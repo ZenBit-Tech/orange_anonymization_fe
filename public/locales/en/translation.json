@@ -824,12 +824,6 @@
         "desc": "Applies UK GDPR anonymisation requirements"
       }
     },
-    "drameworks": {
-      "hippa": {
-        "label": "HIPAA",
-        "desc": "Removes all 18 HIPAA identifiers (Safe Harbor)"
-      }
-    },
     "estimatedOutput": "Estimated output:",
     "completeRequiredFields": "Complete required fields to generate dataset",
     "generate": "Generate Synthetic Data",

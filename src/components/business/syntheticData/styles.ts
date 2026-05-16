@@ -7,16 +7,6 @@ export const layout = {
   fieldGap: 1.5,
 };
 
-export const metrics = {
-  estimateMultiplier: 2.3,
-  kb: 1024,
-  mbDivider: 1000,
-};
-
-export const limits = {
-  maxRecords: 100000,
-};
-
 export const synthetic = {
   root: (theme: Theme) => ({
     width: '100%',
@@ -116,6 +106,77 @@ export const synthetic = {
     WebkitBoxOrient: 'vertical' as unknown as string,
     WebkitLineClamp: 2 as unknown as number,
     textOverflow: 'ellipsis',
+  }),
+
+  title: (theme: Theme) => ({
+    fontWeight: 600,
+    color: theme.palette.text.primary,
+    fontSize: '18px',
+    lineHeight: '26px',
+  }),
+
+  subtitle: (theme: Theme) => ({
+    color: theme.palette.text.secondary,
+    fontSize: '14px',
+    lineHeight: '20px',
+    fontWeight: 400,
+  }),
+
+  headerTitle: (theme: Theme) => ({
+    fontWeight: 500,
+    fontSize: '16px',
+    lineHeight: '24px',
+    color: theme.palette.text.secondary,
+  }),
+
+  numberLabel: (theme: Theme) => ({
+    fontWeight: 500,
+    mb: layout.fieldGap,
+    fontSize: '12px',
+    lineHeight: '16px',
+    color: theme.palette.text.secondary,
+  }),
+
+  helperText: (theme: Theme) => ({
+    display: 'block',
+    mt: 0.5,
+    color: theme.palette.text.secondary,
+    fontSize: '12px',
+  }),
+
+  requiredAsterisk: (theme: Theme) => ({ color: theme.palette.error.main }),
+
+  frameworkLabel: () => ({ fontSize: '16px', lineHeight: '24px' }),
+
+  frameworkDesc: (theme: Theme) => ({ color: theme.palette.text.secondary, fontSize: '12px' }),
+
+  formatLabel: (theme: Theme) => ({
+    fontWeight: 500,
+    mb: layout.fieldGap,
+    fontSize: '12px',
+    lineHeight: '25px',
+    color: theme.palette.text.secondary,
+  }),
+
+  previewTitle: (theme: Theme) => ({
+    fontWeight: 500,
+    color: theme.palette.text.primary,
+    fontSize: '14px',
+    lineHeight: '20px',
+  }),
+
+  previewSubtitle: (theme: Theme) => ({
+    color: theme.palette.text.secondary,
+    mt: 0.5,
+    fontSize: '12px',
+  }),
+
+  footerLabel: (theme: Theme) => ({ color: theme.palette.text.secondary, fontSize: '12px' }),
+
+  footerValue: (theme: Theme) => ({
+    fontWeight: 600,
+    color: theme.palette.text.secondary,
+    fontSize: '12px',
   }),
 
   footerRow: () => ({ display: 'flex', justifyContent: 'flex-end', gap: 1 }),
