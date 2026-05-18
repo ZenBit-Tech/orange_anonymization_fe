@@ -8,7 +8,9 @@ import {
   Typography,
 } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { LAYOUT } from '@/theme';
+import { ROUTES } from '@/constants';
 import { useSidebar } from '@/components/layouts/Sidebar/useSidebar';
 import { useState } from 'react';
 import LogoutPopup from '@/components/popups/LogoutPopup';
@@ -94,6 +96,39 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
                 }}
               />
             </ListItemButton>
+          );
+        })}
+
+        {navItems.map((item) => {
+          const active = isActive(item.path);
+          if (!active || item.path !== ROUTES.SYNTHETIC_DATA) return null;
+          return (
+            <List key={`${item.path}-sub`} sx={{ pl: 4 }}>
+              <ListItemButton
+                onClick={() => handleNavigate(ROUTES.SYNTHETIC_DATA)}
+                sx={(theme) => ({
+                  borderRadius: 1,
+                  mb: 0.5,
+                  bgcolor: theme.palette.action.hover,
+                })}
+              >
+                <ListItemIcon
+                  sx={(theme) => ({
+                    color: theme.palette.grey[400],
+                    minWidth: LAYOUT.sidebar.iconMinWidth,
+                  })}
+                >
+                  <SettingsOutlinedIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t('nav.syntheticDataGenerationSettings')}
+                  primaryTypographyProps={{
+                    variant: 'caption',
+                    sx: (theme) => ({ color: theme.palette.grey[400] }),
+                  }}
+                />
+              </ListItemButton>
+            </List>
           );
         })}
       </List>

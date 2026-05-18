@@ -41,6 +41,7 @@
     "deIdentify": "De-Identify",
     "syntheticData": "Synthetic Data",
     "settings": "Settings",
+    "syntheticDataGenerationSettings": "Generation Settings",
     "logout": "Logout",
     "logoutDialog": {
       "title": "Sign out?",
@@ -804,8 +805,52 @@
     "english": "en"
   },
   "syntheticData": {
-    "title": "Synthetic Data Generation",
-    "subtitle": "Generate realistic synthetic patient records",
+    "title": "Synthetic Data Generator",
+    "subtitle": "Generate realistic but completely fake clinical data for development",
+    "generationSettings": "Generation Settings",
+    "configureParameters": "Configure the synthetic data parameters",
+    "dataSource": "Data source",
+    "datasetType": "Dataset type",
+    "uploadYourFile": "Upload your file",
+    "or": "or",
+    "browseFile": "Browse file",
+    "supportedFormats": "Supported formats: .xlsx, .csv, .json — max 5 MB",
+    "useDeidentified": "Use de-identified data as source",
+    "usePreviouslyDeidentified": "Use previously de-identified data",
+    "passedFromCurrentSession": "Passed from current session",
+    "configuration": "Configuration",
+    "numberOfRecords": "Number of Records",
+    "maxRecords": "Max 100,000 records",
+    "chooseFramework": "Choose Framework",
+    "chooseFormat": "Choose Format",
+    "frameworks": {
+      "hipaa": {
+        "label": "HIPAA",
+        "desc": "Removes all 18 HIPAA identifiers (Safe Harbor)"
+      },
+      "eu-gdpr": {
+        "label": "EU GDPR",
+        "desc": "Applies GDPR risk-based anonymisation rules"
+      },
+      "swiss-fadp": {
+        "label": "Swiss FADP",
+        "desc": "Applies Swiss data protection rules (nDSG)"
+      },
+      "uk-gdpr": {
+        "label": "UK DPI",
+        "desc": "Applies UK GDPR anonymisation requirements"
+      }
+    },
+    "estimatedOutput": "Estimated output:",
+    "completeRequiredFields": "Complete required fields to generate dataset",
+    "generate": "Generate Synthetic Data",
+    "generatedSuccess": "Generated successfully",
+    "generating": "Generating...",
+    "tabs": {
+      "settings": "Settings",
+      "generated": "Generated Data"
+    },
+    "generatedPlaceholder": "Generated data will appear here.",
     "settings": {
       "title": "Generation Settings",
       "recordCount": "Number of Records",
