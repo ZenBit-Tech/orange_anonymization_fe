@@ -71,7 +71,7 @@ export const synthetic = {
 
   fieldLabel: (theme: Theme) => ({
     ...theme.typography.labelSm,
-    fontWeight: 500,
+    fontWeight: theme.typography.fontWeightMedium,
     mb: theme.spacing(layout.fieldGap),
     color: theme.palette.text.secondary,
   }),
@@ -116,25 +116,25 @@ export const synthetic = {
 
   title: (theme: Theme) => ({
     ...theme.typography.h6,
-    fontWeight: 600,
+    fontWeight: theme.typography.fontWeightSemiBold,
     color: theme.palette.text.primary,
   }),
 
   subtitle: (theme: Theme) => ({
     ...theme.typography.body2,
     color: theme.palette.text.secondary,
-    fontWeight: 400,
+    fontWeight: theme.typography.fontWeightRegular,
   }),
 
   headerTitle: (theme: Theme) => ({
     ...theme.typography.bodyMd,
-    fontWeight: 500,
+    fontWeight: theme.typography.fontWeightMedium,
     color: theme.palette.text.secondary,
   }),
 
   numberLabel: (theme: Theme) => ({
     ...theme.typography.labelSm,
-    fontWeight: 500,
+    fontWeight: theme.typography.fontWeightMedium,
     mb: theme.spacing(layout.fieldGap),
     color: theme.palette.text.secondary,
   }),
@@ -157,14 +157,14 @@ export const synthetic = {
 
   formatLabel: (theme: Theme) => ({
     ...theme.typography.labelSm,
-    fontWeight: 500,
+    fontWeight: theme.typography.fontWeightMedium,
     mb: theme.spacing(layout.fieldGap),
     color: theme.palette.text.secondary,
   }),
 
   previewTitle: (theme: Theme) => ({
     ...theme.typography.body2,
-    fontWeight: 500,
+    fontWeight: theme.typography.fontWeightMedium,
     color: theme.palette.text.primary,
   }),
 
@@ -181,7 +181,7 @@ export const synthetic = {
 
   footerValue: (theme: Theme) => ({
     ...theme.typography.labelSm,
-    fontWeight: 600,
+    fontWeight: theme.typography.fontWeightSemiBold,
     color: theme.palette.text.secondary,
   }),
 
