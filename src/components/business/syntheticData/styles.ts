@@ -1,4 +1,7 @@
 import type { Theme } from '@mui/material/styles';
+import { BORDERS } from '@/theme';
+
+const LOCAL_RADIUS = 2;
 
 export const layout = {
   cardWidth: 1040,
@@ -20,8 +23,8 @@ export const synthetic = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '24px 32px',
-    gap: '16px',
+    padding: theme.spacing(3, 4),
+    gap: theme.spacing(2),
     backgroundColor: theme.palette.background.default,
     overflowY: 'auto',
     flex: 1,
@@ -35,37 +38,41 @@ export const synthetic = {
     gap: layout.gap,
   }),
 
-  titleGroup: () => ({
+  titleGroup: (theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
-    gap: 0.5,
+    gap: theme.spacing(0.5),
   }),
 
   paper: (theme: Theme) => ({
     width: '100%',
-    padding: layout.contentPadding,
+    padding: theme.spacing(layout.contentPadding),
     backgroundColor: theme.palette.background.paper,
-    border: `1.5px solid ${theme.palette.divider}`,
+    border: `${BORDERS.card}px solid ${theme.palette.divider}`,
     boxShadow: theme.customShadows?.card ?? 'none',
-    borderRadius: '8px',
+    borderRadius: LOCAL_RADIUS,
     display: 'flex',
     flexDirection: 'column',
-    gap: layout.gap,
+    gap: theme.spacing(layout.gap),
   }),
 
-  headerRow: () => ({ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }),
+  headerRow: (theme: Theme) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    mb: theme.spacing(1),
+  }),
 
   dividerLine: (theme: Theme) => ({
     flex: 1,
-    height: '1px',
+    height: theme.spacing(0.125),
     backgroundColor: theme.palette.grey[100],
   }),
 
   fieldLabel: (theme: Theme) => ({
+    ...theme.typography.labelSm,
     fontWeight: 500,
-    mb: layout.fieldGap,
-    fontSize: '12px',
-    lineHeight: '16px',
+    mb: theme.spacing(layout.fieldGap),
     color: theme.palette.text.secondary,
   }),
 
@@ -73,33 +80,32 @@ export const synthetic = {
     '& .MuiOutlinedInput-root': { backgroundColor: theme.palette.background.default },
   }),
 
-  twoColumnRow: () => ({ display: 'flex', gap: layout.gap }),
+  twoColumnRow: (theme: Theme) => ({ display: 'flex', gap: theme.spacing(layout.gap) }),
 
   previewSection: (theme: Theme) => ({
-    p: 2,
+    padding: theme.spacing(2),
     backgroundColor: theme.palette.grey[100],
     border: `1px solid ${theme.palette.grey[100]}`,
     boxShadow: theme.customShadows?.sm ?? 'none',
-    borderRadius: '8px',
+    borderRadius: LOCAL_RADIUS,
     display: 'flex',
     flexDirection: 'column',
-    gap: 0.5,
+    gap: theme.spacing(0.5),
   }),
 
   previewBox: (theme: Theme) => ({
-    p: 1.5,
-    minHeight: '72px',
+    padding: theme.spacing(1.5),
+    minHeight: theme.spacing(9),
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.divider}`,
-    borderRadius: '8px',
+    borderRadius: LOCAL_RADIUS,
     display: 'flex',
     alignItems: 'flex-start',
   }),
 
-  previewText: () => ({
+  previewText: (theme: Theme) => ({
     width: '100%',
-    fontSize: '12px',
-    lineHeight: '16px',
+    ...theme.typography.labelSm,
     whiteSpace: 'pre-wrap',
     overflow: 'hidden',
     display: '-webkit-box',
@@ -109,83 +115,91 @@ export const synthetic = {
   }),
 
   title: (theme: Theme) => ({
+    ...theme.typography.h6,
     fontWeight: 600,
     color: theme.palette.text.primary,
-    fontSize: '18px',
-    lineHeight: '26px',
   }),
 
   subtitle: (theme: Theme) => ({
+    ...theme.typography.body2,
     color: theme.palette.text.secondary,
-    fontSize: '14px',
-    lineHeight: '20px',
     fontWeight: 400,
   }),
 
   headerTitle: (theme: Theme) => ({
+    ...theme.typography.bodyMd,
     fontWeight: 500,
-    fontSize: '16px',
-    lineHeight: '24px',
     color: theme.palette.text.secondary,
   }),
 
   numberLabel: (theme: Theme) => ({
+    ...theme.typography.labelSm,
     fontWeight: 500,
-    mb: layout.fieldGap,
-    fontSize: '12px',
-    lineHeight: '16px',
+    mb: theme.spacing(layout.fieldGap),
     color: theme.palette.text.secondary,
   }),
 
   helperText: (theme: Theme) => ({
     display: 'block',
-    mt: 0.5,
+    mt: theme.spacing(0.5),
     color: theme.palette.text.secondary,
-    fontSize: '12px',
+    ...theme.typography.labelSm,
   }),
 
   requiredAsterisk: (theme: Theme) => ({ color: theme.palette.error.main }),
 
-  frameworkLabel: () => ({ fontSize: '16px', lineHeight: '24px' }),
+  frameworkLabel: (theme: Theme) => ({ ...theme.typography.bodyMd }),
 
-  frameworkDesc: (theme: Theme) => ({ color: theme.palette.text.secondary, fontSize: '12px' }),
+  frameworkDesc: (theme: Theme) => ({
+    color: theme.palette.text.secondary,
+    ...theme.typography.labelSm,
+  }),
 
   formatLabel: (theme: Theme) => ({
+    ...theme.typography.labelSm,
     fontWeight: 500,
-    mb: layout.fieldGap,
-    fontSize: '12px',
-    lineHeight: '25px',
+    mb: theme.spacing(layout.fieldGap),
     color: theme.palette.text.secondary,
   }),
 
   previewTitle: (theme: Theme) => ({
+    ...theme.typography.body2,
     fontWeight: 500,
     color: theme.palette.text.primary,
-    fontSize: '14px',
-    lineHeight: '20px',
   }),
 
   previewSubtitle: (theme: Theme) => ({
     color: theme.palette.text.secondary,
-    mt: 0.5,
-    fontSize: '12px',
+    mt: theme.spacing(0.5),
+    ...theme.typography.labelSm,
   }),
 
-  footerLabel: (theme: Theme) => ({ color: theme.palette.text.secondary, fontSize: '12px' }),
+  footerLabel: (theme: Theme) => ({
+    color: theme.palette.text.secondary,
+    ...theme.typography.labelSm,
+  }),
 
   footerValue: (theme: Theme) => ({
+    ...theme.typography.labelSm,
     fontWeight: 600,
     color: theme.palette.text.secondary,
-    fontSize: '12px',
   }),
 
-  footerRow: () => ({ display: 'flex', justifyContent: 'flex-end', gap: 1 }),
+  footerRow: (theme: Theme) => ({
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: theme.spacing(1),
+  }),
 
-  actionRow: () => ({ display: 'flex', justifyContent: 'flex-end', pt: 2 }),
+  actionRow: (theme: Theme) => ({
+    display: 'flex',
+    justifyContent: 'flex-end',
+    pt: theme.spacing(2),
+  }),
 
   generateButton: (theme: Theme) => ({
-    width: '249px',
-    height: '40px',
+    width: theme.spacing(31),
+    height: theme.spacing(5),
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.background.paper,
     border: `2px solid ${theme.palette.primary.main}`,
@@ -198,15 +212,14 @@ export const synthetic = {
       color: theme.palette.grey[400],
       borderColor: theme.palette.grey[300],
     },
-    fontSize: '14px',
-    fontWeight: 500,
+    ...theme.typography.button,
     lineHeight: '20px',
     textTransform: 'none',
   }),
 
   warningText: (theme: Theme) => ({
     color: theme.palette.warning.main,
-    fontSize: '12px',
+    ...theme.typography.labelSm,
     textAlign: 'right',
   }),
 };

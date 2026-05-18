@@ -163,10 +163,8 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                 <Typography
                   title={previewLoading ? t('common.loading') : (deidentifiedPreview ?? '')}
                   sx={(theme) => ({
-                    ...synthetic.previewText(),
-                    color: deidentifiedPreview
-                      ? theme.palette.text.secondary
-                      : theme.palette.text.secondary,
+                    ...synthetic.previewText(theme),
+                    color: theme.palette.text.secondary,
                   })}
                 >
                   {previewLoading
