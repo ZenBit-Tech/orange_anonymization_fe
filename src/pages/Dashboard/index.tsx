@@ -9,9 +9,9 @@ import DescriptionIcon from '@/assets/icons/dashboard/MetricCard/description.svg
 import ManageSearchIcon from '@/assets/icons/dashboard/MetricCard/manage_search.svg?react';
 import VerifiedIcon from '@/assets/icons/dashboard/MetricCard/verified.svg?react';
 
+import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
 import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
 import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
-import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
 
 import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 
@@ -23,7 +23,9 @@ import { ActivityChart } from './components/ActivityChart';
 import { ChartControls } from './components/ActivityChart/ChartControls';
 import { DashboardFilters } from './components/DashboardFilters';
 import { FRAMEWORK_VALUES, type FrameworkValue } from './components/DashboardFilters/types';
-import { DistributionChart } from './components/DistributionChart';
+import { DeIdentificationChart } from './components/DistributionCharts/DeIdentificationChart';
+import { ComplianceChart } from './components/DistributionCharts/ComplianceChart';
+import { EntityTypesChart } from './components/DistributionCharts/EntityTypesChart';
 
 import {
   CHART_RANGES,
@@ -139,27 +141,33 @@ const Dashboard: React.FC = () => {
           icon={<DeIdentificationIcon />}
           title={t('dashboard.emptyState.deIdentification.title')}
           subtitle={t('dashboard.emptyState.deIdentification.subtitle')}
+          contentSubtitle={t('dashboard.emptyState.deIdentification.contentSubtitle')}
           state={state}
+          hasData={strategiesDistribution.length > 0}
         >
-          <DistributionChart data={strategiesDistribution} />
+          <DeIdentificationChart data={strategiesDistribution} />
         </EmptyStateCard>
 
         <EmptyStateCard
           icon={<FrameworkIcon />}
           title={t('dashboard.emptyState.compliance.title')}
           subtitle={t('dashboard.emptyState.compliance.subtitle')}
+          contentSubtitle={t('dashboard.emptyState.compliance.contentSubtitle')}
           state={state}
+          hasData={frameworksDistribution.length > 0}
         >
-          <DistributionChart data={frameworksDistribution} />
+          <ComplianceChart data={frameworksDistribution} />
         </EmptyStateCard>
 
         <EmptyStateCard
           icon={<EntityIcon />}
           title={t('dashboard.emptyState.entityTypes.title')}
           subtitle={t('dashboard.emptyState.entityTypes.subtitle')}
+          contentSubtitle={t('dashboard.emptyState.entityTypes.contentSubtitle')}
           state={state}
+          hasData={entitiesDistribution.length > 0}
         >
-          <DistributionChart data={entitiesDistribution} />
+          <EntityTypesChart data={entitiesDistribution} />
         </EmptyStateCard>
       </BottomGrid>
 

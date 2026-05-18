@@ -337,15 +337,18 @@
       "noAnalysesFound": "No analyses found",
       "deIdentification": {
         "title": "De-Identification Method Usage",
-        "subtitle": "Methods will appear after your first analysis"
+        "subtitle": "Methods will appear after your first analysis",
+        "contentSubtitle": "Popular methods applied to detected entities"
       },
       "compliance": {
         "title": "Compliance Framework Usage",
-        "subtitle": "Framework distribution will appear after your first analysis"
+        "subtitle": "Framework distribution will appear after your first analysis",
+        "contentSubtitle": "Distribution of frameworks applied across analyses"
       },
       "entityTypes": {
         "title": "Entity Types Detected",
-        "subtitle": "Entity breakdown will appear after your first analysis"
+        "subtitle": "Entity breakdown will appear after your first analysis",
+        "contentSubtitle": "Distribution of PII entities found in documents"
       }
     }
   },

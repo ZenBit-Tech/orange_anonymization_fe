@@ -139,6 +139,19 @@ declare module '@mui/material/styles' {
     dark: string;
     backdrop: string;
     greenOpacity: string;
+
+    charts: {
+      compliance: {
+        hipaa: string;
+        gdpr: string;
+        ukDpi: string;
+        swissFadp: string;
+      };
+      deIdentification: string;
+      entityBar: string;
+      grid: string;
+    };
+
     whiteOpacity: {
       8: string;
       38: string;
@@ -159,6 +172,19 @@ declare module '@mui/material/styles' {
     accent?: PaletteOptions['primary'];
     neutral?: PaletteOptions['primary'];
     dark?: string;
+
+    charts?: {
+      compliance?: {
+        hipaa?: string;
+        gdpr?: string;
+        ukDpi?: string;
+        swissFadp?: string;
+      };
+      deIdentification?: string;
+      entityBar?: string;
+      grid?: string;
+    };
+
     backdrop?: string;
     greenOpacity?: string;
     whiteOpacity?: {
@@ -333,6 +359,19 @@ const BRAND = {
     800: '#1E293B',
     900: '#0F172A',
   },
+  charts: {
+    compliance: {
+      hipaa: '#01132F',
+      gdpr: '#1B3A6B',
+      ukDpi: '#00BFA5',
+      swissFadp: '#008C78',
+    },
+
+    deIdentification: '#00BFA5',
+    entityBar: '#1B3A6B',
+
+    grid: '#E5E7EB',
+  },
 };
 
 export const theme = createTheme({
@@ -357,6 +396,7 @@ export const theme = createTheme({
     warning: BRAND.warning,
     info: BRAND.info,
     error: BRAND.error,
+    charts: BRAND.charts,
     background: {
       default: BRAND.grey[50],
       paper: WHITE,
