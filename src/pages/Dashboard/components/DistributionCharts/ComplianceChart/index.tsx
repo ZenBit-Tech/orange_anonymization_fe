@@ -32,12 +32,7 @@ interface PieLabelProps {
 }
 
 const RADIAN = Math.PI / 180;
-const OFFSET = 24;
-const DEFAULT_OUTER_RADIUS = 90;
-const DEFAULT_INNER_RADIUS = 65;
-const LABEL_Y_OFFSET = 18;
-const TEXT_GAP = 4;
-const LABEL_FONT_SIZE = 12;
+const OFFSET = 22;
 const LABEL_FONT_WEIGHT = 600;
 const PERCENT_FONT_WEIGHT = 700;
 const LABEL_STROKE_WIDTH = 1.5;
@@ -47,24 +42,24 @@ const TOP_OFFSET_MIN_ANGLE = 60;
 const TOP_OFFSET_MAX_ANGLE = 120;
 const BOTTOM_LINE_MIN_ANGLE = 240;
 const BOTTOM_LINE_MAX_ANGLE = 320;
-const TOP_RIGHT_X_OFFSET = 10;
+const TOP_RIGHT_X_OFFSET = 8;
 const TOP_RIGHT_Y_OFFSET = 8;
-const BOTTOM_EXTRA_LINE_LENGTH = 36;
-const CHART_HEIGHT = 280;
-const LEGEND_HEIGHT = 36;
+const BOTTOM_EXTRA_LINE_LENGTH = 30;
 
 const PIE_CHART_MARGIN = {
   top: 0,
+  right: 0,
   bottom: 0,
+  left: 0,
 };
 
 const getSmartYOffset = (angle: number) => {
   if (angle > TOP_OFFSET_MIN_ANGLE && angle < TOP_OFFSET_MAX_ANGLE) {
-    return -18;
+    return -14;
   }
 
   if (angle > 240 && angle < 300) {
-    return 18;
+    return 14;
   }
 
   return 0;
@@ -91,25 +86,6 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
     return () => observer.disconnect();
   }, []);
 
-  const chartConfig = useMemo(() => {
-    if (!containerWidth) {
-      return {
-        outerRadius: DEFAULT_OUTER_RADIUS,
-        innerRadius: DEFAULT_INNER_RADIUS,
-        lineLength: 80,
-      };
-    }
-
-    const availableWidth = containerWidth * 0.42;
-    const outerRadius = Math.max(48, Math.min(DEFAULT_OUTER_RADIUS, availableWidth / 2));
-
-    return {
-      outerRadius,
-      innerRadius: outerRadius * 0.72,
-      lineLength: Math.max(32, containerWidth * 0.1),
-    };
-  }, [containerWidth]);
-
   const sortedData = useMemo(() => {
     const cloned = [...data];
     const swissIndex = cloned.findIndex((i) => i.name === 'Swiss FADP');
@@ -121,6 +97,29 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
 
     return cloned;
   }, [data]);
+
+  const isSingleItem = sortedData.length === 1;
+  const chartConfig = useMemo(() => {
+    const safeWidth = Math.max(containerWidth, 240);
+
+    const isMobile = safeWidth < 360;
+    const isTablet = safeWidth < 500;
+    const reservedSpace = isMobile ? 120 : 170;
+    const calculatedRadius = (safeWidth - reservedSpace) / 2;
+
+    const outerRadius = isSingleItem
+      ? Math.max(56, Math.min(120, calculatedRadius))
+      : Math.max(46, Math.min(100, calculatedRadius));
+
+    return {
+      outerRadius,
+      innerRadius: outerRadius * 0.72,
+      lineLength: isSingleItem ? (isMobile ? 40 : 58) : isMobile ? 26 : isTablet ? 42 : 60,
+      fontSize: isMobile ? 9 : isTablet ? 11 : 13,
+      labelYOffset: isMobile ? 14 : 18,
+      percentYOffset: isMobile ? 2 : 4,
+    };
+  }, [containerWidth, isSingleItem]);
 
   const colors = useMemo<string[]>(
     () => [
@@ -145,6 +144,50 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
       } = props;
 
       const color = colors[index % colors.length] ?? '';
+      const label = formatComplianceName(name);
+
+      if (isSingleItem) {
+        const sx = cx + outerRadius;
+        const sy = cy;
+        const mx = sx + OFFSET;
+        const my = sy;
+        const ex = mx + chartConfig.lineLength;
+        const lineCenterX = (mx + ex) / 2;
+
+        return (
+          <g>
+            <path
+              d={`M ${sx},${sy} L ${mx},${my} L ${ex},${my}`}
+              stroke={color}
+              strokeWidth={LABEL_STROKE_WIDTH}
+              fill="none"
+            />
+
+            <text
+              x={lineCenterX}
+              y={my - chartConfig.labelYOffset}
+              textAnchor="middle"
+              fontWeight={LABEL_FONT_WEIGHT}
+              fontSize={chartConfig.fontSize}
+              fill={color}
+            >
+              {label}
+            </text>
+
+            <text
+              x={lineCenterX}
+              y={my - chartConfig.percentYOffset}
+              textAnchor="middle"
+              fontWeight={PERCENT_FONT_WEIGHT}
+              fontSize={chartConfig.fontSize}
+              fill={color}
+            >
+              {Math.round(percent * 100)}%
+            </text>
+          </g>
+        );
+      }
+
       const angle = ((midAngle % 360) + 360) % 360;
       const yOffset = getSmartYOffset(angle);
       const sx = cx + outerRadius * Math.cos(-midAngle * RADIAN);
@@ -168,7 +211,6 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
         : mx - chartConfig.lineLength - extraLineLength;
 
       const lineCenterX = (mx + ex) / 2;
-      const label = formatComplianceName(name);
 
       return (
         <g>
@@ -181,10 +223,10 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
 
           <text
             x={lineCenterX}
-            y={my - LABEL_Y_OFFSET - TEXT_GAP}
+            y={my - chartConfig.labelYOffset}
             textAnchor="middle"
             fontWeight={LABEL_FONT_WEIGHT}
-            fontSize={LABEL_FONT_SIZE}
+            fontSize={chartConfig.fontSize}
             fill={color}
           >
             {label}
@@ -192,10 +234,10 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
 
           <text
             x={lineCenterX}
-            y={my - TEXT_GAP}
+            y={my - chartConfig.percentYOffset}
             textAnchor="middle"
             fontWeight={PERCENT_FONT_WEIGHT}
-            fontSize={LABEL_FONT_SIZE}
+            fontSize={chartConfig.fontSize}
             fill={color}
           >
             {Math.round(percent * 100)}%
@@ -203,11 +245,11 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
         </g>
       );
     },
-    [chartConfig, colors],
+    [chartConfig, colors, isSingleItem],
   );
 
   return (
-    <ChartContainer ref={containerRef} chartHeight={CHART_HEIGHT} legendHeight={LEGEND_HEIGHT}>
+    <ChartContainer ref={containerRef}>
       <ChartArea>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart margin={PIE_CHART_MARGIN}>
@@ -230,7 +272,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
         </ResponsiveContainer>
       </ChartArea>
 
-      <LegendContainer height={LEGEND_HEIGHT}>
+      <LegendContainer>
         {sortedData.map((item, index) => (
           <LegendItem key={item.name}>
             <LegendDot color={colors[index % colors.length]} />
