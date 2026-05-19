@@ -2,9 +2,10 @@ import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react'
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-import { useTheme } from '@mui/material';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 import type { DistributionData } from '@/services/dashboard/types';
+import { formatComplianceName } from '@/utils/formatChartLabel';
 
 import {
   ChartContainer,
@@ -14,8 +15,6 @@ import {
   LegendDot,
   LegendText,
 } from './styled';
-
-import { formatComplianceName } from '@/utils/formatChartLabel';
 
 interface Props {
   data: DistributionData[];
@@ -69,6 +68,16 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
   const theme = useTheme();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
+  const formattedData = useMemo(() => {
+    return data.map((item) => ({
+      key: item.key,
+      name: formatComplianceName(item.key),
+      count: item.count,
+    }));
+  }, [data]);
 
   useEffect(() => {
     const element = containerRef.current;
@@ -87,29 +96,26 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
   }, []);
 
   const sortedData = useMemo(() => {
-    const cloned = [...data];
-    const swissIndex = cloned.findIndex((i) => i.name === 'Swiss FADP');
-    const ukIndex = cloned.findIndex((i) => i.name === 'UK DPI');
+    const cloned = [...formattedData];
+    const swissIndex = cloned.findIndex((i) => i.key === 'swiss_fadp');
+    const ukIndex = cloned.findIndex((i) => i.key === 'uk_dpi');
 
     if (swissIndex !== -1 && ukIndex !== -1) {
       [cloned[swissIndex], cloned[ukIndex]] = [cloned[ukIndex], cloned[swissIndex]];
     }
 
     return cloned;
-  }, [data]);
+  }, [formattedData]);
 
   const isSingleItem = sortedData.length === 1;
   const chartConfig = useMemo(() => {
     const safeWidth = Math.max(containerWidth, 240);
-
-    const isMobile = safeWidth < 360;
-    const isTablet = safeWidth < 500;
     const reservedSpace = isMobile ? 120 : 170;
     const calculatedRadius = (safeWidth - reservedSpace) / 2;
 
     const outerRadius = isSingleItem
-      ? Math.max(44, Math.min(80, calculatedRadius))
-      : Math.max(46, Math.min(100, calculatedRadius));
+      ? Math.max(36, Math.min(isTablet ? 56 : 80, calculatedRadius))
+      : Math.max(38, Math.min(isTablet ? 72 : 100, calculatedRadius));
 
     return {
       outerRadius,
@@ -119,7 +125,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
       labelYOffset: isMobile ? 14 : 18,
       percentYOffset: isMobile ? 2 : 4,
     };
-  }, [containerWidth, isSingleItem]);
+  }, [containerWidth, isSingleItem, isMobile, isTablet]);
 
   const colors = useMemo<string[]>(
     () => [
@@ -265,7 +271,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
               label={renderLabel}
             >
               {sortedData.map((entry, index) => (
-                <Cell key={entry.name} fill={colors[index % colors.length]} />
+                <Cell key={entry.key} fill={colors[index % colors.length]} />
               ))}
             </Pie>
           </PieChart>
@@ -278,7 +284,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
             <LegendDot color={colors[index % colors.length]} />
 
             <LegendText color={theme.palette.neutral[500] ?? ''}>
-              {formatComplianceName(item.name)}
+              {formatComplianceName(item.key)}
             </LegendText>
           </LegendItem>
         ))}

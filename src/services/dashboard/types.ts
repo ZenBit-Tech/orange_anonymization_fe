@@ -14,7 +14,7 @@ export interface ChartData {
 }
 
 export interface DistributionData {
-  name: string;
+  key: string;
   count: number;
 }
 

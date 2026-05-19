@@ -105,6 +105,7 @@ export const BottomGrid = styled(Box)(({ theme }) => ({
   gridTemplateColumns: 'repeat(3, 1fr)',
   gridTemplateRows: 'auto auto auto',
   columnGap: theme.spacing(2),
+  alignItems: 'start',
 
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',

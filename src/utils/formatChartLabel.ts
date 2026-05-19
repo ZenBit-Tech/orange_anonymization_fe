@@ -3,15 +3,12 @@ export const formatComplianceName = (value: string): string => {
 
   const map: Record<string, string> = {
     hipaa: 'HIPAA',
-    gdpr: 'GDPR',
-    'uk dpi': 'UK DPI',
-    'swiss fadp': 'Swiss FADP',
-    replace: 'Replace',
-    mask: 'Mask',
-    redact: 'Redact',
+    gdpr: 'EU GDPR',
+    uk_dpi: 'UK DPI',
+    swiss_fadp: 'Swiss FADP',
   };
 
-  const normalized = value.toLowerCase();
+  const normalized = value.trim().toLowerCase();
 
   return map[normalized] ?? capitalizeWords(value);
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   ResponsiveContainer,
@@ -38,6 +39,17 @@ const CHART_MARGIN = {
 
 const TICKS = [0, 50, 100, 150, 200, 250];
 
+const ALL_STRATEGIES = [
+  'Redact',
+  'Replace',
+  'Mask',
+  'Hash',
+  'Synthetic',
+  'Generalise',
+  'Pseudonymise',
+  'NLP',
+] as const;
+
 const generateHorizontalCoordinates = (height: number, itemsCount: number, topOffset: number) => {
   const step = height / itemsCount;
 
@@ -46,33 +58,21 @@ const generateHorizontalCoordinates = (height: number, itemsCount: number, topOf
 
 export const DeIdentificationChart: React.FC<Props> = ({ data }) => {
   const theme = useTheme();
-
-  const ALL_STRATEGIES = [
-    'Redact',
-    'Replace',
-    'Mask',
-    'Hash',
-    'Synthetic',
-    'Token',
-    'Generalise',
-    'Pseudonymise',
-    'NLP',
-  ] as const;
+  const { t } = useTranslation();
 
   const STRATEGY_LABELS: Record<string, string> = {
-    Redact: 'Redact',
-    Replace: 'Replace',
-    Mask: 'Mask',
-    Hash: 'Hash',
-    Synthetic: 'Synthetic',
-    Token: 'Tokenization',
-    Generalise: 'Generalise',
-    Pseudonymise: 'Pseudonymise',
-    NLP: 'NLP redaction',
+    Redact: t('dashboard.deIdentificationChart.strategies.redact'),
+    Replace: t('dashboard.deIdentificationChart.strategies.replace'),
+    Mask: t('dashboard.deIdentificationChart.strategies.mask'),
+    Hash: t('dashboard.deIdentificationChart.strategies.hash'),
+    Synthetic: t('dashboard.deIdentificationChart.strategies.synthetic'),
+    Generalise: t('dashboard.deIdentificationChart.strategies.generalise'),
+    Pseudonymise: t('dashboard.deIdentificationChart.strategies.pseudonymise'),
+    NLP: t('dashboard.deIdentificationChart.strategies.nlp'),
   };
 
   const normalizedData = ALL_STRATEGIES.map((key) => {
-    const found = data.find((d) => d.name === key);
+    const found = data.find((d) => d.key === key);
 
     return {
       name: STRATEGY_LABELS[key],

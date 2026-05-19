@@ -129,8 +129,8 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
 
       return {
         date: formattedDate,
-        documents: existingData?.documents ?? null,
-        entities: existingData?.entities ?? null,
+        documents: existingData?.documents ?? 0,
+        entities: existingData?.entities ?? 0,
       };
     });
   }, [dataMap, from, to]);

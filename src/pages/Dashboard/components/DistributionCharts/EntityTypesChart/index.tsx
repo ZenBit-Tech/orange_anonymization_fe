@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   ResponsiveContainer,
@@ -23,18 +24,14 @@ interface Props {
   data: DistributionData[];
 }
 
-const COLLAPSED_ITEMS_COUNT = 6;
-
+const COLLAPSED_ITEMS_COUNT = 7;
 const BAR_SIZE = 16;
 const BAR_GAP = 24;
-
 const MAX_DOMAIN = 250;
 const GRID_STROKE_WIDTH = 1;
 const GRID_DASH_ARRAY = '3 3';
-
 const Y_AXIS_WIDTH = 110;
 const ROW_HEIGHT = 32;
-
 const BAR_RADIUS: [number, number, number, number] = [0, 4, 4, 0];
 
 const CHART_MARGIN = {
@@ -45,11 +42,6 @@ const CHART_MARGIN = {
 };
 
 const TICKS = [0, 50, 100, 150, 200, 250];
-
-const SHOW_MORE_BUTTON_LABELS = {
-  showLess: 'Show less',
-  showAll: () => 'Show all 18 entity types',
-};
 
 const ALL_ENTITY_TYPES = [
   'PERSON',
@@ -72,27 +64,6 @@ const ALL_ENTITY_TYPES = [
   'FREE_TEXT',
 ] as const;
 
-const ENTITY_LABELS: Record<string, string> = {
-  PERSON: 'Person',
-  DATE_TIME: 'Date / Time',
-  EMAIL_ADDRESS: 'Email',
-  PHONE_NUMBER: 'Phone',
-  LOCATION: 'Location',
-  US_SSN: 'SSN',
-  MEDICAL_RECORD_NUMBER: 'MRN',
-  ORGANIZATION: 'Organisation',
-  IP_ADDRESS: 'IP Address',
-  DEVICE_ID: 'Device ID',
-  US_PASSPORT: 'Passport',
-  NATIONAL_ID: 'National ID',
-  CREDIT_CARD: 'Credit Card',
-  IBAN_CODE: 'Bank Account',
-  GEOPOINT: 'Geopoint',
-  BIOMETRIC: 'Bio. Data',
-  PHOTO: 'Photo/Image',
-  FREE_TEXT: 'Free Text PHI',
-};
-
 const generateHorizontalCoordinates = (height: number, itemsCount: number, topOffset: number) => {
   const step = height / itemsCount;
 
@@ -102,17 +73,24 @@ const generateHorizontalCoordinates = (height: number, itemsCount: number, topOf
 export const EntityTypesChart: React.FC<Props> = ({ data }) => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
+
+  const showAllLabel = t('dashboard.entityTypesChart.showAll', {
+    count: ALL_ENTITY_TYPES.length,
+  });
+
+  const showLessLabel = t('dashboard.entityTypesChart.showLess');
 
   const normalizedData = useMemo(() => {
     return ALL_ENTITY_TYPES.map((key) => {
-      const found = data.find((d) => d.name === key);
+      const found = data.find((d) => d.key === key);
 
       return {
-        name: ENTITY_LABELS[key],
+        name: t(`dashboard.entityTypesChart.labels.${key}`, key),
         count: found?.count ?? 0,
       };
     });
-  }, [data]);
+  }, [data, t]);
 
   const visibleData = useMemo(
     () => (expanded ? normalizedData : normalizedData.slice(0, COLLAPSED_ITEMS_COUNT)),
@@ -194,17 +172,17 @@ export const EntityTypesChart: React.FC<Props> = ({ data }) => {
         </BarChart>
       </ResponsiveContainer>
 
-      {data.length > COLLAPSED_ITEMS_COUNT && (
+      {normalizedData.length > COLLAPSED_ITEMS_COUNT && (
         <ShowMoreContainer>
           <ShowMoreButton onClick={handleToggle}>
             {expanded ? (
               <>
-                {SHOW_MORE_BUTTON_LABELS.showLess}
+                {showLessLabel}
                 <KeyboardArrowUpIcon />
               </>
             ) : (
               <>
-                {SHOW_MORE_BUTTON_LABELS.showAll()}
+                {showAllLabel}
                 <KeyboardArrowDownIcon />
               </>
             )}
