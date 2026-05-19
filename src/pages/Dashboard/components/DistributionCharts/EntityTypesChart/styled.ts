@@ -3,7 +3,7 @@ import { Box, Button, styled } from '@mui/material';
 import { CartesianGrid, XAxis, YAxis, Bar } from 'recharts';
 
 const SHOW_MORE_ICON_MARGIN = 8;
-const SHOW_MORE_MARGIN_TOP = 22;
+const SHOW_MORE_MARGIN_TOP = 35;
 
 export const Wrapper = styled('div')({
   display: 'flex',

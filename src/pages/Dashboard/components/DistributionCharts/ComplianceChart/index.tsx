@@ -108,7 +108,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
     const calculatedRadius = (safeWidth - reservedSpace) / 2;
 
     const outerRadius = isSingleItem
-      ? Math.max(56, Math.min(120, calculatedRadius))
+      ? Math.max(44, Math.min(80, calculatedRadius))
       : Math.max(46, Math.min(100, calculatedRadius));
 
     return {

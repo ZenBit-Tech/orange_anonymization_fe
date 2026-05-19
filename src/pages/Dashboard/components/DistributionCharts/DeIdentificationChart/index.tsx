@@ -27,13 +27,13 @@ const MAX_DOMAIN = 250;
 const GRID_STROKE_WIDTH = 1;
 const GRID_DASH_ARRAY = '3 3';
 const BAR_RADIUS: [number, number, number, number] = [0, 4, 4, 0];
-const Y_AXIS_WIDTH = 120;
+const Y_AXIS_WIDTH = 110;
 
 const CHART_MARGIN = {
   top: 20,
-  right: 16,
-  left: 0,
-  bottom: 8,
+  right: 0,
+  left: -20,
+  bottom: 0,
 };
 
 const TICKS = [0, 50, 100, 150, 200, 250];
@@ -47,16 +47,54 @@ const generateHorizontalCoordinates = (height: number, itemsCount: number, topOf
 export const DeIdentificationChart: React.FC<Props> = ({ data }) => {
   const theme = useTheme();
 
+  const ALL_STRATEGIES = [
+    'Redact',
+    'Replace',
+    'Mask',
+    'Hash',
+    'Synthetic',
+    'Token',
+    'Generalise',
+    'Pseudonymise',
+    'NLP',
+  ] as const;
+
+  const STRATEGY_LABELS: Record<string, string> = {
+    Redact: 'Redact',
+    Replace: 'Replace',
+    Mask: 'Mask',
+    Hash: 'Hash',
+    Synthetic: 'Synthetic',
+    Token: 'Tokenization',
+    Generalise: 'Generalise',
+    Pseudonymise: 'Pseudonymise',
+    NLP: 'NLP redaction',
+  };
+
+  const normalizedData = ALL_STRATEGIES.map((key) => {
+    const found = data.find((d) => d.name === key);
+
+    return {
+      name: STRATEGY_LABELS[key],
+      count: found?.count ?? 0,
+    };
+  });
+
   return (
     <ChartWrapper>
       <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
-        <BarChart data={data} layout="vertical" margin={CHART_MARGIN} barCategoryGap={BAR_GAP}>
+        <BarChart
+          data={normalizedData}
+          layout="vertical"
+          margin={CHART_MARGIN}
+          barCategoryGap={BAR_GAP}
+        >
           <CartesianGrid
             vertical
             stroke={theme.palette.charts.grid}
             strokeDasharray={GRID_DASH_ARRAY}
             horizontalCoordinatesGenerator={({ offset }) =>
-              generateHorizontalCoordinates(offset.height, data.length, offset.top)
+              generateHorizontalCoordinates(offset.height, normalizedData.length, offset.top)
             }
           />
 
