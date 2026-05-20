@@ -4,9 +4,9 @@ import { styled } from '@mui/material/styles';
 import { BORDERS } from '@/theme';
 
 export const CardWrapper = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateRows: 'subgrid',
-  gridRow: 'span 3',
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'start',
   padding: theme.spacing(2),
   backgroundColor: theme.palette.common.white,
   borderRadius: theme.shape.lg,

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { useTheme } from '@mui/material';
+import { CircularProgress, useTheme } from '@mui/material';
 import { eachDayOfInterval, format, startOfDay, subDays, subMonths } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import {
@@ -14,13 +14,16 @@ import {
 } from 'recharts';
 
 import type { ChartData } from '@/services/dashboard/types';
+import type { DashboardState } from '@/pages/Dashboard/types';
 
 import { CHART_CONSTANTS } from './constants';
+
 import {
   CHART_MARGIN,
   ChartEmptyState,
   ChartErrorState,
   ChartWrapper,
+  ChartLoaderWrapper,
   getGridStyles,
   getTooltipStyles,
   getXAxisLine,
@@ -34,7 +37,7 @@ interface ActivityChartProps {
   chartData: ChartData[];
   chartType: ChartType;
   range?: Range;
-  error?: boolean;
+  state: DashboardState;
 }
 
 interface DotProps {
@@ -46,7 +49,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   chartData,
   chartType,
   range = CHART_CONSTANTS.DEFAULT_RANGE,
-  error = false,
+  state,
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -115,7 +118,10 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   }, [chartData]);
 
   const normalizedData = useMemo(() => {
-    const days = eachDayOfInterval({ start: from, end: to });
+    const days = eachDayOfInterval({
+      start: from,
+      end: to,
+    });
 
     return days.map((day) => {
       const formattedDate = format(day, CHART_CONSTANTS.DATE_FORMAT);
@@ -123,8 +129,8 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
 
       return {
         date: formattedDate,
-        documents: existingData?.documents ?? null,
-        entities: existingData?.entities ?? null,
+        documents: existingData?.documents ?? 0,
+        entities: existingData?.entities ?? 0,
       };
     });
   }, [dataMap, from, to]);
@@ -134,25 +140,25 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
     const total = data.length;
 
     if (range === CHART_RANGES.DAYS_7 || range === CHART_RANGES.DAYS_14) {
-      return data.map((i) => i.date);
+      return data.map((item) => item.date);
     }
 
     if (range === CHART_RANGES.DAYS_30) {
       const step = Math.ceil(total / 8);
-      return data.filter((_, i) => i % step === 0).map((i) => i.date);
+      return data.filter((_, index) => index % step === 0).map((item) => item.date);
     }
 
     if (range === CHART_RANGES.MONTHS_3) {
       const step = Math.ceil(total / 10);
-      return data.filter((_, i) => i % step === 0).map((i) => i.date);
+      return data.filter((_, index) => index % step === 0).map((item) => item.date);
     }
 
     if (range === CHART_RANGES.MONTHS_6) {
       const step = Math.ceil(total / 12);
-      return data.filter((_, i) => i % step === 0).map((i) => i.date);
+      return data.filter((_, index) => index % step === 0).map((item) => item.date);
     }
 
-    return data.map((i) => i.date);
+    return data.map((item) => item.date);
   }, [normalizedData, range]);
 
   const isEmptyChart = useMemo(() => {
@@ -174,7 +180,9 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   const renderChartDot =
     (innerRadius: number, opacity: number) =>
     ({ cx, cy }: DotProps) => {
-      if (cx == null || cy == null) return null;
+      if (cx == null || cy == null) {
+        return null;
+      }
 
       return (
         <g>
@@ -197,10 +205,18 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
       );
     };
 
-  if (error) {
+  if (state === 'loading') {
+    return (
+      <ChartLoaderWrapper>
+        <CircularProgress color="inherit" />
+      </ChartLoaderWrapper>
+    );
+  }
+
+  if (state === 'error') {
     return (
       <ChartWrapper>
-        <ChartErrorState>{t('dashboard.chart.error')}</ChartErrorState>
+        <ChartErrorState>{t('dashboard.errors.failedToLoadProcessingActivity')}</ChartErrorState>
       </ChartWrapper>
     );
   }
