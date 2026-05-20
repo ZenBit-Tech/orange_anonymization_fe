@@ -16,6 +16,7 @@ import { PageLoader } from '@/components/common/PageLoader';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
+const AnalysesPage = lazy(() => import('@/pages/AnalysesPage'));
 
 export function AppRoutes() {
   return (
@@ -38,6 +39,7 @@ export function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.ANALYSES} element={<AnalysesPage />} />
             <Route path={ROUTES.DE_IDENTIFY} element={<DeIdentify />} />
             <Route path={ROUTES.SYNTHETIC_DATA} element={<SyntheticData />} />
           </Route>

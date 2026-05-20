@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
@@ -15,14 +16,14 @@ import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-ide
 
 import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 
+import { ROUTES } from '@/constants';
+
 import { EmptyStateCard } from '@/pages/Dashboard/components/EmptyStateCard';
 import { MetricCard } from '@/pages/Dashboard/components/MetricCard';
 import { RecentActivityTable } from '@/pages/Dashboard/components/RecentActivityTable';
 
 import { ActivityChart } from './components/ActivityChart';
 import { ChartControls } from './components/ActivityChart/ChartControls';
-import { DashboardFilters } from './components/DashboardFilters';
-import { FRAMEWORK_VALUES, type FrameworkValue } from './components/DashboardFilters/types';
 
 import {
   CHART_RANGES,
@@ -30,6 +31,9 @@ import {
   type ChartType,
   type Range,
 } from './components/ActivityChart/types';
+
+import { DashboardFilters } from './components/DashboardFilters';
+import { FRAMEWORK_VALUES, type FrameworkValue } from './components/DashboardFilters/types';
 
 import {
   BottomGrid,
@@ -47,13 +51,15 @@ import {
   WelcomeTitle,
   ChartHeaderRow,
   ChartLoaderWrapper,
+  ViewAllButton,
 } from './styled';
 
 import { useDashboard } from './useDashboard';
 
 const Dashboard: React.FC = () => {
-  const { metrics, chartData, isEmpty, loading, error } = useDashboard();
+  const { metrics, chartData, recentActivity, isEmpty, loading, error } = useDashboard();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [chartType, setChartType] = useState<ChartType>(CHART_TYPES.DOCUMENTS);
   const [range, setRange] = useState<Range>(CHART_RANGES.DAYS_7);
   const [framework, setFramework] = useState<FrameworkValue>(FRAMEWORK_VALUES.ALL);
@@ -72,7 +78,7 @@ const Dashboard: React.FC = () => {
             </Box>
           </WelcomeText>
 
-          <NewAnalysisButton startIcon={<AddIcon />}>
+          <NewAnalysisButton startIcon={<AddIcon />} onClick={() => navigate(ROUTES.DE_IDENTIFY)}>
             {t('dashboard.newAnalysis')}
           </NewAnalysisButton>
         </WelcomeBanner>
@@ -164,9 +170,18 @@ const Dashboard: React.FC = () => {
       </BottomGrid>
 
       <RecentActivityCard>
-        <SectionTitle>{t('dashboard.recentActivity.title')}</SectionTitle>
-        <SectionSubtitle>{t('dashboard.recentActivity.subtitle')}</SectionSubtitle>
-        <RecentActivityTable rows={[]} />
+        <ChartHeaderRow>
+          <Box>
+            <SectionTitle>{t('dashboard.recentActivity.title')}</SectionTitle>
+            <SectionSubtitle>{t('dashboard.recentActivity.subtitle')}</SectionSubtitle>
+          </Box>
+
+          <Link to={ROUTES.ANALYSES} style={{ textDecoration: 'none' }}>
+            <ViewAllButton>{t('dashboard.recentActivity.viewAll')}</ViewAllButton>
+          </Link>
+        </ChartHeaderRow>
+
+        <RecentActivityTable rows={recentActivity.slice(0, 5)} />
       </RecentActivityCard>
     </PageWrapper>
   );

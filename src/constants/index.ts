@@ -16,6 +16,7 @@ export const ROUTES = {
   SESSION_EXPIRED: '/session-expired',
   TOKEN: '/auth/verify/token/:token',
   DASHBOARD: '/app',
+  ANALYSES: '/analyses',
   DE_IDENTIFY: '/app/de-identify',
   SYNTHETIC_DATA: '/app/synthetic-data',
 } as const;
