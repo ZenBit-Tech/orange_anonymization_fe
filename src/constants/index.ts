@@ -18,6 +18,7 @@ export const ROUTES = {
   DASHBOARD: '/app',
   DE_IDENTIFY: '/app/de-identify',
   SYNTHETIC_DATA: '/app/synthetic-data',
+  SYNTHETIC_RESULTS: '/app/synthetic-data/:syntheticId',
 } as const;
 
 export const FONT_SIZES = {
