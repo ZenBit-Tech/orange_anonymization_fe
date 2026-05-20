@@ -15,6 +15,8 @@ import {
   WarningAmberOutlined as WarningAmberOutlinedIcon,
   SettingsOutlined as SettingsOutlinedIcon,
   Remove as RemoveIcon,
+  ErrorOutline as ErrorOutlineIcon,
+  Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import {
   Box,
@@ -88,6 +90,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   const [isProcessing, setIsProcessing] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [hasFailedGeneration, setHasFailedGeneration] = useState(false);
   const [results, setResults] = useState<JobResults | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -148,35 +151,45 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
       setResults(response);
       setIsProcessing(false);
       stopPolling();
-    } catch {
+    } catch (err) {
+      console.error('ReviewAndRun.getResults failed for jobId:', jobId, err);
       setIsError(true);
       stopPolling();
     }
   }, [jobId]);
 
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const job = await jobsService.getJobById(jobId);
+  const checkStatus = useCallback(async () => {
+    try {
+      const job = await jobsService.getJobById(jobId);
 
-        if (job.status === JobStatus.SUCCEEDED) {
-          await getResults();
-          dispatch(setJobAC(job));
-        } else if (job.status === JobStatus.FAILED) {
-          setIsError(true);
-          stopPolling();
+      if (job.status === JobStatus.SUCCEEDED) {
+        await getResults();
+        dispatch(setJobAC(job));
+      } else if (job.status === JobStatus.FAILED) {
+        try {
+          const partial = await resultsService.getResults(jobId);
+          setResults(partial);
+        } catch {
+          // Silent catch
         }
-      } catch {
-        handleError('errors.network');
-      }
-    };
 
+        setHasFailedGeneration(true);
+        setIsProcessing(false);
+        stopPolling();
+      }
+    } catch (err) {
+      console.error('ReviewAndRun.checkStatus failed for jobId:', jobId, err);
+      handleError('errors.network');
+    }
+  }, [dispatch, getResults, handleError, jobId]);
+
+  useEffect(() => {
     checkStatus();
 
     intervalRef.current = setInterval(checkStatus, REVIEW_RESULTS_POLL_INTERVAL_MS);
 
     return () => stopPolling();
-  }, [dispatch, getResults, handleError, jobId]);
+  }, [checkStatus]);
 
   const handleSelectOption = (event: SelectChangeEvent<string>) => {
     setSelectedOptionId(event.target.value);
@@ -240,6 +253,20 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const handleCloseSnackbar = (_?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return;
     setSnackbarOpen(false);
+  };
+
+  const handleRetry = async () => {
+    try {
+      setIsProcessing(true);
+      setHasFailedGeneration(false);
+      await jobsService.runAnalysis(jobId, localOriginalText || '');
+      stopPolling();
+      intervalRef.current = setInterval(checkStatus, REVIEW_RESULTS_POLL_INTERVAL_MS);
+      await checkStatus();
+    } catch (e) {
+      console.error('ReviewAndRun.handleRetry failed for jobId:', jobId, e);
+      handleError('errors.network');
+    }
   };
 
   const renderHighlightedText = (text: string, entities: EntityDetection[]) => {
@@ -467,10 +494,20 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
             </Tabs>
 
             <Stack direction="row">
-              <Button startIcon={<ContentCopy />} onClick={onCopy} sx={{ color: 'accent.400' }}>
+              <Button
+                startIcon={<ContentCopy />}
+                onClick={onCopy}
+                sx={{ color: 'accent.400' }}
+                disabled={!results?.mainContent?.anonymizedText}
+              >
                 {t('common.copy')}
               </Button>
-              <Button startIcon={<Download />} onClick={onDownload} sx={{ color: 'accent.400' }}>
+              <Button
+                startIcon={<Download />}
+                onClick={onDownload}
+                sx={{ color: 'accent.400' }}
+                disabled={!results?.mainContent?.anonymizedText}
+              >
                 {t('common.download')}
               </Button>
             </Stack>
@@ -481,9 +518,67 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               sx={{ height: '400px', overflowY: 'auto', bgcolor: 'common.white', p: '40px' }}
               className="scrollbar-md"
             >
-              {activeTab === 'original'
-                ? renderHighlightedText(textToDisplay, results?.entityTable ?? [])
-                : results?.mainContent.anonymizedText}
+              {activeTab === 'original' ? (
+                renderHighlightedText(textToDisplay, results?.entityTable ?? [])
+              ) : results?.mainContent?.anonymizedText ? (
+                results?.mainContent.anonymizedText
+              ) : hasFailedGeneration ? (
+                <Box
+                  sx={{
+                    textAlign: 'center',
+                    py: 6,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <ErrorOutlineIcon sx={{ fontSize: 60, color: 'error.main', mb: 3 }} />
+                  <Typography
+                    sx={{
+                      fontWeight: 'fontWeightBold',
+                      fontSize: FONT_SIZES.xxl,
+                      color: 'neutral.900',
+                      mb: 2,
+                    }}
+                  >
+                    {t('deIdentify.results.failed')}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: FONT_SIZES.md,
+                      color: 'neutral.500',
+                      mb: 4,
+                      maxWidth: '400px',
+                    }}
+                  >
+                    {t('deIdentify.results.failedToGenerate')}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={handleRetry}
+                    sx={{
+                      bgcolor: 'primary.900',
+                      color: 'common.white',
+                      fontWeight: 'fontWeightMedium',
+                      fontSize: FONT_SIZES.sm,
+                      px: 3,
+                      py: 1.2,
+                      borderRadius: '8px',
+                      '&:hover': {
+                        bgcolor: 'primary.800',
+                      },
+                    }}
+                    startIcon={<RefreshIcon />}
+                  >
+                    {t('deIdentify.results.tryAgain')}
+                  </Button>
+                </Box>
+              ) : (
+                <Typography sx={{ color: 'neutral.400' }}>
+                  {t('deIdentify.results.noPreview')}
+                </Typography>
+              )}
             </Box>
           </Box>
         </Box>
