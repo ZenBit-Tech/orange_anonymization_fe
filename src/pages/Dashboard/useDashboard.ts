@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardData } from '@/store/slices/dashboardSlice';
 import type { AppDispatch, RootState } from '@/store/store';
 
+import type { DashboardState } from './types';
+
 export const useDashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -13,13 +15,32 @@ export const useDashboard = () => {
     dispatch(fetchDashboardData());
   }, [dispatch]);
 
-  const recentActivity = useMemo(() => data?.recentActivity ?? [], [data?.recentActivity]);
+  const metrics = data?.metrics ?? null;
+  const chartData = data?.chartData ?? [];
+  const recentActivity = data?.recentActivity ?? [];
+  const strategiesDistribution = data?.strategiesDistribution ?? [];
+  const frameworksDistribution = data?.frameworksDistribution ?? [];
+  const entitiesDistribution = data?.entitiesDistribution ?? [];
+
+  const isEmpty = data?.emptyState ?? true;
+
+  const state = useMemo<DashboardState>(() => {
+    if (loading) return 'loading';
+    if (error) return 'error';
+    if (isEmpty) return 'empty';
+
+    return 'content';
+  }, [loading, error, isEmpty]);
 
   return {
-    metrics: data?.metrics ?? null,
-    chartData: data?.chartData ?? [],
+    metrics,
+    chartData,
     recentActivity,
-    isEmpty: data?.emptyState ?? true,
+    strategiesDistribution,
+    frameworksDistribution,
+    entitiesDistribution,
+    isEmpty,
+    state,
     loading,
     error,
   };

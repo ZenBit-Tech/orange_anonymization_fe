@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 
 import { BORDERS } from '@/theme';
 
-import { CHART_CONSTANTS } from './components/ActivityChart/constants';
-
 export const PageWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.neutral[50],
 }));
@@ -117,6 +115,7 @@ export const BottomGrid = styled(Box)(({ theme }) => ({
   gridTemplateColumns: 'repeat(3, 1fr)',
   gridTemplateRows: 'auto auto auto',
   columnGap: theme.spacing(2),
+  alignItems: 'start',
 
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
@@ -130,12 +129,4 @@ export const RecentActivityCard = styled(Box)(({ theme }) => ({
   border: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
   boxShadow: theme.customShadows.sm,
   backgroundColor: theme.palette.common.white,
-}));
-
-export const ChartLoaderWrapper = styled(Box)(({ theme }) => ({
-  height: CHART_CONSTANTS.CHART_HEIGHT,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.primary[500],
 }));

@@ -311,7 +311,7 @@
     "metrics": {
       "totalDocuments": "Total Documents",
       "entitiesDetected": "Entities Detected",
-      "averageConfidenceRate": "Anonymization Rate",
+      "anonymizationRate": "Anonymization Rate",
       "syntheticRecords": "Synthetic Records"
     },
     "recentActivity": {
@@ -349,23 +349,65 @@
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
       "entities": "Entities",
-      "empty": "No processing activity yet",
-      "error": "Failed to load processing activity"
+      "empty": "No processing activity yet"
+    },
+    "errors": {
+      "failedToLoadProcessingActivity": "Failed to load processing activity",
+      "failedToLoadAnalysesActivity": "Failed to load analyses activity"
     },
     "emptyState": {
       "noAnalysesFound": "No analyses found",
       "deIdentification": {
         "title": "De-Identification Method Usage",
-        "subtitle": "Methods will appear after your first analysis"
+        "subtitle": "Methods will appear after your first analysis",
+        "contentSubtitle": "Popular methods applied to detected entities"
       },
       "compliance": {
         "title": "Compliance Framework Usage",
-        "subtitle": "Framework distribution will appear after your first analysis"
+        "subtitle": "Framework distribution will appear after your first analysis",
+        "contentSubtitle": "Distribution of frameworks applied across analyses"
       },
       "entityTypes": {
         "title": "Entity Types Detected",
-        "subtitle": "Entity breakdown will appear after your first analysis"
+        "subtitle": "Entity breakdown will appear after your first analysis",
+        "contentSubtitle": "Distribution of PII entities found in documents"
       }
+    },
+    "deIdentificationChart": {
+      "strategies": {
+        "redact": "Redact",
+        "replace": "Replace",
+        "mask": "Mask",
+        "hash": "Hash",
+        "synthetic": "Synthetic",
+        "generalise": "Generalise",
+        "pseudonymise": "Pseudonymise",
+        "nlp": "NLP redaction"
+      }
+    },
+    "entityTypesChart": {
+      "labels": {
+        "PERSON": "Person",
+        "DATE_TIME": "Date / Time",
+        "EMAIL_ADDRESS": "Email",
+        "PHONE_NUMBER": "Phone",
+        "LOCATION": "Location",
+        "US_SSN": "SSN",
+        "MEDICAL_RECORD_NUMBER": "MRN",
+        "ORGANIZATION": "Organisation",
+        "IP_ADDRESS": "IP Address",
+        "DEVICE_ID": "Device ID",
+        "US_PASSPORT": "Passport",
+        "NATIONAL_ID": "National ID",
+        "CREDIT_CARD": "Credit Card",
+        "IBAN_CODE": "Bank Account",
+        "GEOPOINT": "Geopoint",
+        "BIOMETRIC": "Bio. Data",
+        "PHOTO": "Photo/Image",
+        "FREE_TEXT": "Free Text PHI"
+      },
+      "showLess": "Show less",
+      "showAll": "Show all {{count}} entity types"
     }
   },
   "deIdentify": {

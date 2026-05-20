@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { Box, CircularProgress } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
 import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?react';
@@ -10,9 +10,9 @@ import DescriptionIcon from '@/assets/icons/dashboard/MetricCard/description.svg
 import ManageSearchIcon from '@/assets/icons/dashboard/MetricCard/manage_search.svg?react';
 import VerifiedIcon from '@/assets/icons/dashboard/MetricCard/verified.svg?react';
 
+import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
 import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
 import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
-import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
 
 import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 
@@ -35,9 +35,14 @@ import {
 import { DashboardFilters } from './components/DashboardFilters';
 import { FRAMEWORK_VALUES, type FrameworkValue } from './components/DashboardFilters/types';
 
+import { ComplianceChart } from './components/DistributionCharts/ComplianceChart';
+import { DeIdentificationChart } from './components/DistributionCharts/DeIdentificationChart';
+import { EntityTypesChart } from './components/DistributionCharts/EntityTypesChart';
+
 import {
   BottomGrid,
   Card,
+  ChartHeaderRow,
   MetricsRow,
   NewAnalysisButton,
   PageWrapper,
@@ -45,28 +50,38 @@ import {
   SectionDivider,
   SectionSubtitle,
   SectionTitle,
+  ViewAllButton,
   WelcomeBanner,
   WelcomeSubtitle,
   WelcomeText,
   WelcomeTitle,
-  ChartHeaderRow,
-  ChartLoaderWrapper,
-  ViewAllButton,
 } from './styled';
 
 import { useDashboard } from './useDashboard';
 
 const Dashboard: React.FC = () => {
-  const { metrics, chartData, recentActivity, isEmpty, loading, error } = useDashboard();
+  const {
+    metrics,
+    chartData,
+    strategiesDistribution,
+    frameworksDistribution,
+    entitiesDistribution,
+    recentActivity,
+    state,
+  } = useDashboard();
+
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const [chartType, setChartType] = useState<ChartType>(CHART_TYPES.DOCUMENTS);
+
   const [range, setRange] = useState<Range>(CHART_RANGES.DAYS_7);
+
   const [framework, setFramework] = useState<FrameworkValue>(FRAMEWORK_VALUES.ALL);
 
   return (
     <PageWrapper>
-      {isEmpty ? (
+      {state === 'empty' ? (
         <WelcomeBanner>
           <WelcomeText>
             <InfoIcon />
@@ -96,29 +111,28 @@ const Dashboard: React.FC = () => {
           icon={<DescriptionIcon />}
           label={t('dashboard.metrics.totalDocuments')}
           value={metrics?.totalDocuments ?? 0}
-          loading={loading}
-          error={error}
+          state={state}
         />
+
         <MetricCard
           icon={<ManageSearchIcon />}
           label={t('dashboard.metrics.entitiesDetected')}
           value={metrics?.entitiesDetected ?? 0}
-          loading={loading}
-          error={error}
+          state={state}
         />
+
         <MetricCard
           icon={<VerifiedIcon />}
-          label={t('dashboard.metrics.averageConfidenceRate')}
-          value={`${metrics?.averageConfidenceRate ?? 0}%`}
-          loading={loading}
-          error={error}
+          label={t('dashboard.metrics.anonymizationRate')}
+          value={`${metrics?.anonymizationRate ?? 0}%`}
+          state={state}
         />
+
         <MetricCard
           icon={<AnalyticsIcon />}
           label={t('dashboard.metrics.syntheticRecords')}
           value={metrics?.syntheticRecords ?? 0}
-          loading={loading}
-          error={error}
+          state={state}
         />
       </MetricsRow>
 
@@ -126,6 +140,7 @@ const Dashboard: React.FC = () => {
         <ChartHeaderRow>
           <Box>
             <SectionTitle>{t('dashboard.chart.activityTitle')}</SectionTitle>
+
             <SectionSubtitle>{t('dashboard.chart.activitySubtitle')}</SectionSubtitle>
           </Box>
 
@@ -134,18 +149,7 @@ const Dashboard: React.FC = () => {
 
         <SectionDivider />
 
-        {loading ? (
-          <ChartLoaderWrapper>
-            <CircularProgress color="inherit" />
-          </ChartLoaderWrapper>
-        ) : (
-          <ActivityChart
-            chartData={chartData}
-            chartType={chartType}
-            range={range}
-            error={Boolean(error)}
-          />
-        )}
+        <ActivityChart chartData={chartData} chartType={chartType} range={range} state={state} />
       </Card>
 
       <BottomGrid>
@@ -153,26 +157,41 @@ const Dashboard: React.FC = () => {
           icon={<DeIdentificationIcon />}
           title={t('dashboard.emptyState.deIdentification.title')}
           subtitle={t('dashboard.emptyState.deIdentification.subtitle')}
-          isEmpty={isEmpty}
-        />
+          contentSubtitle={t('dashboard.emptyState.deIdentification.contentSubtitle')}
+          state={state}
+          hasData={strategiesDistribution.length > 0}
+        >
+          <DeIdentificationChart data={strategiesDistribution} />
+        </EmptyStateCard>
+
         <EmptyStateCard
           icon={<FrameworkIcon />}
           title={t('dashboard.emptyState.compliance.title')}
           subtitle={t('dashboard.emptyState.compliance.subtitle')}
-          isEmpty={isEmpty}
-        />
+          contentSubtitle={t('dashboard.emptyState.compliance.contentSubtitle')}
+          state={state}
+          hasData={frameworksDistribution.length > 0}
+        >
+          <ComplianceChart data={frameworksDistribution} />
+        </EmptyStateCard>
+
         <EmptyStateCard
           icon={<EntityIcon />}
           title={t('dashboard.emptyState.entityTypes.title')}
           subtitle={t('dashboard.emptyState.entityTypes.subtitle')}
-          isEmpty={isEmpty}
-        />
+          contentSubtitle={t('dashboard.emptyState.entityTypes.contentSubtitle')}
+          state={state}
+          hasData={entitiesDistribution.length > 0}
+        >
+          <EntityTypesChart data={entitiesDistribution} />
+        </EmptyStateCard>
       </BottomGrid>
 
       <RecentActivityCard>
         <ChartHeaderRow>
           <Box>
             <SectionTitle>{t('dashboard.recentActivity.title')}</SectionTitle>
+
             <SectionSubtitle>{t('dashboard.recentActivity.subtitle')}</SectionSubtitle>
           </Box>
 

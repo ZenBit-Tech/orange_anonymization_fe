@@ -3,17 +3,22 @@ export type JobStatus = 'draft' | 'configured' | 'queued' | 'processing' | 'succ
 export interface Metrics {
   totalDocuments: number;
   entitiesDetected: number;
-  averageConfidenceRate: number;
+  anonymizationRate: number;
   syntheticRecords: number;
 }
 
 export interface ChartData {
   date: string;
-  documents: number | null;
-  entities: number | null;
+  documents: number;
+  entities: number;
 }
 
-export interface Job {
+export interface DistributionData {
+  key: string;
+  count: number;
+}
+
+export interface RecentActivity {
   id: string;
   framework: string | null;
   status: JobStatus;
@@ -25,19 +30,12 @@ export interface Job {
 export interface DashboardData {
   metrics: Metrics;
   chartData: ChartData[];
-  recentActivity: Job[];
-
+  recentActivity: RecentActivity[];
   strategiesDistribution: DistributionData[];
   frameworksDistribution: DistributionData[];
   entitiesDistribution: DistributionData[];
-
   emptyState?: boolean;
   startDate?: string;
   endDate?: string;
   message?: string;
-}
-
-export interface DistributionData {
-  key: string;
-  count: number;
 }

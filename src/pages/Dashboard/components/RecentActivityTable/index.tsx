@@ -8,7 +8,7 @@ import FileIcon from '@/assets/icons/dashboard/MetricCard/description.svg?react'
 import { DataTable } from '@/components/common/DataTable';
 import type { ColumnDef } from '@/components/common/DataTable/types';
 
-import type { Job } from '@/services/dashboard/types';
+import type { RecentActivity } from '@/services/dashboard/types';
 
 import {
   BodyCell,
@@ -20,7 +20,7 @@ import {
 } from './styled';
 
 interface RecentActivityTableProps {
-  rows: Job[];
+  rows: RecentActivity[];
 }
 
 const formatFramework = (framework: string | null, t: TFunction): string => {
@@ -45,7 +45,7 @@ const formatDate = (date: string): string =>
     year: 'numeric',
   });
 
-const useColumns = (): ColumnDef<Job>[] => {
+const useColumns = (): ColumnDef<RecentActivity>[] => {
   const { t } = useTranslation();
 
   return [
