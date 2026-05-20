@@ -43,6 +43,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { getUniqueEntities, presidioToHipaaMap } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion';
+import { REVIEW_AND_RUN_CONSTANTS } from './reviewAndRunConstants';
 
 const getEntityColor = (type: string) => {
   const map: Record<string, string> = {
@@ -210,18 +211,23 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   const onAdjustSettings = async () => {
     if (!currentJob?.wizardState) return;
-    await updateJob(currentJob.id, {
-      wizardState: {
-        ...currentJob.wizardState,
-        currentStep: 3,
-      },
-    });
+    try {
+      await updateJob(currentJob.id, {
+        wizardState: {
+          ...currentJob.wizardState,
+          currentStep: 3,
+        },
+      });
+    } catch (err) {
+      console.error('onAdjustSettings failed:', err);
+      handleError('errors.network');
+    }
   };
 
   if (isProcessing) {
     return (
-      <Box sx={{ textAlign: 'center', p: 10 }}>
-        <CircularProgress sx={{ mb: 2, color: 'primary.500' }} />
+      <Box sx={{ textAlign: 'center', p: REVIEW_AND_RUN_CONSTANTS.spacing.xl }}>
+        <CircularProgress sx={{ mb: REVIEW_AND_RUN_CONSTANTS.spacing.sm, color: 'primary.500' }} />
         <Typography sx={{ color: 'neutral.500' }}>{t('deIdentify.results.analyzing')}</Typography>
       </Box>
     );
@@ -309,11 +315,13 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   if (isError) {
     return (
-      <Box sx={{ textAlign: 'center', p: 5 }}>
+      <Box sx={{ textAlign: 'center', p: REVIEW_AND_RUN_CONSTANTS.spacing.lg }}>
         <Typography color="error" variant="h6">
           {t('deIdentify.results.failed')}
         </Typography>
-        <Typography sx={{ mb: 2 }}>{t('errors.network')}</Typography>
+        <Typography sx={{ mb: REVIEW_AND_RUN_CONSTANTS.spacing.sm }}>
+          {t('errors.network')}
+        </Typography>
         <Button variant="outlined" onClick={() => window.location.reload()}>
           {t('common.retry')}
         </Button>
@@ -322,7 +330,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   }
 
   return (
-    <Box sx={{ mx: '20px' }}>
+    <Box sx={{ mx: REVIEW_AND_RUN_CONSTANTS.spacing.md }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
           <Typography
@@ -475,7 +483,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
             >
               <Tab
                 label={t('deIdentify.results.originalTab')}
-                value="original"
+                value={REVIEW_AND_RUN_CONSTANTS.tabs.original}
                 sx={{
                   '&.Mui-selected': {
                     color: 'primary.500',
@@ -484,7 +492,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               />
               <Tab
                 label={t('deIdentify.results.deIdentifiedTab')}
-                value="de-identified"
+                value={REVIEW_AND_RUN_CONSTANTS.tabs.deIdentified}
                 sx={{
                   '&.Mui-selected': {
                     color: 'primary.500',
@@ -518,7 +526,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               sx={{ height: '400px', overflowY: 'auto', bgcolor: 'common.white', p: '40px' }}
               className="scrollbar-md"
             >
-              {activeTab === 'original' ? (
+              {activeTab === REVIEW_AND_RUN_CONSTANTS.tabs.original ? (
                 renderHighlightedText(textToDisplay, results?.entityTable ?? [])
               ) : results?.mainContent?.anonymizedText ? (
                 results?.mainContent.anonymizedText
