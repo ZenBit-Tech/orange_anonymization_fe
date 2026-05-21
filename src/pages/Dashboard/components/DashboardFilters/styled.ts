@@ -1,5 +1,6 @@
-import { BORDERS } from '@/theme';
 import { Box, MenuItem, Select, styled } from '@mui/material';
+
+import { BORDERS } from '@/theme';
 
 const FILTER_SELECT_SIZES = {
   minWidth: 180,

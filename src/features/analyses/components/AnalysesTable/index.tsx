@@ -12,9 +12,9 @@ import { formatDate, formatFramework } from '@/features/analyses/utils/formatter
 
 import type { RecentActivity } from '@/services/dashboard/types';
 
-import { BodyCell, CellContent } from './styled';
+import { BodyCell, CellContent, TableWrapper } from './styled';
 
-interface RecentActivityTableProps {
+interface AnalysesTableProps {
   rows: RecentActivity[];
 }
 
@@ -70,8 +70,12 @@ const useColumns = (): ColumnDef<RecentActivity>[] => {
   ];
 };
 
-export const RecentActivityTable: React.FC<RecentActivityTableProps> = ({ rows }) => {
+export const AnalysesTable: React.FC<AnalysesTableProps> = ({ rows }) => {
   const columns = useColumns();
 
-  return <DataTable columns={columns} rows={rows} />;
+  return (
+    <TableWrapper>
+      <DataTable columns={columns} rows={rows} />
+    </TableWrapper>
+  );
 };

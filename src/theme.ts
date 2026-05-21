@@ -167,7 +167,11 @@ declare module '@mui/material/styles' {
       successBg: string;
       errorBg: string;
     };
+    status: {
+      configured: string;
+    };
   }
+
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
     neutral?: PaletteOptions['primary'];
@@ -201,6 +205,9 @@ declare module '@mui/material/styles' {
       successBorder?: string;
       successBg?: string;
       errorBg?: string;
+    };
+    status?: {
+      configured?: string;
     };
   }
   interface PaletteColor {
@@ -295,6 +302,9 @@ const BRAND = {
     main: '#1565C0',
     dark: '#0D47A1',
     contrastText: WHITE,
+  },
+  status: {
+    configured: '#8B5CF6',
   },
   state: {
     successBorder: '#16A34A99',
@@ -394,6 +404,7 @@ export const theme = createTheme({
     entities: BRAND.entities,
     success: BRAND.success,
     warning: BRAND.warning,
+    status: BRAND.status,
     info: BRAND.info,
     error: BRAND.error,
     charts: BRAND.charts,

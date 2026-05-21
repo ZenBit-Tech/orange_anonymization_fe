@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 
 import { BORDERS } from '@/theme';
 
-const RECENT_ACTIVITY_CARD_PADDING_BOTTOM = 5.5;
-
 export const PageWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.neutral[50],
 }));
@@ -90,6 +88,18 @@ export const SectionSubtitle = styled('p')(({ theme }) => ({
   color: theme.palette.neutral[500],
 }));
 
+export const ViewAllButton = styled(Button)(({ theme }) => ({
+  ...theme.typography.labelMd,
+  textTransform: 'none',
+  color: theme.palette.accent[400],
+  minWidth: 'auto',
+  padding: 0,
+
+  '&:hover': {
+    color: theme.palette.accent[200],
+  },
+}));
+
 export const SectionDivider = styled(Box)(({ theme }) => ({
   height: BORDERS.divider,
   borderRadius: BORDERS.dividerRadius,
@@ -114,9 +124,16 @@ export const BottomGrid = styled(Box)(({ theme }) => ({
 }));
 
 export const RecentActivityCard = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2, 3, RECENT_ACTIVITY_CARD_PADDING_BOTTOM),
+  padding: theme.spacing(2, 3, 0),
   borderRadius: theme.shape.lg,
-  border: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
+  borderTop: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
   boxShadow: theme.customShadows.sm,
   backgroundColor: theme.palette.common.white,
+}));
+
+export const RecentActivityTableWrapper = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  borderTop: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
+  marginInline: theme.spacing(-3),
+  paddingInline: theme.spacing(3),
 }));

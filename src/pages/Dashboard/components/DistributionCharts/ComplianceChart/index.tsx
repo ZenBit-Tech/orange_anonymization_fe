@@ -5,7 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useMediaQuery, useTheme } from '@mui/material';
 
 import type { DistributionData } from '@/services/dashboard/types';
-import { formatComplianceName } from '@/utils/formatChartLabel';
+import { formatFramework } from '@/features/analyses/utils/formatters';
 
 import {
   ChartContainer,
@@ -74,7 +74,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
   const formattedData = useMemo(() => {
     return data.map((item) => ({
       key: item.key,
-      name: formatComplianceName(item.key),
+      name: formatFramework(item.key),
       count: item.count,
     }));
   }, [data]);
@@ -150,7 +150,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
       } = props;
 
       const color = colors[index % colors.length] ?? '';
-      const label = formatComplianceName(name);
+      const label = formatFramework(name);
 
       if (isSingleItem) {
         const sx = cx + outerRadius;
@@ -284,7 +284,7 @@ export const ComplianceChart: React.FC<Props> = ({ data }) => {
             <LegendDot color={colors[index % colors.length]} />
 
             <LegendText color={theme.palette.neutral[500] ?? ''}>
-              {formatComplianceName(item.key)}
+              {formatFramework(item.key)}
             </LegendText>
           </LegendItem>
         ))}

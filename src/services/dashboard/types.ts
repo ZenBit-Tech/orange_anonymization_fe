@@ -1,4 +1,4 @@
-type JobStatus = 'draft' | 'configured' | 'queued' | 'processing' | 'succeeded' | 'failed';
+export type JobStatus = 'draft' | 'configured' | 'queued' | 'processing' | 'succeeded' | 'failed';
 
 export interface Metrics {
   totalDocuments: number;
@@ -20,11 +20,11 @@ export interface DistributionData {
 
 export interface RecentActivity {
   id: string;
-  framework: string;
+  framework: string | null;
   status: JobStatus;
   createdAt: string;
   fileName: string;
-  entitiesCount: number;
+  entitiesCount: number | null;
 }
 
 export interface DashboardData {
@@ -35,7 +35,7 @@ export interface DashboardData {
   frameworksDistribution: DistributionData[];
   entitiesDistribution: DistributionData[];
   emptyState?: boolean;
-  message?: string;
   startDate?: string;
   endDate?: string;
+  message?: string;
 }

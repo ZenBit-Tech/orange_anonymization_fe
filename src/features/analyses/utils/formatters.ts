@@ -1,4 +1,4 @@
-export const formatComplianceName = (value: string): string => {
+export const formatFramework = (value: string): string => {
   if (!value) return '';
 
   const map: Record<string, string> = {
@@ -12,6 +12,13 @@ export const formatComplianceName = (value: string): string => {
 
   return map[normalized] ?? capitalizeWords(value);
 };
+
+export const formatDate = (date: string): string =>
+  new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 
 const capitalizeWords = (str: string) =>
   str

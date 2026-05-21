@@ -66,12 +66,17 @@
   "sidebar": {
     "brand": "De-ID Studio",
     "brandSubtitle": "De-ID & Synthesis",
+    "allAnalyses": "All Analyses",
     "signOut": "Sign out"
   },
   "header": {
     "dashboard": {
       "title": "Dashboard",
       "subtitle": "Track your de-identification activity"
+    },
+    "analyses": {
+      "title": "All Analyses",
+      "subtitle": "Complete history of de-identification jobs"
     },
     "deIdentify": {
       "title": "New Analysis",
@@ -311,6 +316,12 @@
       "last6Months": "Last 6 months",
       "customRange": "Custom range..."
     },
+    "analyses": {
+      "filters": {
+        "allStatuses": "All statuses",
+        "searchByFilename": "Search by filename..."
+      }
+    },
     "welcomeTitle": "Welcome to De-ID Studio",
     "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",
     "metrics": {
@@ -322,6 +333,7 @@
     "recentActivity": {
       "title": "Recent Activity",
       "subtitle": "Last 5 analyses across all compliance frameworks",
+      "viewAll": "View all",
       "noActivity": "No recent activity",
       "columns": {
         "document": "Document",
@@ -330,7 +342,21 @@
         "entities": "Entities",
         "date": "Date",
         "action": "Action"
+      },
+      "status": {
+        "succeeded": "Succeeded",
+        "failed": "Failed",
+        "queued": "Queued",
+        "processing": "Processing",
+        "draft": "Draft",
+        "configured": "Configured"
       }
+    },
+    "frameworks": {
+      "hipaa": "HIPAA",
+      "gdpr": "EU GDPR",
+      "ukDpi": "UK DPI",
+      "swissFadp": "Swiss FADP"
     },
     "chart": {
       "activityTitle": "Processing Activity",
