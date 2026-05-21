@@ -15,6 +15,8 @@ import {
   WarningAmberOutlined as WarningAmberOutlinedIcon,
   SettingsOutlined as SettingsOutlinedIcon,
   Remove as RemoveIcon,
+  ErrorOutline as ErrorOutlineIcon,
+  Refresh as RefreshIcon,
   EmailOutlined as EmailIcon,
   PhoneOutlined as PhoneIcon,
   LocationOnOutlined as LocationIcon,
@@ -54,6 +56,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { getUniqueEntities, presidioToHipaaMap } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion';
+import { REVIEW_AND_RUN_CONSTANTS } from './reviewAndRunConstants';
 
 const getEntityColor = (type: string) => {
   const map: Record<string, string> = {
@@ -148,6 +151,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   const [isProcessing, setIsProcessing] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [hasFailedGeneration, setHasFailedGeneration] = useState(false);
   const [results, setResults] = useState<JobResults | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -208,35 +212,45 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
       setResults(response);
       setIsProcessing(false);
       stopPolling();
-    } catch {
+    } catch (err) {
+      console.error('ReviewAndRun.getResults failed for jobId:', jobId, err);
       setIsError(true);
       stopPolling();
     }
   }, [jobId]);
 
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const job = await jobsService.getJobById(jobId);
+  const checkStatus = useCallback(async () => {
+    try {
+      const job = await jobsService.getJobById(jobId);
 
-        if (job.status === JobStatus.SUCCEEDED) {
-          await getResults();
-          dispatch(setJobAC(job));
-        } else if (job.status === JobStatus.FAILED) {
-          setIsError(true);
-          stopPolling();
+      if (job.status === JobStatus.SUCCEEDED) {
+        await getResults();
+        dispatch(setJobAC(job));
+      } else if (job.status === JobStatus.FAILED) {
+        try {
+          const partial = await resultsService.getResults(jobId);
+          setResults(partial);
+        } catch {
+          // Silent catch
         }
-      } catch {
-        handleError('errors.network');
-      }
-    };
 
+        setHasFailedGeneration(true);
+        setIsProcessing(false);
+        stopPolling();
+      }
+    } catch (err) {
+      console.error('ReviewAndRun.checkStatus failed for jobId:', jobId, err);
+      handleError('errors.network');
+    }
+  }, [dispatch, getResults, handleError, jobId]);
+
+  useEffect(() => {
     checkStatus();
 
     intervalRef.current = setInterval(checkStatus, REVIEW_RESULTS_POLL_INTERVAL_MS);
 
     return () => stopPolling();
-  }, [dispatch, getResults, handleError, jobId]);
+  }, [checkStatus]);
 
   const handleSelectOption = (event: SelectChangeEvent<string>) => {
     setSelectedOptionId(event.target.value);
@@ -257,18 +271,23 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   const onAdjustSettings = async () => {
     if (!currentJob?.wizardState) return;
-    await updateJob(currentJob.id, {
-      wizardState: {
-        ...currentJob.wizardState,
-        currentStep: 3,
-      },
-    });
+    try {
+      await updateJob(currentJob.id, {
+        wizardState: {
+          ...currentJob.wizardState,
+          currentStep: 3,
+        },
+      });
+    } catch (err) {
+      console.error('onAdjustSettings failed:', err);
+      handleError('errors.network');
+    }
   };
 
   if (isProcessing) {
     return (
-      <Box sx={{ textAlign: 'center', p: 10 }}>
-        <CircularProgress sx={{ mb: 2, color: 'primary.500' }} />
+      <Box sx={{ textAlign: 'center', p: REVIEW_AND_RUN_CONSTANTS.spacing.xl }}>
+        <CircularProgress sx={{ mb: REVIEW_AND_RUN_CONSTANTS.spacing.sm, color: 'primary.500' }} />
         <Typography sx={{ color: 'neutral.500' }}>{t('deIdentify.results.analyzing')}</Typography>
       </Box>
     );
@@ -300,6 +319,20 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const handleCloseSnackbar = (_?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return;
     setSnackbarOpen(false);
+  };
+
+  const handleRetry = async () => {
+    try {
+      setIsProcessing(true);
+      setHasFailedGeneration(false);
+      await jobsService.runAnalysis(jobId, localOriginalText || '');
+      stopPolling();
+      intervalRef.current = setInterval(checkStatus, REVIEW_RESULTS_POLL_INTERVAL_MS);
+      await checkStatus();
+    } catch (e) {
+      console.error('ReviewAndRun.handleRetry failed for jobId:', jobId, e);
+      handleError('errors.network');
+    }
   };
 
   const renderHighlightedText = (text: string, entities: EntityDetection[]) => {
@@ -342,11 +375,13 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   if (isError) {
     return (
-      <Box sx={{ textAlign: 'center', p: 5 }}>
+      <Box sx={{ textAlign: 'center', p: REVIEW_AND_RUN_CONSTANTS.spacing.lg }}>
         <Typography color="error" variant="h6">
           {t('deIdentify.results.failed')}
         </Typography>
-        <Typography sx={{ mb: 2 }}>{t('errors.network')}</Typography>
+        <Typography sx={{ mb: REVIEW_AND_RUN_CONSTANTS.spacing.sm }}>
+          {t('errors.network')}
+        </Typography>
         <Button variant="outlined" onClick={() => window.location.reload()}>
           {t('common.retry')}
         </Button>
@@ -355,7 +390,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   }
 
   return (
-    <Box sx={{ mx: '20px' }}>
+    <Box sx={{ mx: REVIEW_AND_RUN_CONSTANTS.spacing.md }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box sx={{ mb: '24px' }}>
           <Typography
@@ -509,7 +544,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
             >
               <Tab
                 label={t('deIdentify.results.originalTab')}
-                value="original"
+                value={REVIEW_AND_RUN_CONSTANTS.tabs.original}
                 sx={{
                   '&.Mui-selected': {
                     color: 'primary.500',
@@ -518,7 +553,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               />
               <Tab
                 label={t('deIdentify.results.deIdentifiedTab')}
-                value="de-identified"
+                value={REVIEW_AND_RUN_CONSTANTS.tabs.deIdentified}
                 sx={{
                   '&.Mui-selected': {
                     color: 'primary.500',
@@ -542,9 +577,67 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               sx={{ height: '400px', overflowY: 'auto', bgcolor: 'common.white', p: '40px' }}
               className="scrollbar-md"
             >
-              {activeTab === 'original'
-                ? renderHighlightedText(textToDisplay, results?.entityTable ?? [])
-                : results?.mainContent.anonymizedText}
+              {activeTab === REVIEW_AND_RUN_CONSTANTS.tabs.original ? (
+                renderHighlightedText(textToDisplay, results?.entityTable ?? [])
+              ) : results?.mainContent?.anonymizedText ? (
+                results?.mainContent.anonymizedText
+              ) : hasFailedGeneration ? (
+                <Box
+                  sx={{
+                    textAlign: 'center',
+                    py: 6,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <ErrorOutlineIcon sx={{ fontSize: 60, color: 'error.main', mb: 3 }} />
+                  <Typography
+                    sx={{
+                      fontWeight: 'fontWeightBold',
+                      fontSize: FONT_SIZES.xxl,
+                      color: 'neutral.900',
+                      mb: 2,
+                    }}
+                  >
+                    {t('deIdentify.results.failed')}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: FONT_SIZES.md,
+                      color: 'neutral.500',
+                      mb: 4,
+                      maxWidth: '400px',
+                    }}
+                  >
+                    {t('deIdentify.results.failedToGenerate')}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={handleRetry}
+                    sx={{
+                      bgcolor: 'primary.900',
+                      color: 'common.white',
+                      fontWeight: 'fontWeightMedium',
+                      fontSize: FONT_SIZES.sm,
+                      px: 3,
+                      py: 1.2,
+                      borderRadius: '8px',
+                      '&:hover': {
+                        bgcolor: 'primary.800',
+                      },
+                    }}
+                    startIcon={<RefreshIcon />}
+                  >
+                    {t('deIdentify.results.tryAgain')}
+                  </Button>
+                </Box>
+              ) : (
+                <Typography sx={{ color: 'neutral.400' }}>
+                  {t('deIdentify.results.noPreview')}
+                </Typography>
+              )}
             </Box>
           </Box>
         </Box>
