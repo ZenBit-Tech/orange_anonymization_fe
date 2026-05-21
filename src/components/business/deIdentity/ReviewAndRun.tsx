@@ -57,6 +57,7 @@ import { setJobAC } from '@/store/slices/jobsSlice';
 import { getUniqueEntities, presidioToHipaaMap } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { REVIEW_AND_RUN_CONSTANTS } from './reviewAndRunConstants';
+import noEntitiesIcon from '@/assets/icons/noEntities.png';
 
 const getEntityColor = (type: string) => {
   const map: Record<string, string> = {
@@ -165,11 +166,17 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const dispatch = useAppDispatch();
 
   const textToDisplay = localOriginalText || '';
+  const detectedEntities = results?.entityTable ?? [];
+  const detectedCount = results?.stats.detected ?? detectedEntities.length ?? 0;
+  const noIdentifiersDetected = Boolean(results) && detectedCount === 0;
+  const processedCount = noIdentifiersDetected ? 0 : (results?.stats.processed ?? 0);
+  const allEntitiesExcluded =
+    detectedEntities.length > 0 && detectedEntities.every((entity) => entity.isExcluded);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const filteredEntities =
-    results?.entityTable.filter((entity) => {
+    detectedEntities.filter((entity) => {
       if (selectedEntityTypes.length === 0) return true;
       return selectedEntityTypes.includes(entity.entity_type);
     }) || [];
@@ -450,7 +457,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               color: 'neutral.900',
             }}
           >
-            {results?.stats.detected}
+            {detectedCount}
           </Typography>
           <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
             {t('deIdentify.results.entitiesDetected')}
@@ -464,7 +471,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               color: 'neutral.900',
             }}
           >
-            {results?.stats.processed}
+            {processedCount}
           </Typography>
           <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
             {t('deIdentify.results.entitiesProcessed')}
@@ -478,9 +485,9 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               color: 'neutral.900',
             }}
           >
-            {typeof results?.stats.avgConfidence === 'number'
-              ? `${(results?.stats.avgConfidence * 100).toFixed(2)}%`
-              : t('common.na')}
+            {noIdentifiersDetected || typeof results?.stats.avgConfidence !== 'number'
+              ? t('common.na')
+              : `${(results.stats.avgConfidence * 100).toFixed(2)}%`}
           </Typography>
           <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
             {t('deIdentify.results.avgConfidence')}
@@ -574,7 +581,12 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
           <Box sx={{ p: '24px', bgcolor: 'neutral.50' }}>
             <Box
-              sx={{ height: '400px', overflowY: 'auto', bgcolor: 'common.white', p: '40px' }}
+              sx={{
+                minHeight: '400px',
+                overflowY: 'auto',
+                bgcolor: 'common.white',
+                p: '40px',
+              }}
               className="scrollbar-md"
             >
               {activeTab === REVIEW_AND_RUN_CONSTANTS.tabs.original ? (
@@ -639,6 +651,26 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
                 </Typography>
               )}
             </Box>
+
+            {noIdentifiersDetected && (
+              <Alert
+                severity="info"
+                variant="outlined"
+                sx={{ mt: '16px', alignItems: 'flex-start', borderRadius: '12px' }}
+              >
+                {t('deIdentify.results.noIdentifiersDetected')}
+              </Alert>
+            )}
+
+            {allEntitiesExcluded && (
+              <Alert
+                severity="warning"
+                variant="outlined"
+                sx={{ mt: '16px', alignItems: 'flex-start', borderRadius: '12px' }}
+              >
+                {t('deIdentify.results.allEntitiesExcluded')}
+              </Alert>
+            )}
           </Box>
         </Box>
 
@@ -684,192 +716,263 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
                 fontWeight: 'fontWeightMedium',
               }}
             >
-              {results?.entityTable.length}
+              {detectedEntities.length}
             </Box>
           </Box>
 
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">{t('deIdentify.results.sortBy')}</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={sortOptions.find((option) => option.id === selectedOptionId)?.id || ''}
-              label={t('deIdentify.results.sortBy')}
-              size="small"
-              sx={{ color: 'primary.500' }}
-              onChange={handleSelectOption}
+          {noIdentifiersDetected ? (
+            <Box
+              sx={{
+                mt: '16px',
+                minHeight: '320px',
+                borderRadius: '16px',
+                border: '1px dashed',
+                borderColor: 'neutral.200',
+                bgcolor: 'neutral.50',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                px: '24px',
+                pt: '96px',
+                textAlign: 'center',
+              }}
             >
-              {sortOptions.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.title}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <Box
-            sx={{ my: '16px', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}
-          >
-            {getUniqueEntities(results?.entityTable ?? []).map((entity, index) => (
               <Box
-                key={index}
                 sx={{
-                  padding: '4px 10px',
-                  borderRadius: '99px',
-                  bgcolor: selectedEntityTypes.includes(entity.entity_type)
-                    ? 'primary.50'
-                    : 'neutral.100',
-                  fontSize: FONT_SIZES.xs,
-                  color: 'neutral.700',
-                  fontWeight: 'fontWeightMedium',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    bgcolor: 'neutral.200',
-                  },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  maxWidth: '280px',
                 }}
-                onClick={() => handleToggleEntityType(entity.entity_type)}
               >
-                {entity.entity_type}
-              </Box>
-            ))}
-          </Box>
-
-          <Box sx={{ maxHeight: '400px', overflowY: 'auto' }} className="scrollbar-md">
-            <AnimatePresence mode="popLayout">
-              {sortedEntities.map((entity) => (
-                <motion.div
-                  key={entity.id}
-                  layout
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 500,
-                    damping: 40,
-                    mass: 1,
+                <Box
+                  sx={{
+                    width: '84px',
+                    height: '84px',
+                    borderRadius: '50%',
+                    bgcolor: 'common.white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: (theme) =>
+                      `0px 1px 8px 0px ${alpha(theme.palette.common.black, 0.08)}`,
                   }}
                 >
                   <Box
-                    sx={{
-                      bgcolor: (theme) =>
-                        entity.score > 0.6
-                          ? 'common.white'
-                          : alpha(theme.palette.warning[100] || 'common.white', 0.3),
-                      p: '12px',
-                      borderRadius: '8px',
-                      border: '1px solid',
-                      borderColor: 'neutral.200',
-                      mb: '8px',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: (theme) =>
-                        `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-                    }}
+                    component="img"
+                    src={noEntitiesIcon}
+                    alt={t('deIdentify.results.noIdentifiersDetectedPanel')}
+                    sx={{ width: '64px', height: '64px', objectFit: 'contain' }}
+                  />
+                </Box>
+                <Box sx={{ maxWidth: '320px' }}>
+                  <Typography
+                    sx={{ color: 'neutral.700', fontWeight: 'fontWeightMedium', mb: '4px' }}
                   >
-                    <Box sx={{ flex: 1 }}>
-                      {(() => {
-                        const EntityIconComponent = getEntityIcon(entity.entity_type);
-                        return (
-                          <EntityIconComponent
-                            sx={{ fontSize: FONT_SIZES.xl, color: 'neutral.400' }}
-                          />
-                        );
-                      })()}
-                      <Typography
-                        sx={{
-                          fontWeight: 'fontWeightMedium',
-                          fontSize: FONT_SIZES.xs,
-                          color: 'neutral.500',
-                        }}
-                      >
-                        {entity.entity_type}
-                      </Typography>
-                    </Box>
+                    {t('deIdentify.results.noIdentifiersDetectedPanel')}
+                  </Typography>
+                  <Typography sx={{ color: 'neutral.500' }}>
+                    {t('deIdentify.results.noIdentifiersDetectedPanelDetail')}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  {t('deIdentify.results.sortBy')}
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={sortOptions.find((option) => option.id === selectedOptionId)?.id || ''}
+                  label={t('deIdentify.results.sortBy')}
+                  size="small"
+                  sx={{ color: 'primary.500' }}
+                  onChange={handleSelectOption}
+                >
+                  {sortOptions.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }} noWrap>
-                        {localOriginalText.slice(entity.start, entity.end)}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: FONT_SIZES.xs,
-                          fontWeight: 'fontWeightBold',
-                          color: 'primary.500',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        <ArrowForwardOutlinedIcon
-                          sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.300', mr: '4px' }}
-                        />
-                        [
-                        {currentJob?.wizardState?.configSettings.strategies?.[
-                          presidioToHipaaMap[entity.entity_type]
-                        ] || t('deIdentify.results.redacted')}
-                        ]
-                      </Typography>
-                    </Box>
-
-                    <Box sx={{ flex: 1, textAlign: 'right', minWidth: 0 }}>
-                      <Button
-                        sx={{
-                          fontSize: FONT_SIZES.xs,
-                          color: entity.isExcluded ? 'neutral.500' : 'primary.500',
-                          fontWeight: 'fontWeightMedium',
-                          border: entity.isExcluded ? 'none' : '1px solid',
-                          borderColor: 'primary.500',
-                          borderRadius: '16px',
-                          px: '12px',
-                          py: '4px',
-                          mb: '4px',
-                        }}
-                        size="small"
-                        startIcon={
-                          entity.isExcluded ? (
-                            <RemoveIcon sx={{ fontSize: FONT_SIZES.sm }} />
-                          ) : (
-                            <CheckOutlinedIcon sx={{ fontSize: FONT_SIZES.sm }} />
-                          )
-                        }
-                        onClick={() => toggleEntity(entity.id)}
-                      >
-                        {isToggling
-                          ? t('deIdentify.results.toggling')
-                          : entity.isExcluded
-                            ? t('deIdentify.results.excluded')
-                            : t('deIdentify.results.included')}
-                      </Button>
-                      <Typography
-                        sx={{
-                          fontSize: FONT_SIZES.xs,
-                          color: 'neutral.400',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'flex-end',
-                          gap: '4px',
-                        }}
-                      >
-                        {(entity.score * 100).toFixed(0)}%
-                        {entity.score <= 0.6 && (
-                          <WarningAmberOutlinedIcon
-                            sx={{ fontSize: FONT_SIZES.xs, color: 'warning.main' }}
-                          />
-                        )}
-                      </Typography>
-                    </Box>
+              <Box
+                sx={{
+                  my: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '8px',
+                }}
+              >
+                {getUniqueEntities(detectedEntities).map((entity, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      padding: '4px 10px',
+                      borderRadius: '99px',
+                      bgcolor: selectedEntityTypes.includes(entity.entity_type)
+                        ? 'primary.50'
+                        : 'neutral.100',
+                      fontSize: FONT_SIZES.xs,
+                      color: 'neutral.700',
+                      fontWeight: 'fontWeightMedium',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        bgcolor: 'neutral.200',
+                      },
+                    }}
+                    onClick={() => handleToggleEntityType(entity.entity_type)}
+                  >
+                    {entity.entity_type}
                   </Box>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                ))}
+              </Box>
 
-            {sortedEntities.length === 0 && (
-              <Typography sx={{ textAlign: 'center', mt: 2, color: 'neutral.400' }}>
-                {t('deIdentify.results.noEntitiesFound')}
-              </Typography>
-            )}
-          </Box>
+              <Box sx={{ maxHeight: '400px', overflowY: 'auto' }} className="scrollbar-md">
+                <AnimatePresence mode="popLayout">
+                  {sortedEntities.map((entity) => (
+                    <motion.div
+                      key={entity.id}
+                      layout
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 500,
+                        damping: 40,
+                        mass: 1,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          bgcolor: (theme) =>
+                            entity.score > 0.6
+                              ? 'common.white'
+                              : alpha(theme.palette.warning[100] || 'common.white', 0.3),
+                          p: '12px',
+                          borderRadius: '8px',
+                          border: '1px solid',
+                          borderColor: 'neutral.200',
+                          mb: '8px',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          gap: '8px',
+                          boxShadow: (theme) =>
+                            `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
+                        }}
+                      >
+                        <Box sx={{ flex: 1 }}>
+                          {(() => {
+                            const EntityIconComponent = getEntityIcon(entity.entity_type);
+                            return (
+                              <EntityIconComponent
+                                sx={{ fontSize: FONT_SIZES.xl, color: 'neutral.400' }}
+                              />
+                            );
+                          })()}
+                          <Typography
+                            sx={{
+                              fontWeight: 'fontWeightMedium',
+                              fontSize: FONT_SIZES.xs,
+                              color: 'neutral.500',
+                            }}
+                          >
+                            {entity.entity_type}
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                          <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }} noWrap>
+                            {localOriginalText.slice(entity.start, entity.end)}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: FONT_SIZES.xs,
+                              fontWeight: 'fontWeightBold',
+                              color: 'primary.500',
+                              textTransform: 'uppercase',
+                            }}
+                          >
+                            <ArrowForwardOutlinedIcon
+                              sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.300', mr: '4px' }}
+                            />
+                            [
+                            {currentJob?.wizardState?.configSettings.strategies?.[
+                              presidioToHipaaMap[entity.entity_type]
+                            ] || t('deIdentify.results.redacted')}
+                            ]
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ flex: 1, textAlign: 'right', minWidth: 0 }}>
+                          <Button
+                            sx={{
+                              fontSize: FONT_SIZES.xs,
+                              color: entity.isExcluded ? 'neutral.500' : 'primary.500',
+                              fontWeight: 'fontWeightMedium',
+                              border: entity.isExcluded ? 'none' : '1px solid',
+                              borderColor: 'primary.500',
+                              borderRadius: '16px',
+                              px: '12px',
+                              py: '4px',
+                              mb: '4px',
+                            }}
+                            size="small"
+                            startIcon={
+                              entity.isExcluded ? (
+                                <RemoveIcon sx={{ fontSize: FONT_SIZES.sm }} />
+                              ) : (
+                                <CheckOutlinedIcon sx={{ fontSize: FONT_SIZES.sm }} />
+                              )
+                            }
+                            onClick={() => toggleEntity(entity.id)}
+                          >
+                            {isToggling
+                              ? t('deIdentify.results.toggling')
+                              : entity.isExcluded
+                                ? t('deIdentify.results.excluded')
+                                : t('deIdentify.results.included')}
+                          </Button>
+                          <Typography
+                            sx={{
+                              fontSize: FONT_SIZES.xs,
+                              color: 'neutral.400',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-end',
+                              gap: '4px',
+                            }}
+                          >
+                            {(entity.score * 100).toFixed(0)}%
+                            {entity.score <= 0.6 && (
+                              <WarningAmberOutlinedIcon
+                                sx={{ fontSize: FONT_SIZES.xs, color: 'warning.main' }}
+                              />
+                            )}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+
+                {sortedEntities.length === 0 && (
+                  <Typography sx={{ textAlign: 'center', mt: 2, color: 'neutral.400' }}>
+                    {t('deIdentify.results.noEntitiesFound')}
+                  </Typography>
+                )}
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
 
