@@ -12,7 +12,6 @@ import { NewAnalysisButton } from '@/pages/Dashboard/styled';
 
 import { FRAMEWORK_OPTIONS } from './constants';
 import { FiltersContainer, FiltersRow, FilterMenuItem, FilterSelect } from './styled';
-
 import type { FrameworkValue } from './types';
 
 interface DashboardFiltersProps {

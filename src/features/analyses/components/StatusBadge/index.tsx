@@ -2,6 +2,7 @@ import { Box, styled } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import type { JobStatus } from '@/services/dashboard/types';
+
 import { theme } from '@/theme';
 
 const STATUS_COLORS: Record<JobStatus, string> = {

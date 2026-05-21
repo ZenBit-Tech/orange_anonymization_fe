@@ -306,6 +306,12 @@
       "last6Months": "Last 6 months",
       "customRange": "Custom range..."
     },
+    "analyses": {
+      "filters": {
+        "allStatuses": "All statuses",
+        "searchByFilename": "Search by filename..."
+      }
+    },
     "welcomeTitle": "Welcome to De-ID Studio",
     "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",
     "metrics": {
