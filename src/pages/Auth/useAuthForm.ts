@@ -22,7 +22,7 @@ export const useAuthForm = () => {
       await login(data.email);
       return true;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+      const errorMessage = error instanceof Error ? error.message : 'common.error';
       setError('email', { type: 'manual', message: errorMessage });
       return false;
     }

@@ -399,7 +399,8 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               color: 'neutral.900',
             }}
           >
-            {results?.auditTrail.processingTime.toFixed(2)}s
+            {results?.auditTrail.processingTime.toFixed(2)}
+            {t('common.s')}
           </Typography>
           <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
             {t('deIdentify.results.processingTimeLabel')}

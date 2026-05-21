@@ -1,6 +1,7 @@
+import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FONT_SIZES } from '@/constants';
 import { Box, Button, Drawer, Typography } from '@mui/material';
-import type { FC } from 'react';
 import { Close as CloseIcon, Check as CheckIcon } from '@mui/icons-material';
 
 interface IProps {
@@ -8,7 +9,76 @@ interface IProps {
   setDrawerOpen: (v: boolean) => void;
 }
 
+const rowBoxStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '8px',
+  mb: '4px',
+};
+
+const MetaRow = ({ label, value }: { label: string; value: string }) => (
+  <Box sx={rowBoxStyle}>
+    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
+    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>{value}</Typography>
+  </Box>
+);
+
+const GeneratedFieldRow = ({ label, value }: { label: string; value: string }) => (
+  <Box sx={rowBoxStyle}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <CheckIcon sx={{ color: 'success.main' }} fontSize="small" />
+      <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
+    </Box>
+    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>{value}</Typography>
+  </Box>
+);
+
+const ComplianceCheckRow = ({ label }: { label: string }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
+    <CheckIcon sx={{ color: 'success.main' }} fontSize="small" />
+    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
+  </Box>
+);
+
 const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
+  const { t } = useTranslation();
+
+  const generatedFields = [
+    { labelKey: 'ageRange', valueKey: '55-64' },
+    { labelKey: 'encounterDate', valueKey: '2025-04-14' },
+    { labelKey: 'category', valueKey: 'Endocrinology' },
+    { labelKey: 'diagnosis', valueKey: 'E11.9' },
+    { labelKey: 'dischargeStatus', valueKey: 'Follow-up' },
+    { labelKey: 'medication', valueKey: 'Metformin' },
+    { labelKey: 'providerType', valueKey: 'Endocrinologist' },
+  ];
+
+  const complianceChecks = [
+    'noDirectIdentifiers',
+    'datesTransformed',
+    'fieldConfidenceHigh',
+    'syntheticIdentifiers',
+    'directIdentifiersRemoved',
+  ];
+
+  const renderDivider = () => (
+    <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
+  );
+
+  const renderSectionTitle = (titleKey: string) => (
+    <Typography
+      sx={{
+        color: 'neutral.400',
+        fontSize: FONT_SIZES.xs,
+        fontWeight: 'fontWeightMedium',
+        mb: '12px',
+      }}
+    >
+      {t(`syntheticData.results.drawers.recordDetails.${titleKey}`)}
+    </Typography>
+  );
+
   return (
     <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
       <Box sx={{ p: '32px', width: '400px' }}>
@@ -23,247 +93,61 @@ const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
                 fontWeight: 'fontWeightSemiBold',
               }}
             >
-              Record details
+              {t('syntheticData.results.drawers.recordDetails.title')}
             </Typography>
-
             <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
-              SYN-00041
+              {t('syntheticData.results.drawers.recordDetails.SYN-00041')}
             </Typography>
           </Box>
-
           <Button onClick={() => setDrawerOpen(false)} sx={{ minWidth: 'auto', p: 0 }}>
             <CloseIcon sx={{ color: 'neutral.500' }} />
           </Button>
         </Box>
 
-        <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
+        {renderDivider()}
 
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '4px' }}
-        >
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            Document type
-          </Typography>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>
-            Discharge Summary
-          </Typography>
-        </Box>
+        <MetaRow
+          label={t('syntheticData.results.drawers.recordDetails.fields.documentType')}
+          value={t('syntheticData.results.drawers.recordDetails.Discharge_Summary')}
+        />
+        <MetaRow
+          label={t('syntheticData.results.drawers.recordDetails.fields.compliance')}
+          value={t('syntheticData.results.drawers.recordDetails.values.passed')}
+        />
 
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '4px' }}
-        >
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>Compliance</Typography>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>Passed</Typography>
-        </Box>
+        {renderDivider()}
 
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '4px' }}
-        >
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>Compliance</Typography>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>Compliance</Typography>
-        </Box>
+        {renderSectionTitle('generatedFields')}
+        {generatedFields.map((field) => (
+          <GeneratedFieldRow
+            key={field.labelKey}
+            label={t(`syntheticData.results.drawers.recordDetails.fields.${field.labelKey}`)}
+            value={t(
+              `syntheticData.results.drawers.recordDetails.values.${field.valueKey}`,
+              field.valueKey,
+            )}
+          />
+        ))}
 
-        <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
+        {renderDivider()}
 
-        <Typography
-          sx={{
-            color: 'neutral.400',
-            fontSize: FONT_SIZES.xs,
-            fontWeight: 'fontWeightMedium',
-            mb: '12px',
-          }}
-        >
-          GENERATED FIELDS
-        </Typography>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Age range
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>55-64</Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Encounter date
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>2025-04-14</Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>Category</Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>
-            Endocrinology
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Diagnosis
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>E11.9</Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Discharge status
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>Follow-up</Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Medication
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>Metformin</Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Provider type
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.700' }}>
-            Endocrinologist
-          </Typography>
-        </Box>
-
-        <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
-
-        <Typography
-          sx={{
-            color: 'neutral.400',
-            fontSize: FONT_SIZES.xs,
-            fontWeight: 'fontWeightMedium',
-            mb: '12px',
-          }}
-        >
-          CLINICAL NOTE
-        </Typography>
-
+        {renderSectionTitle('clinicalNote')}
         <Box sx={{ p: '12px', borderRadius: '8px', bgcolor: 'neutral.50' }}>
           <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            Patient presented for routine follow-up. Synthetic note generated for testing purposes.
-            No direct identifiers detected.
+            {t('syntheticData.results.drawers.recordDetails.values.notePlaceholder')}
           </Typography>
         </Box>
 
-        <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
+        {renderDivider()}
 
-        <Typography
-          sx={{
-            color: 'neutral.400',
-            fontSize: FONT_SIZES.xs,
-            fontWeight: 'fontWeightMedium',
-            mb: '12px',
-          }}
-        >
-          COMPLIANCE
-        </Typography>
+        {renderSectionTitle('compliance')}
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckIcon sx={{ color: 'success.main' }} />
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            No direct identifiers detected
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckIcon sx={{ color: 'success.main' }} />
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            Dates transformed
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckIcon sx={{ color: 'success.main' }} />
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            Field confidence: High
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckIcon sx={{ color: 'success.main' }} />
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            Synthetic identifiers generated
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckIcon sx={{ color: 'success.main' }} />
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            Direct identifiers removed
-          </Typography>
-        </Box>
+        {complianceChecks.map((checkKey) => (
+          <ComplianceCheckRow
+            key={checkKey}
+            label={t(`syntheticData.results.drawers.recordDetails.values.${checkKey}`)}
+          />
+        ))}
       </Box>
     </Drawer>
   );

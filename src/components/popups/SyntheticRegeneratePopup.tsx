@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import BasePopup from './BasePopup';
+import { useTranslation } from 'react-i18next';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 import {
   Close as CloseIcon,
@@ -7,6 +7,7 @@ import {
   ArrowBack as ArrowBackIcon,
   Loop as LoopIcon,
 } from '@mui/icons-material';
+import BasePopup from '@/components/popups/BasePopup';
 
 interface IProps {
   isVisible: boolean;
@@ -15,6 +16,8 @@ interface IProps {
 }
 
 const SyntheticRegeneratePopup: FC<IProps> = ({ isVisible, onClose, onRegenerate }) => {
+  const { t } = useTranslation();
+
   return (
     <BasePopup isVisible={isVisible} onClose={onClose}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
@@ -37,15 +40,15 @@ const SyntheticRegeneratePopup: FC<IProps> = ({ isVisible, onClose, onRegenerate
           align="center"
           sx={{ color: 'neutral.900', fontWeight: 'fontWeightMedium', mb: '8px' }}
         >
-          Regenerate dataset?
+          {t('syntheticData.results.regeneratePopup.title')}
         </Typography>
 
         <Box sx={{ mb: '24px' }}>
           <Typography variant="body2" align="center" sx={{ color: 'neutral.500' }}>
-            Current data exists only in this session.
+            {t('syntheticData.results.regeneratePopup.messageLine1')}
           </Typography>
           <Typography variant="body2" align="center" sx={{ color: 'neutral.500' }}>
-            Download before regenerating to avoid data loss.
+            {t('syntheticData.results.regeneratePopup.messageLine2')}
           </Typography>
         </Box>
 
@@ -63,7 +66,7 @@ const SyntheticRegeneratePopup: FC<IProps> = ({ isVisible, onClose, onRegenerate
             }}
             startIcon={<ArrowBackIcon />}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
 
           <Button
@@ -76,7 +79,7 @@ const SyntheticRegeneratePopup: FC<IProps> = ({ isVisible, onClose, onRegenerate
             }}
             endIcon={<LoopIcon />}
           >
-            Regenerate
+            {t('common.regenerate')}
           </Button>
         </Stack>
       </Box>

@@ -1,5 +1,6 @@
 import type { FC } from 'react';
-import BasePopup from './BasePopup';
+import { useTranslation } from 'react-i18next';
+import { FONT_SIZES } from '@/constants';
 import {
   alpha,
   Box,
@@ -17,7 +18,7 @@ import {
   ArrowBack as ArrowBackIcon,
   InfoOutlined as InfoOutlinedIcon,
 } from '@mui/icons-material';
-import { FONT_SIZES } from '@/constants';
+import BasePopup from '@/components/popups/BasePopup';
 
 interface IProps {
   isVisible: boolean;
@@ -25,7 +26,48 @@ interface IProps {
   onDownload: () => void;
 }
 
+const InfoRow = ({ label, value }: { label: string; value: string }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
+    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>{value}</Typography>
+  </Box>
+);
+
+const PopupCheckbox = ({
+  label,
+  defaultChecked = false,
+}: {
+  label: string;
+  defaultChecked?: boolean;
+}) => (
+  <FormControlLabel
+    control={
+      <Checkbox
+        defaultChecked={defaultChecked}
+        sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
+      />
+    }
+    label={label}
+    slotProps={{
+      typography: { fontSize: FONT_SIZES.xs },
+    }}
+  />
+);
+
 const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) => {
+  const { t } = useTranslation();
+
+  const infoItems = [
+    { labelKey: 'format', valueKey: 'syntheticData.syntheticResults.datasetSummary.formatTitle' },
+    { labelKey: 'records', valueKey: 'syntheticData.syntheticResults.datasetSummary.recordsTitle' },
+    { labelKey: 'fields', valueKey: 'syntheticData.syntheticResults.datasetSummary.fieldsTitle' },
+    { labelKey: 'framework', valueKey: 'syntheticData.results.drawers.validationDetails.HIPAA' },
+    {
+      labelKey: 'validation',
+      valueKey: 'syntheticData.results.drawers.recordDetails.fields.compliance',
+    },
+  ];
+
   return (
     <BasePopup isVisible={isVisible} onClose={onClose}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
@@ -38,7 +80,7 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
             align="center"
             sx={{ color: 'neutral.900', fontWeight: 'fontWeightMedium' }}
           >
-            Download synthetic dataset
+            {t('syntheticData.results.downloadPopup.title')}
           </Typography>
 
           <IconButton
@@ -49,39 +91,28 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
           </IconButton>
         </Box>
 
-        <Box sx={{ bgcolor: 'neutral.50', borderRadius: '8px', p: '16px', mb: '20px' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>Format</Typography>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>CSV</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>Records</Typography>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>1,000</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>Fields</Typography>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>23</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Framework
-            </Typography>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>
-              HIPAA Safe Harbor
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-              Validation
-            </Typography>
-            <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>
-              Validation
-            </Typography>
-          </Box>
+        <Box
+          sx={{
+            bgcolor: 'neutral.50',
+            borderRadius: '8px',
+            p: '16px',
+            mb: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+          }}
+        >
+          {infoItems.map((item) => (
+            <InfoRow
+              key={item.labelKey}
+              label={t(`syntheticData.results.downloadPopup.fields.${item.labelKey}`)}
+              value={t(item.valueKey)}
+            />
+          ))}
         </Box>
 
         <Box
-          sx={{
+          sx={(theme) => ({
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
@@ -91,13 +122,13 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
             borderRadius: '8px',
             border: '1px solid',
             borderColor: 'info.main',
-            boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-            bgcolor: (theme) => `${alpha(theme.palette.info.light, 0.3)}`,
-          }}
+            bgcolor: alpha(theme.palette.info.light, 0.3),
+            boxShadow: `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
+          })}
         >
           <InfoOutlinedIcon sx={{ color: 'info.main' }} />
           <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'info.main' }}>
-            Generated data will not be stored after this session.
+            {t('syntheticData.results.downloadPopup.info')}
           </Typography>
         </Box>
 
@@ -110,27 +141,11 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
             },
           }}
         >
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-              />
-            }
-            label="Include validation report"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
+          <PopupCheckbox
+            label={t('syntheticData.results.downloadPopup.includeValidation')}
+            defaultChecked
           />
-          <FormControlLabel
-            control={
-              <Checkbox sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }} />
-            }
-            label="Include schema summary"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
-          />
+          <PopupCheckbox label={t('syntheticData.results.downloadPopup.includeSchema')} />
         </FormGroup>
 
         <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', mb: '20px' }}></Box>
@@ -147,7 +162,7 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
             }}
             startIcon={<ArrowBackIcon />}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
 
           <Button
@@ -156,11 +171,11 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
               color: 'common.white',
               bgcolor: 'primary.500',
               fontWeight: 'fontWeightMedium',
-              '&:hover': { opacity: 0.8 },
+              '&:hover': { bgcolor: 'primary.600' },
             }}
             startIcon={<ArrowCircleDownIcon />}
           >
-            Download
+            {t('common.download')}
           </Button>
         </Stack>
       </Box>

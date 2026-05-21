@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  type Theme,
 } from '@mui/material';
 import {
   ArrowCircleDown as ArrowCircleDownIcon,
@@ -29,37 +30,150 @@ import RecordDetailsDrawer from '@/components/business/synthetic/RecordDetailsDr
 import CustomizeColumnsDrawer from '@/components/business/synthetic/CustomizeColumnsDrawer';
 import SyntheticRegeneratePopup from '@/components/popups/SyntheticRegeneratePopup';
 import SyntheticDownloadPopup from '@/components/popups/SyntheticDownloadPopup';
+import { useTranslation } from 'react-i18next';
+
+const cardStyle = {
+  width: '100%',
+  bgcolor: 'common.white',
+  p: '16px',
+  borderRadius: '8px',
+  border: '1px solid',
+  borderColor: 'neutral.200',
+  boxShadow: (theme: Theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
+};
+
+interface MetricField {
+  label: string;
+  value: React.ReactNode;
+}
+
+interface MetricCardProps {
+  title: string;
+  icon: React.ReactNode;
+  fields: MetricField[];
+  lineColor?: string;
+}
+
+const MetricCard = ({ title, icon, fields, lineColor = 'success.main' }: MetricCardProps) => (
+  <Box sx={cardStyle}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'neutral.700' }}>
+      {icon}
+      <Typography
+        sx={{
+          fontSize: FONT_SIZES.sm,
+          fontWeight: 'fontWeightMedium',
+          textTransform: 'uppercase',
+        }}
+      >
+        {title}
+      </Typography>
+    </Box>
+
+    <Box sx={{ height: '1px', width: '100%', bgcolor: lineColor, my: '12px' }}></Box>
+
+    <Box sx={{ display: 'flex', gap: '8px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        {fields.map((f, i) => (
+          <Typography
+            key={i}
+            sx={{ fontWeight: 'fontWeightMedium', fontSize: FONT_SIZES.sm, color: 'neutral.700' }}
+          >
+            {f.label}
+          </Typography>
+        ))}
+      </Box>
+
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        {fields.map((f, i) =>
+          typeof f.value === 'string' ? (
+            <Typography key={i} sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>
+              {f.value}
+            </Typography>
+          ) : (
+            <Box key={i}>{f.value}</Box>
+          ),
+        )}
+      </Box>
+    </Box>
+  </Box>
+);
 
 const SyntheticResults = () => {
+  const { t } = useTranslation();
   const [isValidationDetailsDrawerOpen, setIsValidationDetailsDrawerOpen] = useState(false);
   const [isRecordDetailsDrawerOpen, setIsRecordDetailsDrawerOpen] = useState(false);
   const [isCustomizeColumnsDrawerOpen, setIsCustomizeColumnsDrawerOpen] = useState(false);
   const [isRegeneratePopupOpen, setIsRegeneratePopupOpen] = useState(false);
   const [isDownloadPopupOpen, setIsDownloadPopupOpen] = useState(false);
 
-  function createData(
-    record_id: string,
-    docType: string,
-    ageRange: string,
-    date: string,
-    quality: string,
-  ) {
-    return { record_id, docType, ageRange, date, quality };
-  }
-
   const rows = [
-    createData('SYN-00041', 'Dischrge sum...', '55-64', '2026-04-01', 'Good'),
-    createData('SYN-00042', 'Progress Note', '34-37', '2026-04-05', 'Fair'),
-    createData('SYN-00043', 'Consultation', '23-34', '2026-04-04', 'Good'),
-    createData('SYN-00044', 'Operative', '20-45', '2026-04-15', 'Good'),
-    createData('SYN-00045', 'Operative report', '30-35', '2026-04-30', 'Good'),
-    createData('SYN-00046', 'Radiology', '30-40', '2026-04-30', 'Good'),
-    createData('SYN-00047', 'RadiClinical Not...', '39-40', '2026-04-29', 'Good'),
-    createData('SYN-00048', 'Consultation No...', '18-23', '2026-05-01', 'Good'),
+    {
+      record_id: 'SYN-00041',
+      docType: 'Dischrge sum...',
+      ageRange: '55-64',
+      date: '2026-04-01',
+      quality: t('common.good'),
+    },
+    {
+      record_id: 'SYN-00042',
+      docType: 'Progress Note',
+      ageRange: '34-37',
+      date: '2026-04-05',
+      quality: t('common.fair'),
+    },
+    {
+      record_id: 'SYN-00043',
+      docType: 'Consultation',
+      ageRange: '23-34',
+      date: '2026-04-04',
+      quality: t('common.good'),
+    },
+    {
+      record_id: 'SYN-00044',
+      docType: 'Operative',
+      ageRange: '20-45',
+      date: '2026-04-15',
+      quality: t('common.good'),
+    },
+    {
+      record_id: 'SYN-00045',
+      docType: 'Operative report',
+      ageRange: '30-35',
+      date: '2026-04-30',
+      quality: t('common.good'),
+    },
+    {
+      record_id: 'SYN-00046',
+      docType: 'Radiology',
+      ageRange: '30-40',
+      date: '2026-04-30',
+      quality: t('common.good'),
+    },
+    {
+      record_id: 'SYN-00047',
+      docType: 'RadiClinical Not...',
+      ageRange: '39-40',
+      date: '2026-04-29',
+      quality: t('common.good'),
+    },
+    {
+      record_id: 'SYN-00048',
+      docType: 'Consultation No...',
+      ageRange: '18-23',
+      date: '2026-05-01',
+      quality: t('common.good'),
+    },
+  ];
+
+  const validationChecksKeys = [
+    'syntheticData.syntheticResults.validation.checks.dates',
+    'syntheticData.syntheticResults.validation.checks.freeText',
+    'syntheticData.syntheticResults.validation.checks.format',
+    'syntheticData.syntheticResults.validation.checks.synthetic',
+    'syntheticData.syntheticResults.validation.checks.synthetic',
   ];
 
   const onRegenerate = async () => {};
-
   const onDownload = async () => {};
 
   return (
@@ -74,301 +188,140 @@ const SyntheticResults = () => {
             flexDirection: { xs: 'column', md: 'row' },
           }}
         >
-          <Box
-            sx={{
-              width: '100%',
-              bgcolor: 'common.white',
-              p: '16px',
-              borderRadius: '8px',
-              border: '1px solid',
-              borderColor: 'neutral.200',
-              boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'neutral.700' }}>
-              <SvgIcon component={ComplienceIcon} inheritViewBox />
+          <MetricCard
+            title={t('syntheticData.syntheticResults.compliance.title')}
+            icon={<SvgIcon component={ComplienceIcon} inheritViewBox />}
+            fields={[
+              {
+                label: t('syntheticData.syntheticResults.compliance.framework'),
+                value: t('syntheticData.syntheticResults.compliance.values.hipaaSh'),
+              },
+              {
+                label: t('syntheticData.syntheticResults.compliance.riskLevel'),
+                value: t('common.low'),
+              },
+              {
+                label: t('syntheticData.syntheticResults.compliance.directIdentifiers'),
+                value: t('common.low'),
+              },
+            ]}
+          />
 
-              <Typography
-                sx={{
-                  fontSize: FONT_SIZES.sm,
-                  fontWeight: 'fontWeightMedium',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Compliance
-              </Typography>
-            </Box>
-
-            <Box sx={{ height: '1px', width: '100%', bgcolor: 'success.main', my: '12px' }}></Box>
-
-            <Box sx={{ display: 'flex', gap: '8px' }}>
-              <Box>
-                <Typography
-                  sx={{
-                    fontWeight: 'fontWeightMedium',
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                  }}
-                >
-                  Framework:
-                </Typography>
-                <Typography
-                  sx={{
-                    fontWeight: 'fontWeightMedium',
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                  }}
-                >
-                  Risk level:
-                </Typography>
-                <Typography
-                  sx={{
-                    fontWeight: 'fontWeightMedium',
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                  }}
-                >
-                  Direct identifiers:
-                </Typography>
-              </Box>
-
-              <Box>
-                <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>
-                  HIPAA SH
-                </Typography>
-                <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>Low</Typography>
-                <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>Low</Typography>
-              </Box>
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              width: '100%',
-              bgcolor: 'common.white',
-              p: '16px',
-              borderRadius: '8px',
-              border: '1px solid',
-              borderColor: 'neutral.200',
-              boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'neutral.700' }}>
-              <SvgIcon component={FinanceIcon} inheritViewBox />
-
-              <Typography
-                sx={{
-                  fontSize: FONT_SIZES.sm,
-                  fontWeight: 'fontWeightMedium',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Data Quality
-              </Typography>
-            </Box>
-
-            <Box sx={{ height: '1px', width: '100%', bgcolor: 'success.main', my: '12px' }}></Box>
-
-            <Box sx={{ display: 'flex', gap: '8px' }}>
-              <Box>
-                <Typography
-                  sx={{
-                    fontWeight: 'fontWeightMedium',
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                  }}
-                >
-                  Quality:
-                </Typography>
-                <Typography
-                  sx={{
-                    fontWeight: 'fontWeightMedium',
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                  }}
-                >
-                  Consistency:
-                </Typography>
-                <Typography
-                  sx={{
-                    fontWeight: 'fontWeightMedium',
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                  }}
-                >
-                  Warnings:
-                </Typography>
-              </Box>
-
-              <Box>
-                <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>Good</Typography>
-                <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>High</Typography>
-                <Box
-                  sx={{
-                    bgcolor: (theme) =>
-                      alpha(theme.palette.warning[100] || theme.palette.common.white, 0.3),
-                    borderRadius: '99px',
-                    display: 'flex',
-                    gap: '4px',
-                    alignItems: 'center',
-                  }}
-                >
+          <MetricCard
+            title={t('syntheticData.syntheticResults.dataQuality.title')}
+            icon={<SvgIcon component={FinanceIcon} inheritViewBox />}
+            fields={[
+              {
+                label: t('syntheticData.syntheticResults.dataQuality.quality'),
+                value: t('common.good'),
+              },
+              {
+                label: t('syntheticData.syntheticResults.dataQuality.consistency'),
+                value: t('common.high'),
+              },
+              {
+                label: t('syntheticData.syntheticResults.dataQuality.warnings'),
+                value: (
                   <Box
-                    sx={{
-                      width: '8px',
-                      height: '8px',
-                      borderRadius: '4px',
-                      bgcolor: 'warning.main',
-                    }}
-                  ></Box>
-                  <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'warning.main' }}>
-                    3 low-confidence
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+                    sx={(theme) => ({
+                      bgcolor: alpha(theme.palette.warning[100] || theme.palette.common.white, 0.3),
+                      borderRadius: '99px',
+                      display: 'flex',
+                      gap: '4px',
+                      alignItems: 'center',
+                      px: 1,
+                    })}
+                  >
+                    <Box
+                      sx={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '4px',
+                        bgcolor: 'warning.main',
+                      }}
+                    />
+                    <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'warning.main' }}>
+                      {t('syntheticData.syntheticResults.dataQuality.lowConfidenceCount', {
+                        count: 3,
+                      })}
+                    </Typography>
+                  </Box>
+                ),
+              },
+            ]}
+          />
 
-          <Box
-            sx={{
-              width: '100%',
-              bgcolor: 'common.white',
-              p: '16px',
-              borderRadius: '8px',
-              border: '1px solid',
-              borderColor: 'neutral.200',
-              boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'neutral.700' }}>
-              <ArrowCircleDownIcon />
-
-              <Typography
-                sx={{
-                  fontSize: FONT_SIZES.sm,
-                  fontWeight: 'fontWeightMedium',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Export
-              </Typography>
-            </Box>
-
-            <Box sx={{ height: '1px', width: '100%', bgcolor: 'success.main', my: '12px' }}></Box>
-
-            <Box sx={{ display: 'flex', gap: '8px' }}>
-              <Box>
-                <Box
-                  sx={{
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                    display: 'flex',
-                    gap: '8px',
-                    alignItems: 'center',
-                    mb: '4px',
-                  }}
-                >
-                  <ArrowCircleDownIcon />
-                  Ready to download
-                </Box>
-
-                <Box
-                  sx={{
-                    fontSize: FONT_SIZES.sm,
-                    color: 'neutral.700',
-                    display: 'flex',
-                    gap: '8px',
-                  }}
-                >
-                  <CheckCircleOutlinedIcon sx={{ color: 'success.main' }} />
-                  Session only — download before leaving
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+          <MetricCard
+            title={t('syntheticData.syntheticResults.export.title')}
+            icon={<ArrowCircleDownIcon />}
+            fields={[
+              {
+                label: '',
+                value: (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <Box
+                      sx={{
+                        fontSize: FONT_SIZES.sm,
+                        color: 'neutral.700',
+                        display: 'flex',
+                        gap: '8px',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <ArrowCircleDownIcon fontSize="small" />
+                      {t('syntheticData.syntheticResults.export.ready')}
+                    </Box>
+                    <Box
+                      sx={{
+                        fontSize: FONT_SIZES.sm,
+                        color: 'neutral.700',
+                        display: 'flex',
+                        gap: '8px',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <CheckCircleOutlinedIcon sx={{ color: 'success.main' }} fontSize="small" />
+                      {t('syntheticData.syntheticResults.export.sessionNotice')}
+                    </Box>
+                  </Box>
+                ),
+              },
+            ]}
+          />
         </Box>
 
-        <Box
-          sx={{
-            flex: 1,
-            width: '100%',
-            bgcolor: 'common.white',
-            p: '16px',
-            borderRadius: '8px',
-            border: '1px solid',
-            borderColor: 'neutral.200',
-            boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'neutral.700' }}>
-            <SvgIcon component={TableChartIcon} inheritViewBox />
-
-            <Typography
-              sx={{
-                fontSize: FONT_SIZES.sm,
-                fontWeight: 'fontWeightMedium',
-                textTransform: 'uppercase',
-              }}
-            >
-              Dataset Summary
-            </Typography>
-          </Box>
-
-          <Box sx={{ height: '1px', width: '100%', bgcolor: 'success.main', my: '12px' }}></Box>
-
-          <Box sx={{ display: 'flex', gap: '8px' }}>
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightMedium',
-                  fontSize: FONT_SIZES.sm,
-                  color: 'neutral.700',
-                }}
-              >
-                Format:
-              </Typography>
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightMedium',
-                  fontSize: FONT_SIZES.sm,
-                  color: 'neutral.700',
-                }}
-              >
-                Records:
-              </Typography>
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightMedium',
-                  fontSize: FONT_SIZES.sm,
-                  color: 'neutral.700',
-                }}
-              >
-                Fields:
-              </Typography>
-            </Box>
-
-            <Box>
-              <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>CSV</Typography>
-              <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>1,000</Typography>
-              <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.700' }}>24</Typography>
-            </Box>
-          </Box>
+        <Box sx={{ flex: 1, ...cardStyle }}>
+          <MetricCard
+            title={t('syntheticData.syntheticResults.datasetSummary.title')}
+            icon={<SvgIcon component={TableChartIcon} inheritViewBox />}
+            fields={[
+              {
+                label: t('syntheticData.syntheticResults.datasetSummary.format'),
+                value: t('syntheticData.syntheticResults.datasetSummary.formatTitle'),
+              },
+              {
+                label: t('syntheticData.syntheticResults.datasetSummary.records'),
+                value: t('syntheticData.syntheticResults.datasetSummary.recordsTitle'),
+              },
+              {
+                label: t('syntheticData.syntheticResults.datasetSummary.fields'),
+                value: t('syntheticData.syntheticResults.datasetSummary.fieldsTitle'),
+              },
+            ]}
+          />
         </Box>
       </Box>
 
       <Box sx={{ display: 'flex', gap: '24px', flexDirection: { xs: 'column', md: 'row' }, mb: 4 }}>
-        <Box
-          sx={{
-            flex: 2,
-            width: '100%',
-            borderRadius: '8px',
-            bgcolor: 'white',
-            border: '1px solid',
-            borderColor: 'neutral.200',
-            boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-          }}
-        >
-          <Box sx={{ p: '16px', display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ flex: 2, ...cardStyle, p: 0 }}>
+          <Box
+            sx={{
+              p: '16px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <Box>
               <Typography
                 sx={{
@@ -377,79 +330,39 @@ const SyntheticResults = () => {
                   color: 'neutral.900',
                 }}
               >
-                Preview Records
+                {t('syntheticData.syntheticResults.preview.title')}
               </Typography>
               <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
-                Showing 8 of 1,000 records
+                {t('syntheticData.syntheticResults.preview.showingCount', {
+                  count: 8,
+                  total: 1000,
+                })}
               </Typography>
             </Box>
-
             <Button
               sx={{ color: 'primary.500' }}
               startIcon={<SettingsIcon />}
               onClick={() => setIsCustomizeColumnsDrawerOpen(true)}
             >
-              Columns
+              {t('syntheticData.results.drawers.customizeColumns.title')}
             </Button>
           </Box>
 
-          <Table size="small" aria-label="a dense table">
+          <Table size="small" aria-label="dense table">
             <TableHead sx={{ bgcolor: 'neutral.50' }}>
               <TableRow>
-                <TableCell
-                  sx={{
-                    color: 'neutral.500',
-                    fontSize: FONT_SIZES.sm,
-                    fontWeight: 'fontWeightMedium',
-                  }}
-                >
-                  Record_ID
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: 'neutral.500',
-                    fontSize: FONT_SIZES.sm,
-                    fontWeight: 'fontWeightMedium',
-                  }}
-                >
-                  Doc Type
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: 'neutral.500',
-                    fontSize: FONT_SIZES.sm,
-                    fontWeight: 'fontWeightMedium',
-                  }}
-                >
-                  Age Range
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: 'neutral.500',
-                    fontSize: FONT_SIZES.sm,
-                    fontWeight: 'fontWeightMedium',
-                  }}
-                >
-                  Date
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: 'neutral.500',
-                    fontSize: FONT_SIZES.sm,
-                    fontWeight: 'fontWeightMedium',
-                  }}
-                >
-                  Quality
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: 'neutral.500',
-                    fontSize: FONT_SIZES.sm,
-                    fontWeight: 'fontWeightMedium',
-                  }}
-                >
-                  Action
-                </TableCell>
+                {['recordId', 'docType', 'ageRange', 'date', 'quality', 'action'].map((col) => (
+                  <TableCell
+                    key={col}
+                    sx={{
+                      color: 'neutral.500',
+                      fontSize: FONT_SIZES.sm,
+                      fontWeight: 'fontWeightMedium',
+                    }}
+                  >
+                    {t(`syntheticData.syntheticResults.preview.columns.${col}`)}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -497,18 +410,12 @@ const SyntheticResults = () => {
                   >
                     {row.quality}
                   </TableCell>
-                  <TableCell
-                    sx={{
-                      color: 'primary.500',
-                      fontSize: FONT_SIZES.xs,
-                      fontWeight: 'fontWeightMedium',
-                    }}
-                  >
+                  <TableCell>
                     <Button
-                      sx={{ color: 'primary.500' }}
+                      sx={{ color: 'primary.500', fontSize: FONT_SIZES.xs, p: 0 }}
                       onClick={() => setIsRecordDetailsDrawerOpen(true)}
                     >
-                      View
+                      {t('common.view')}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -517,18 +424,7 @@ const SyntheticResults = () => {
           </Table>
         </Box>
 
-        <Box
-          sx={{
-            flex: 1,
-            width: '100%',
-            bgcolor: 'common.white',
-            p: '16px',
-            borderRadius: '8px',
-            border: '1px solid',
-            borderColor: 'neutral.200',
-            boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-          }}
-        >
+        <Box sx={{ flex: 1, ...cardStyle }}>
           <Typography
             sx={{
               color: 'neutral.900',
@@ -537,114 +433,82 @@ const SyntheticResults = () => {
               mb: '17px',
             }}
           >
-            Compliance Validation
+            {t('syntheticData.syntheticResults.validation.title')}
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: '8px' }}>
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightMedium',
-                  fontSize: FONT_SIZES.sm,
-                  color: 'primary.700',
-                }}
-              >
-                Framework:
-              </Typography>
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightMedium',
-                  fontSize: FONT_SIZES.sm,
-                  color: 'primary.700',
-                }}
-              >
-                Risk level:
-              </Typography>
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightMedium',
-                  fontSize: FONT_SIZES.sm,
-                  color: 'primary.700',
-                }}
-              >
-                Export status:
-              </Typography>
+          <Box sx={{ display: 'flex', gap: '8px', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              {[
+                t('syntheticData.syntheticResults.compliance.framework'),
+                t('syntheticData.syntheticResults.compliance.riskLevel'),
+                t('syntheticData.syntheticResults.validation.exportStatus'),
+              ].map((text, i) => (
+                <Typography
+                  key={i}
+                  sx={{
+                    fontWeight: 'fontWeightMedium',
+                    fontSize: FONT_SIZES.sm,
+                    color: 'primary.700',
+                  }}
+                >
+                  {text}
+                </Typography>
+              ))}
             </Box>
-
-            <Box>
-              <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
-                HIPAA Safe Harbor
-              </Typography>
-              <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>Low</Typography>
-              <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
-                Safe to download
-              </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              {[
+                t('syntheticData.syntheticResults.compliance.values.hipaaSh'),
+                t('common.low'),
+                t('syntheticData.syntheticResults.validation.safeToDownload'),
+              ].map((text, i) => (
+                <Typography key={i} sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
+                  {text}
+                </Typography>
+              ))}
             </Box>
           </Box>
 
           <Box sx={{ height: '1px', width: '100%', my: '17px', bgcolor: 'neutral.200' }}></Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
-              Dates transformed
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
-              Free-text fields checked
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
-              Export format validated
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
-              Synthetic identifiers generated
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
-            <CheckIcon sx={{ color: 'success.main' }} />
-            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
-              Synthetic identifiers generated
-            </Typography>
-          </Box>
+          {validationChecksKeys.map((key, index) => (
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
+              <CheckIcon sx={{ color: 'success.main' }} fontSize="small" />
+              <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
+                {t(key)}
+              </Typography>
+            </Box>
+          ))}
 
           <Box sx={{ height: '1px', width: '100%', my: '17px', bgcolor: 'neutral.200' }}></Box>
 
           <Box
-            sx={{
+            sx={(theme) => ({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
               mb: '17px',
-              bgcolor: (theme) =>
-                alpha(theme.palette.warning[100] || theme.palette.common.white, 0.3),
-              borderRadius: '8px',
               p: '12px',
-            }}
+              borderRadius: '8px',
+              bgcolor: alpha(theme.palette.warning[100] || theme.palette.common.white, 0.3),
+            })}
           >
             <WarningAmberIcon sx={{ color: 'warning.main' }} />
             <Typography sx={{ color: 'warning.main', fontSize: FONT_SIZES.sm }}>
-              3 low-confidence fields may require review
+              {t('syntheticData.syntheticResults.validation.warningReview', { count: 3 })}
             </Typography>
           </Box>
 
           <Button
-            sx={{ color: 'primary.500', fontWeight: 'fontWeightMedium', fontSize: FONT_SIZES.sm }}
+            sx={{
+              color: 'primary.500',
+              fontWeight: 'fontWeightMedium',
+              fontSize: FONT_SIZES.sm,
+              p: 0,
+            }}
             endIcon={<ArrowForwardIcon />}
             onClick={() => setIsValidationDetailsDrawerOpen(true)}
           >
-            View validation details
+            {t('syntheticData.syntheticResults.validation.viewDetails')}
           </Button>
         </Box>
       </Box>
@@ -658,6 +522,7 @@ const SyntheticResults = () => {
           bottom: 0,
           left: 0,
           right: 0,
+          zIndex: (theme) => theme.zIndex.appBar,
           border: '1px solid',
           borderColor: 'neutral.200',
           display: 'flex',
@@ -671,7 +536,7 @@ const SyntheticResults = () => {
           startIcon={<AutorenewIcon />}
           onClick={() => setIsRegeneratePopupOpen(true)}
         >
-          Regenerate
+          {t('common.regenerate')}
         </Button>
 
         <Button
@@ -680,11 +545,12 @@ const SyntheticResults = () => {
             fontWeight: 'fontWeightMedium',
             fontSize: FONT_SIZES.sm,
             bgcolor: 'primary.500',
+            '&:hover': { bgcolor: 'primary.600' },
           }}
-          endIcon={<AutorenewIcon />}
+          startIcon={<ArrowCircleDownIcon />}
           onClick={() => setIsDownloadPopupOpen(true)}
         >
-          Download
+          {t('common.download')}
         </Button>
       </Box>
 
@@ -693,23 +559,19 @@ const SyntheticResults = () => {
         setDrawerOpen={setIsValidationDetailsDrawerOpen}
         onDownload={() => setIsDownloadPopupOpen(true)}
       />
-
       <RecordDetailsDrawer
         drawerOpen={isRecordDetailsDrawerOpen}
         setDrawerOpen={setIsRecordDetailsDrawerOpen}
       />
-
       <CustomizeColumnsDrawer
         drawerOpen={isCustomizeColumnsDrawerOpen}
         setDrawerOpen={setIsCustomizeColumnsDrawerOpen}
       />
-
       <SyntheticRegeneratePopup
         isVisible={isRegeneratePopupOpen}
         onClose={() => setIsRegeneratePopupOpen(false)}
         onRegenerate={onRegenerate}
       />
-
       <SyntheticDownloadPopup
         isVisible={isDownloadPopupOpen}
         onClose={() => setIsDownloadPopupOpen(false)}

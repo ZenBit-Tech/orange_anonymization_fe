@@ -1,3 +1,5 @@
+import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FONT_SIZES } from '@/constants';
 import {
   alpha,
@@ -9,7 +11,6 @@ import {
   FormGroup,
   Typography,
 } from '@mui/material';
-import type { FC } from 'react';
 import { Close as CloseIcon, InfoOutlined as InfoOutlinedIcon } from '@mui/icons-material';
 
 interface IProps {
@@ -17,7 +18,72 @@ interface IProps {
   setDrawerOpen: (v: boolean) => void;
 }
 
+const formGroupStyle = {
+  color: 'neutral.700',
+  flex: 1,
+  '& .MuiFormControlLabel-root': {
+    marginBottom: '-10px',
+  },
+};
+
+interface CustomCheckboxFieldProps {
+  label: string;
+  defaultChecked?: boolean;
+}
+
+const CustomCheckboxField = ({ label, defaultChecked = false }: CustomCheckboxFieldProps) => (
+  <FormControlLabel
+    control={
+      <Checkbox
+        defaultChecked={defaultChecked}
+        sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
+      />
+    }
+    label={label}
+    slotProps={{
+      typography: { fontSize: FONT_SIZES.xs },
+    }}
+  />
+);
+
 const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
+  const { t } = useTranslation();
+
+  const baseFields = [
+    'syntheticData.results.drawers.customizeColumns.fields.recordId',
+    'syntheticData.results.drawers.customizeColumns.fields.documentType',
+    'syntheticData.results.drawers.customizeColumns.fields.ageRange',
+    'syntheticData.results.drawers.customizeColumns.fields.date',
+    'syntheticData.results.drawers.customizeColumns.fields.quality',
+  ];
+
+  const additionalFieldsCol1 = [
+    { key: 'dashboard.entityTypesChart.labels.PERSON' },
+    { key: 'dashboard.entityTypesChart.labels.LOCATION' },
+    { key: 'dashboard.entityTypesChart.labels.DATE_TIME' },
+    { key: 'dashboard.entityTypesChart.labels.PHONE_NUMBER' },
+    { label: 'FAX' },
+    { key: 'dashboard.entityTypesChart.labels.EMAIL_ADDRESS' },
+    { key: 'dashboard.entityTypesChart.labels.US_SSN' },
+    { key: 'dashboard.entityTypesChart.labels.MEDICAL_RECORD_NUMBER' },
+    { label: 'BENEFICIARY' },
+  ];
+
+  const additionalFieldsCol2 = [
+    { key: 'dashboard.entityTypesChart.labels.IBAN_CODE' },
+    { label: 'LICENSE' },
+    { key: 'dashboard.entityTypesChart.labels.US_PASSPORT' },
+    { key: 'dashboard.entityTypesChart.labels.DEVICE_ID' },
+    { key: 'dashboard.entityTypesChart.labels.URL' },
+    { key: 'dashboard.entityTypesChart.labels.IP_ADDRESS' },
+    { key: 'dashboard.entityTypesChart.labels.BIOMETRIC' },
+    { key: 'dashboard.entityTypesChart.labels.PHOTO' },
+    { label: 'OTHER' },
+  ];
+
+  const getLabel = (field: { key?: string; label?: string }) =>
+    field.key ? t(field.key) : field.label || '';
+
   return (
     <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
       <Box sx={{ p: '32px', width: '400px' }}>
@@ -32,14 +98,12 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
                 fontWeight: 'fontWeightSemiBold',
               }}
             >
-              Customize columns
+              {t('syntheticData.results.drawers.customizeColumns.title')}
             </Typography>
-
             <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
-              Choose fields to display
+              {t('syntheticData.results.drawers.customizeColumns.subtitle')}
             </Typography>
           </Box>
-
           <Button onClick={() => setDrawerOpen(false)} sx={{ minWidth: 'auto', p: 0 }}>
             <CloseIcon sx={{ color: 'neutral.500' }} />
           </Button>
@@ -48,7 +112,7 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
         <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
 
         <Box
-          sx={{
+          sx={(theme) => ({
             display: 'flex',
             gap: '8px',
             px: '16px',
@@ -56,14 +120,14 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
             borderRadius: '8px',
             border: '1px solid',
             borderColor: 'info.main',
-            boxShadow: (theme) => `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
-            bgcolor: (theme) => `${alpha(theme.palette.info.light, 0.3)}`,
+            bgcolor: alpha(theme.palette.info.light, 0.3),
             mb: '24px',
-          }}
+            boxShadow: `0px 1px 3px 0px ${alpha(theme.palette.common.black, 0.14)}`,
+          })}
         >
           <InfoOutlinedIcon sx={{ color: 'info.main' }} />
           <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'info.main' }}>
-            This only affects the preview table. Downloaded dataset includes all 23 fields
+            {t('syntheticData.results.drawers.customizeColumns.info')}
           </Typography>
         </Box>
 
@@ -75,77 +139,16 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
             mb: '12px',
           }}
         >
-          Selected 5 of 23
+          {t('syntheticData.results.drawers.customizeColumns.selectedCount', {
+            selected: 5,
+            total: 23,
+          })}
         </Typography>
 
-        <FormGroup
-          sx={{
-            color: 'neutral.700',
-            '& .MuiFormControlLabel-root': {
-              marginBottom: '-10px',
-            },
-          }}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-              />
-            }
-            label="Record ID"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-              />
-            }
-            label="Document Type"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-              />
-            }
-            label="Age Range"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-              />
-            }
-            label="Date"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-              />
-            }
-            label="Quality"
-            slotProps={{
-              typography: { fontSize: FONT_SIZES.xs },
-            }}
-          />
+        <FormGroup sx={formGroupStyle}>
+          {baseFields.map((fieldKey) => (
+            <CustomCheckboxField key={fieldKey} label={t(fieldKey)} defaultChecked />
+          ))}
         </FormGroup>
 
         <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
@@ -158,226 +161,20 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
             mb: '12px',
           }}
         >
-          ADDITIONAL FIELDS
+          {t('syntheticData.results.drawers.customizeColumns.additionalFields')}
         </Typography>
 
-        <Box sx={{ display: 'flex' }}>
-          <FormGroup
-            sx={{
-              color: 'neutral.700',
-              '& .MuiFormControlLabel-root': {
-                marginBottom: '-10px',
-              },
-            }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="PERSON"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="LOCATION"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="DATE"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="PHONE"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="FAX"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="EMAIL"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="SSN"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="MRN"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="BENEFICIARY"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
+        <Box sx={{ display: 'flex', gap: '16px' }}>
+          <FormGroup sx={formGroupStyle}>
+            {additionalFieldsCol1.map((field, index) => (
+              <CustomCheckboxField key={field.key || index} label={getLabel(field)} />
+            ))}
           </FormGroup>
 
-          <FormGroup
-            sx={{
-              color: 'neutral.700',
-              '& .MuiFormControlLabel-root': {
-                marginBottom: '-10px',
-              },
-            }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="ACCOUNT"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="LICENSE"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="VEHICLE"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="DEVICE"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="URL"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="IP"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="BIOMETRIC"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="PHOTO"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-                />
-              }
-              label="OTHER"
-              slotProps={{
-                typography: { fontSize: FONT_SIZES.xs },
-              }}
-            />
+          <FormGroup sx={formGroupStyle}>
+            {additionalFieldsCol2.map((field, index) => (
+              <CustomCheckboxField key={field.key || index} label={getLabel(field)} />
+            ))}
           </FormGroup>
         </Box>
 
@@ -385,13 +182,9 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
 
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Button
-            sx={{
-              color: 'primary.500',
-              fontSize: FONT_SIZES.md,
-              fontWeight: 'fontWeightMedium',
-            }}
+            sx={{ color: 'primary.500', fontSize: FONT_SIZES.md, fontWeight: 'fontWeightMedium' }}
           >
-            Reset to default
+            {t('syntheticData.results.drawers.customizeColumns.resetToDefault')}
           </Button>
           <Button
             sx={{
@@ -399,9 +192,10 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
               fontSize: FONT_SIZES.md,
               fontWeight: 'fontWeightMedium',
               bgcolor: 'primary.500',
+              '&:hover': { bgcolor: 'primary.600' },
             }}
           >
-            Apply
+            {t('syntheticData.results.drawers.customizeColumns.apply')}
           </Button>
         </Box>
       </Box>
