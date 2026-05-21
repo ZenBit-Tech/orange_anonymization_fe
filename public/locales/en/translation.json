@@ -20,14 +20,23 @@
     "copy": "Copy",
     "download": "Download",
     "retry": "Retry",
+    "regenerate": "Regenerate",
     "continue": "Continue",
     "finish": "Finish",
     "analyze": "Analyze",
     "diIdFile": "De-id File",
     "newAnalysis": "New Analysis",
+    "view": "View",
     "copied": "Copied to clipboard",
     "mb": "MB",
+    "s": "s",
+    "percent": "%",
     "na": "N/A",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "good": "Good",
+    "fair": "Fair",
     "reduct": "Reduct"
   },
   "nav": {
@@ -42,6 +51,7 @@
     "syntheticData": "Synthetic Data",
     "settings": "Settings",
     "syntheticDataGenerationSettings": "Generation Settings",
+    "syntheticGeneratedData": "Generated Data",
     "logout": "Logout",
     "logoutDialog": {
       "title": "Sign out?",
@@ -56,12 +66,17 @@
   "sidebar": {
     "brand": "De-ID Studio",
     "brandSubtitle": "De-ID & Synthesis",
+    "allAnalyses": "All Analyses",
     "signOut": "Sign out"
   },
   "header": {
     "dashboard": {
       "title": "Dashboard",
       "subtitle": "Track your de-identification activity"
+    },
+    "analyses": {
+      "title": "All Analyses",
+      "subtitle": "Complete history of de-identification jobs"
     },
     "deIdentify": {
       "title": "New Analysis",
@@ -301,17 +316,24 @@
       "last6Months": "Last 6 months",
       "customRange": "Custom range..."
     },
+    "analyses": {
+      "filters": {
+        "allStatuses": "All statuses",
+        "searchByFilename": "Search by filename..."
+      }
+    },
     "welcomeTitle": "Welcome to De-ID Studio",
     "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",
     "metrics": {
       "totalDocuments": "Total Documents",
       "entitiesDetected": "Entities Detected",
-      "averageConfidenceRate": "Anonymization Rate",
+      "anonymizationRate": "Anonymization Rate",
       "syntheticRecords": "Synthetic Records"
     },
     "recentActivity": {
       "title": "Recent Activity",
       "subtitle": "Last 5 analyses across all compliance frameworks",
+      "viewAll": "View all",
       "noActivity": "No recent activity",
       "columns": {
         "document": "Document",
@@ -320,7 +342,21 @@
         "entities": "Entities",
         "date": "Date",
         "action": "Action"
+      },
+      "status": {
+        "succeeded": "Succeeded",
+        "failed": "Failed",
+        "queued": "Queued",
+        "processing": "Processing",
+        "draft": "Draft",
+        "configured": "Configured"
       }
+    },
+    "frameworks": {
+      "hipaa": "HIPAA",
+      "gdpr": "EU GDPR",
+      "ukDpi": "UK DPI",
+      "swissFadp": "Swiss FADP"
     },
     "chart": {
       "activityTitle": "Processing Activity",
@@ -328,29 +364,73 @@
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
       "entities": "Entities",
-      "empty": "No processing activity yet",
-      "error": "Failed to load processing activity"
+      "empty": "No processing activity yet"
+    },
+    "errors": {
+      "failedToLoadProcessingActivity": "Failed to load processing activity",
+      "failedToLoadAnalysesActivity": "Failed to load analyses activity"
     },
     "emptyState": {
       "noAnalysesFound": "No analyses found",
       "deIdentification": {
         "title": "De-Identification Method Usage",
-        "subtitle": "Methods will appear after your first analysis"
+        "subtitle": "Methods will appear after your first analysis",
+        "contentSubtitle": "Popular methods applied to detected entities"
       },
       "compliance": {
         "title": "Compliance Framework Usage",
-        "subtitle": "Framework distribution will appear after your first analysis"
+        "subtitle": "Framework distribution will appear after your first analysis",
+        "contentSubtitle": "Distribution of frameworks applied across analyses"
       },
       "entityTypes": {
         "title": "Entity Types Detected",
-        "subtitle": "Entity breakdown will appear after your first analysis"
+        "subtitle": "Entity breakdown will appear after your first analysis",
+        "contentSubtitle": "Distribution of PII entities found in documents"
       }
+    },
+    "deIdentificationChart": {
+      "strategies": {
+        "redact": "Redact",
+        "replace": "Replace",
+        "mask": "Mask",
+        "hash": "Hash",
+        "synthetic": "Synthetic",
+        "generalise": "Generalise",
+        "pseudonymise": "Pseudonymise",
+        "nlp": "NLP redaction"
+      }
+    },
+    "entityTypesChart": {
+      "labels": {
+        "PERSON": "Person",
+        "DATE_TIME": "Date / Time",
+        "EMAIL_ADDRESS": "Email",
+        "PHONE_NUMBER": "Phone",
+        "LOCATION": "Location",
+        "US_SSN": "SSN",
+        "MEDICAL_RECORD_NUMBER": "MRN",
+        "ORGANIZATION": "Organisation",
+        "IP_ADDRESS": "IP Address",
+        "DEVICE_ID": "Device ID",
+        "US_PASSPORT": "Passport",
+        "NATIONAL_ID": "National ID",
+        "CREDIT_CARD": "Credit Card",
+        "IBAN_CODE": "Bank Account",
+        "GEOPOINT": "Geopoint",
+        "BIOMETRIC": "Bio. Data",
+        "PHOTO": "Photo/Image",
+        "FREE_TEXT": "Free Text PHI",
+        "URL": "URL"
+      },
+      "showLess": "Show less",
+      "showAll": "Show all {{count}} entity types"
     }
   },
   "deIdentify": {
     "title": "De-Identify Clinical Text",
     "subtitle": "Detect and anonymize PII in clinical documents",
     "languageSelect": {
+      "placeholder": "Select language",
       "search": "Search language...",
       "recentlyUsed": "RECENTLY USED",
       "allLanguages": "ALL LANGUAGES",
@@ -885,7 +965,156 @@
         "value": "Generated Value",
         "locale": "Locale"
       },
-      "noData": "No synthetic data generated yet"
+      "noData": "No synthetic data generated yet",
+      "downloadPopup": {
+        "title": "Download synthetic dataset",
+        "info": "Generated data will not be stored after this session.",
+        "includeValidation": "Include validation report",
+        "includeSchema": "Include schema summary",
+        "fields": {
+          "format": "Format",
+          "records": "Records",
+          "fields": "Fields",
+          "framework": "Framework",
+          "validation": "Validation"
+        }
+      },
+      "regeneratePopup": {
+        "title": "Regenerate dataset?",
+        "messageLine1": "Current data exists only in this session.",
+        "messageLine2": "Download before regenerating to avoid data loss."
+      },
+      "drawers": {
+        "customizeColumns": {
+          "title": "Customize columns",
+          "subtitle": "Choose fields to display",
+          "info": "This only affects the preview table. Downloaded dataset includes all 23 fields",
+          "selectedCount": "Selected {{selected}} of {{total}}",
+          "additionalFields": "ADDITIONAL FIELDS",
+          "resetToDefault": "Reset to default",
+          "apply": "Apply",
+          "fields": {
+            "recordId": "Record ID",
+            "documentType": "Document Type",
+            "ageRange": "Age Range",
+            "date": "Date",
+            "quality": "Quality"
+          }
+        },
+        "recordDetails": {
+          "title": "Record details",
+          "generatedFields": "GENERATED FIELDS",
+          "clinicalNote": "CLINICAL NOTE",
+          "compliance": "COMPLIANCE",
+          "SYN-00041": "SYN-00041",
+          "SYN-00042": "SYN-00041",
+          "SYN-00043": "SYN-00041",
+          "SYN-00044": "SYN-00041",
+          "SYN-00045": "SYN-00041",
+          "SYN-00046": "SYN-00041",
+          "SYN-00047": "SYN-00041",
+          "Discharge_Summary": "Discharge Summary",
+          "55-64": "55-64",
+          "2025-04-14": "2025-04-14",
+          "Endocrinology": "Endocrinology",
+          "Endocrinologist": "Endocrinologist",
+          "E11.9": "E11.9",
+          "Follow-up": "Follow-up",
+          "Metformin": "Metformin",
+          "fields": {
+            "documentType": "Document type",
+            "compliance": "Compliance",
+            "ageRange": "Age range",
+            "encounterDate": "Encounter date",
+            "category": "Category",
+            "diagnosis": "Diagnosis",
+            "dischargeStatus": "Discharge status",
+            "medication": "Medication",
+            "providerType": "Provider type"
+          },
+          "values": {
+            "passed": "Passed",
+            "notePlaceholder": "Patient presented for routine follow-up. Synthetic note generated for testing purposes. No direct identifiers detected.",
+            "noDirectIdentifiers": "No direct identifiers detected",
+            "datesTransformed": "Dates transformed",
+            "fieldConfidenceHigh": "Field confidence: High",
+            "syntheticIdentifiers": "Synthetic identifiers generated",
+            "directIdentifiersRemoved": "Direct identifiers removed"
+          }
+        },
+        "validationDetails": {
+          "title": "Validation Details",
+          "passed": "Passed with review notes",
+          "checks": "CHECKS",
+          "warnings": "WARNINGS",
+          "info": "Review warnings before using this dataset in regulated workflows",
+          "HIPAA": "HIPAA Safe Harbor",
+          "Generated_note_text": "Generated_note_text",
+          "Diagnosis_code": "Diagnosis code",
+          "values": {
+            "removed": "Removed",
+            "mediumConfidence": "Medium confidence",
+            "mediumConsistency": "Medium consistency"
+          }
+        }
+      }
+    },
+    "syntheticResults": {
+      "compliance": {
+        "title": "Compliance",
+        "framework": "Framework:",
+        "riskLevel": "Risk level:",
+        "directIdentifiers": "Direct identifiers:",
+        "values": {
+          "hipaaSh": "HIPAA SH"
+        }
+      },
+      "dataQuality": {
+        "title": "Data Quality",
+        "quality": "Quality:",
+        "consistency": "Consistency:",
+        "warnings": "Warnings:",
+        "lowConfidenceCount": "{{count}} low-confidence"
+      },
+      "export": {
+        "title": "Export",
+        "ready": "Ready to download",
+        "sessionNotice": "Session only — download before leaving"
+      },
+      "datasetSummary": {
+        "title": "Dataset Summary",
+        "format": "Format:",
+        "records": "Records:",
+        "fields": "Fields:",
+        "formatTitle": "CSV",
+        "recordsTitle": "1,000",
+        "fieldsTitle": "24"
+      },
+      "preview": {
+        "title": "Preview Records",
+        "showingCount": "Showing {{count}} of {{total}} records",
+        "columns": {
+          "recordId": "Record_ID",
+          "docType": "Doc Type",
+          "ageRange": "Age Range",
+          "date": "Date",
+          "quality": "Quality",
+          "action": "Action"
+        }
+      },
+      "validation": {
+        "title": "Compliance Validation",
+        "exportStatus": "Export status:",
+        "safeToDownload": "Safe to download",
+        "checks": {
+          "dates": "Dates transformed",
+          "freeText": "Free-text fields checked",
+          "format": "Export format validated",
+          "synthetic": "Synthetic identifiers generated"
+        },
+        "warningReview": "{{count}} low-confidence fields may require review",
+        "viewDetails": "View validation details"
+      }
     }
   },
   "errors": {

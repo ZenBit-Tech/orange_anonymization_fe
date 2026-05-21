@@ -1,29 +1,41 @@
-type JobStatus = 'draft' | 'processing' | 'completed' | 'failed';
+export type JobStatus = 'draft' | 'configured' | 'queued' | 'processing' | 'succeeded' | 'failed';
 
 export interface Metrics {
   totalDocuments: number;
   entitiesDetected: number;
-  averageConfidenceRate: number;
+  anonymizationRate: number;
   syntheticRecords: number;
 }
 
 export interface ChartData {
   date: string;
-  documents: number | null;
-  entities: number | null;
+  documents: number;
+  entities: number;
 }
 
-export interface Job {
+export interface DistributionData {
+  key: string;
+  count: number;
+}
+
+export interface RecentActivity {
   id: string;
-  document: string;
-  status: JobStatus;
   framework: string | null;
-  entities: number;
-  date: string;
+  status: JobStatus;
+  createdAt: string;
+  fileName: string;
+  entitiesCount: number | null;
 }
 
 export interface DashboardData {
   metrics: Metrics;
   chartData: ChartData[];
-  recentActivity: Job[];
+  recentActivity: RecentActivity[];
+  strategiesDistribution: DistributionData[];
+  frameworksDistribution: DistributionData[];
+  entitiesDistribution: DistributionData[];
+  emptyState?: boolean;
+  startDate?: string;
+  endDate?: string;
+  message?: string;
 }

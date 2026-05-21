@@ -13,9 +13,11 @@ import TokenPage from '@/pages/TokenPage';
 import NotFound from '@/pages/NotFound';
 import Inactivity from '@/pages/Inactivity';
 import { PageLoader } from '@/components/common/PageLoader';
+import SyntheticResults from '@/pages/SyntheticResults';
 
 const DeIdentify = lazy(() => import('@/pages/DeIdentify'));
 const SyntheticData = lazy(() => import('@/pages/SyntheticData'));
+const AnalysesPage = lazy(() => import('@/pages/Analyses'));
 
 export function AppRoutes() {
   return (
@@ -38,8 +40,10 @@ export function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.ANALYSES} element={<AnalysesPage />} />
             <Route path={ROUTES.DE_IDENTIFY} element={<DeIdentify />} />
             <Route path={ROUTES.SYNTHETIC_DATA} element={<SyntheticData />} />
+            <Route path={ROUTES.SYNTHETIC_RESULTS} element={<SyntheticResults />} />
           </Route>
         </Route>
 

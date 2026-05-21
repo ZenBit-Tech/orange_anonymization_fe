@@ -2,10 +2,13 @@ import React from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
-import { NewAnalysisButton } from '@/pages/Dashboard/styled';
+import { ROUTES } from '@/constants';
+
 import { CHART_RANGES, type Range } from '@/pages/Dashboard/components/ActivityChart/types';
+import { NewAnalysisButton } from '@/pages/Dashboard/styled';
 
 import { FRAMEWORK_OPTIONS } from './constants';
 import { FiltersContainer, FiltersRow, FilterMenuItem, FilterSelect } from './styled';
@@ -25,6 +28,7 @@ export const DashboardFilters: React.FC<DashboardFiltersProps> = ({
   setFramework,
 }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const handleRangeChange = (event: SelectChangeEvent<string>) => {
     setRange(event.target.value as Range);
@@ -78,7 +82,9 @@ export const DashboardFilters: React.FC<DashboardFiltersProps> = ({
         </FilterSelect>
       </FiltersRow>
 
-      <NewAnalysisButton startIcon={<AddIcon />}>{t('dashboard.newAnalysis')}</NewAnalysisButton>
+      <NewAnalysisButton startIcon={<AddIcon />} onClick={() => navigate(ROUTES.DE_IDENTIFY)}>
+        {t('dashboard.newAnalysis')}
+      </NewAnalysisButton>
     </FiltersContainer>
   );
 };

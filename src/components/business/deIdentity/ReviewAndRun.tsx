@@ -17,6 +17,18 @@ import {
   Remove as RemoveIcon,
   ErrorOutline as ErrorOutlineIcon,
   Refresh as RefreshIcon,
+  EmailOutlined as EmailIcon,
+  PhoneOutlined as PhoneIcon,
+  LocationOnOutlined as LocationIcon,
+  CalendarTodayOutlined as CalendarIcon,
+  LanguageOutlined as UrlIcon,
+  CreditCardOutlined as CreditCardIcon,
+  LocalHospitalOutlined as MedicalIcon,
+  DescriptionOutlined as DefaultEntityIcon,
+  Fingerprint as FingerprintIcon,
+  Paid as PaidIcon,
+  Security as SecurityIcon,
+  BadgeOutlined as IdIcon,
 } from '@mui/icons-material';
 import {
   Box,
@@ -34,6 +46,7 @@ import {
   Select,
   MenuItem,
   type SelectChangeEvent,
+  type SvgIconProps,
 } from '@mui/material';
 import { useCallback, useEffect, useState, type FC, useRef, type JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -71,6 +84,53 @@ const getEntityColor = (type: string) => {
   const paletteKey = map[type] || 'DEFAULT';
 
   return `entities.${paletteKey}`;
+};
+
+const getEntityIcon = (type: string): React.ComponentType<SvgIconProps> => {
+  const iconMap: Record<string, React.ComponentType<SvgIconProps>> = {
+    PERSON: AccountCircleOutlinedIcon,
+    EMAIL_ADDRESS: EmailIcon,
+    PHONE_NUMBER: PhoneIcon,
+    FAX: PhoneIcon,
+    LOCATION: LocationIcon,
+    DATE_TIME: CalendarIcon,
+    URL: UrlIcon,
+    IP_ADDRESS: LocationIcon,
+    AGE: FingerprintIcon,
+    GENDER: AccountCircleOutlinedIcon,
+    NATIONALITY: IdIcon,
+    RELIGION: AccountCircleOutlinedIcon,
+    CREDIT_CARD: CreditCardIcon,
+    CRYPTO: CreditCardIcon,
+    IBAN_CODE: PaidIcon,
+    ACCOUNT: PaidIcon,
+    BANK_ACCOUNT: PaidIcon,
+    SWIFT_CODE: PaidIcon,
+    TAX_ID: IdIcon,
+    US_SSN: IdIcon,
+    US_DRIVER_LICENSE: IdIcon,
+    LICENSE: IdIcon,
+    US_PASSPORT: IdIcon,
+    PASSPORT: IdIcon,
+    NATIONAL_ID: IdIcon,
+    NIF: IdIcon,
+    NIE: IdIcon,
+    CPF: IdIcon,
+    AHV_NUMBER: IdIcon,
+    UID_NUMBER: IdIcon,
+    MEDICAL_LICENSE: MedicalIcon,
+    MRN: MedicalIcon,
+    MEDICAL_RECORD_NUMBER: MedicalIcon,
+    HEALTH_INSURANCE: MedicalIcon,
+    HEALTH_INFO: MedicalIcon,
+    BIOMETRIC: FingerprintIcon,
+    GENETIC_DATA: FingerprintIcon,
+    PASSWORD: SecurityIcon,
+    ENCRYPTION_KEY: SecurityIcon,
+    VEHICLE: IdIcon,
+  };
+
+  return iconMap[type] || DefaultEntityIcon;
 };
 
 interface IProps {
@@ -332,7 +392,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   return (
     <Box sx={{ mx: REVIEW_AND_RUN_CONSTANTS.spacing.md }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
+        <Box sx={{ mb: '24px' }}>
           <Typography
             sx={{
               color: 'neutral.900',
@@ -343,7 +403,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
             {t('deIdentify.results.titleReview')}
           </Typography>
           {currentJob?.wizardState?.inputData?.fileName && (
-            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm, mb: '16px' }}>
+            <Typography sx={{ color: 'neutral.500', fontSize: FONT_SIZES.sm }}>
               {currentJob?.wizardState?.inputData?.fileName} · {t('deIdentify.results.analyzedAt')}{' '}
               {currentJob.updatedAt && new Date(currentJob.updatedAt).toLocaleString()}
             </Typography>
@@ -352,12 +412,12 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
         <Button
           sx={{
-            bgcolor: 'accent.400',
+            bgcolor: 'primary.500',
             fontWeight: 'fontWeightMedium',
             fontSize: FONT_SIZES.sm,
-            color: 'primary.800',
+            color: 'common.white',
             '&:hover': {
-              bgcolor: 'accent.500',
+              bgcolor: 'primary.400',
             },
           }}
           size="small"
@@ -434,7 +494,8 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
               color: 'neutral.900',
             }}
           >
-            {results?.auditTrail.processingTime.toFixed(2)}s
+            {results?.auditTrail.processingTime.toFixed(2)}
+            {t('common.s')}
           </Typography>
           <Typography sx={{ fontSize: FONT_SIZES.sm, color: 'neutral.500' }}>
             {t('deIdentify.results.processingTimeLabel')}
@@ -502,20 +563,10 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
             </Tabs>
 
             <Stack direction="row">
-              <Button
-                startIcon={<ContentCopy />}
-                onClick={onCopy}
-                sx={{ color: 'accent.400' }}
-                disabled={!results?.mainContent?.anonymizedText}
-              >
+              <Button startIcon={<ContentCopy />} onClick={onCopy} sx={{ color: 'primary.500' }}>
                 {t('common.copy')}
               </Button>
-              <Button
-                startIcon={<Download />}
-                onClick={onDownload}
-                sx={{ color: 'accent.400' }}
-                disabled={!results?.mainContent?.anonymizedText}
-              >
+              <Button startIcon={<Download />} onClick={onDownload} sx={{ color: 'primary.500' }}>
                 {t('common.download')}
               </Button>
             </Stack>
@@ -719,9 +770,14 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
                     }}
                   >
                     <Box sx={{ flex: 1 }}>
-                      <AccountCircleOutlinedIcon
-                        sx={{ fontSize: FONT_SIZES.xl, color: 'neutral.400' }}
-                      />
+                      {(() => {
+                        const EntityIconComponent = getEntityIcon(entity.entity_type);
+                        return (
+                          <EntityIconComponent
+                            sx={{ fontSize: FONT_SIZES.xl, color: 'neutral.400' }}
+                          />
+                        );
+                      })()}
                       <Typography
                         sx={{
                           fontWeight: 'fontWeightMedium',

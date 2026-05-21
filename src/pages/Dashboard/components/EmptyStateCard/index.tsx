@@ -1,39 +1,65 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { CircularProgress } from '@mui/material';
+
+import type { DashboardState } from '@/pages/Dashboard/types';
 
 import { CardWrapper, Title, Subtitle, EmptyBody, EmptyLabel, SectionDivider } from './styled';
 
 interface EmptyStateCardProps {
+  state: DashboardState;
+  hasData?: boolean;
   icon: React.ReactNode;
   title: string;
   subtitle: string;
-  isEmpty: boolean;
+  contentSubtitle?: string;
   children?: React.ReactNode;
 }
+
+const LOADER_SIZE = 28;
 
 export const EmptyStateCard: React.FC<EmptyStateCardProps> = ({
   icon,
   title,
   subtitle,
-  isEmpty,
+  state,
+  hasData = false,
+  contentSubtitle,
   children,
 }) => {
   const { t } = useTranslation();
 
+  const showEmpty = state === 'empty' || (state === 'content' && !hasData);
+
+  const finalSubtitle =
+    state === 'content' && hasData && contentSubtitle ? contentSubtitle : subtitle;
+
   return (
     <CardWrapper>
       <Title>{title}</Title>
-      <Subtitle>{subtitle}</Subtitle>
+      <Subtitle>{finalSubtitle}</Subtitle>
       <SectionDivider />
 
-      {isEmpty ? (
+      {state === 'loading' && (
+        <EmptyBody>
+          <CircularProgress size={LOADER_SIZE} />
+        </EmptyBody>
+      )}
+
+      {state === 'error' && (
+        <EmptyBody>
+          <EmptyLabel>{t('dashboard.errors.failedToLoadAnalysesActivity')}</EmptyLabel>
+        </EmptyBody>
+      )}
+
+      {showEmpty && (
         <EmptyBody>
           {icon}
           <EmptyLabel>{t('dashboard.emptyState.noAnalysesFound')}</EmptyLabel>
         </EmptyBody>
-      ) : (
-        children
       )}
+
+      {state === 'content' && hasData && children}
     </CardWrapper>
   );
 };

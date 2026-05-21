@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Box,
   Drawer,
@@ -5,15 +6,18 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SvgIcon,
   Typography,
+  type Theme,
 } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { LAYOUT } from '@/theme';
-import { ROUTES } from '@/constants';
 import { useSidebar } from '@/components/layouts/Sidebar/useSidebar';
-import { useState } from 'react';
 import LogoutPopup from '@/components/popups/LogoutPopup';
+import GeneratedDataIcon from '@/assets/icons/generatedDataIcon.svg?react';
+import { ROUTES } from '@/constants';
 
 export interface SidebarProps {
   isMobile: boolean;
@@ -59,62 +63,131 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
       <List sx={{ flex: 1, px: 1.5 }}>
         {navItems.map((item) => {
           const active = isActive(item.path);
+          const isDashboard = item.path === ROUTES.DASHBOARD;
+          const isAnalysesPage = isActive(ROUTES.ANALYSES);
+          const isDashboardGreen = isDashboard && isAnalysesPage;
+
           return (
-            <ListItemButton
-              key={item.path}
-              onClick={() => handleNavigate(item.path)}
-              sx={(theme) => ({
-                borderRadius: 1.5,
-                mb: 0.5,
-                bgcolor: active ? theme.palette.sidebar.activeOverlay : 'transparent',
-                borderLeft: active
-                  ? `${LAYOUT.sidebar.activeBorderWidth}px solid ${theme.palette.primary.light}`
-                  : `${LAYOUT.sidebar.activeBorderWidth}px solid transparent`,
-                '&:hover': {
-                  bgcolor: theme.palette.sidebar.hoverOverlay,
-                },
-              })}
-            >
-              <ListItemIcon
+            <Box key={item.path}>
+              <ListItemButton
+                onClick={() => handleNavigate(item.path)}
                 sx={(theme) => ({
-                  color: active ? theme.palette.primary.contrastText : theme.palette.grey[400],
-                  minWidth: LAYOUT.sidebar.iconMinWidth,
+                  borderRadius: 1.5,
+                  mb: 0.5,
+                  bgcolor: active ? theme.palette.sidebar.activeOverlay : 'transparent',
+                  borderLeft: active
+                    ? `${LAYOUT.sidebar.activeBorderWidth}px solid ${theme.palette.primary.light}`
+                    : `${LAYOUT.sidebar.activeBorderWidth}px solid transparent`,
+
+                  '&:hover': {
+                    bgcolor: theme.palette.sidebar.hoverOverlay,
+                  },
                 })}
               >
-                <item.icon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText
-                primary={t(item.labelKey)}
-                primaryTypographyProps={{
-                  variant: 'body2',
-                  sx: (theme) => ({
-                    color: active ? theme.palette.primary.contrastText : theme.palette.grey[400],
-                    fontWeight: active
-                      ? theme.typography.fontWeightMedium
-                      : theme.typography.fontWeightRegular,
-                  }),
-                }}
-              />
-            </ListItemButton>
+                <ListItemIcon
+                  sx={(theme) => ({
+                    color:
+                      active || isDashboardGreen
+                        ? theme.palette.accent[400]
+                        : theme.palette.grey[400],
+                    minWidth: LAYOUT.sidebar.iconMinWidth,
+                  })}
+                >
+                  <item.icon fontSize="small" />
+                </ListItemIcon>
+
+                <ListItemText
+                  primary={t(item.labelKey)}
+                  primaryTypographyProps={{
+                    variant: 'body2',
+                    sx: (theme) => ({
+                      color:
+                        active || isDashboardGreen
+                          ? theme.palette.accent[400]
+                          : theme.palette.grey[400],
+
+                      fontWeight:
+                        active || isDashboardGreen
+                          ? theme.typography.fontWeightMedium
+                          : theme.typography.fontWeightRegular,
+                    }),
+                  }}
+                />
+              </ListItemButton>
+
+              {isDashboard && isAnalysesPage && (
+                <List
+                  sx={{
+                    pl: 4,
+                    mb: 0.5,
+                  }}
+                >
+                  <ListItemButton
+                    onClick={() => handleNavigate(ROUTES.ANALYSES)}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      borderRadius: 1,
+                      py: 0.5,
+                      gap: 1.5,
+                      '&:hover': {
+                        bgcolor: 'transparent',
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={(theme) => ({
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: theme.palette.accent[400],
+                      })}
+                    >
+                      <FormatListBulletedIcon sx={(theme) => ({ fontSize: theme.spacing(2) })} />
+                    </Box>
+
+                    <Box
+                      component="span"
+                      sx={(theme) => ({
+                        ...theme.typography.labelMd,
+                        color: theme.palette.accent[400],
+                        display: 'flex',
+                        alignItems: 'center',
+                      })}
+                    >
+                      {t('sidebar.allAnalyses')}
+                    </Box>
+                  </ListItemButton>
+                </List>
+              )}
+            </Box>
           );
         })}
 
         {navItems.map((item) => {
-          const active = isActive(item.path);
-          if (!active || item.path !== ROUTES.SYNTHETIC_DATA) return null;
+          if (item.path !== ROUTES.SYNTHETIC_DATA) return null;
+
+          const isSettingsActive = isActive(ROUTES.SYNTHETIC_DATA);
+          const isResultsActive = isActive(ROUTES.SYNTHETIC_RESULTS);
+
+          if (!isSettingsActive && !isResultsActive) return null;
+
           return (
-            <List key={`${item.path}-sub`} sx={{ pl: 4 }}>
+            <List key={`${item.path}-sub`} sx={{ pl: 4, mt: 0.5 }}>
               <ListItemButton
                 onClick={() => handleNavigate(ROUTES.SYNTHETIC_DATA)}
                 sx={(theme) => ({
                   borderRadius: 1,
                   mb: 0.5,
-                  bgcolor: theme.palette.action.hover,
+                  bgcolor: isSettingsActive ? theme.palette.action.selected : 'transparent',
+                  '&:hover': {
+                    bgcolor: theme.palette.action.hover,
+                  },
                 })}
               >
                 <ListItemIcon
                   sx={(theme) => ({
-                    color: theme.palette.grey[400],
+                    color: isSettingsActive ? 'accent.500' : theme.palette.grey[400],
                     minWidth: LAYOUT.sidebar.iconMinWidth,
                   })}
                 >
@@ -124,7 +197,51 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
                   primary={t('nav.syntheticDataGenerationSettings')}
                   primaryTypographyProps={{
                     variant: 'caption',
-                    sx: (theme) => ({ color: theme.palette.grey[400] }),
+                    sx: (theme) => ({
+                      color: isSettingsActive ? 'accent.500' : theme.palette.grey[400],
+                      fontWeight: isSettingsActive
+                        ? theme.typography.fontWeightMedium
+                        : theme.typography.fontWeightRegular,
+                    }),
+                  }}
+                />
+              </ListItemButton>
+
+              <ListItemButton
+                onClick={() => handleNavigate(ROUTES.SYNTHETIC_RESULTS)}
+                sx={(theme) => ({
+                  borderRadius: 1,
+                  mb: 0.5,
+                  bgcolor: isResultsActive ? theme.palette.action.selected : 'transparent',
+                  '&:hover': {
+                    bgcolor: theme.palette.action.hover,
+                  },
+                })}
+              >
+                <ListItemIcon
+                  sx={(theme) => ({
+                    color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
+                    minWidth: LAYOUT.sidebar.iconMinWidth,
+                  })}
+                >
+                  <SvgIcon
+                    component={GeneratedDataIcon}
+                    inheritViewBox
+                    sx={(theme: Theme) => ({
+                      color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
+                    })}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t('nav.syntheticGeneratedData')}
+                  primaryTypographyProps={{
+                    variant: 'caption',
+                    sx: (theme) => ({
+                      color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
+                      fontWeight: isResultsActive
+                        ? theme.typography.fontWeightMedium
+                        : theme.typography.fontWeightRegular,
+                    }),
                   }}
                 />
               </ListItemButton>

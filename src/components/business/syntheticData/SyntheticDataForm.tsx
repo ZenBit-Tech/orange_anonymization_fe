@@ -179,7 +179,7 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                 {t('syntheticData.estimatedOutput')}
               </Typography>
               <Typography sx={synthetic.footerValue}>
-                {(records * metrics.estimateMultiplier) / metrics.mbDivider} MB
+                {(records * metrics.estimateMultiplier) / metrics.mbDivider} {t('common.mb')}
               </Typography>
             </Box>
 

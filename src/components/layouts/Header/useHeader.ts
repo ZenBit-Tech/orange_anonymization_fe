@@ -12,6 +12,10 @@ const PAGE_META: Record<string, PageMeta> = {
     titleKey: 'header.dashboard.title',
     subtitleKey: 'header.dashboard.subtitle',
   },
+  [ROUTES.ANALYSES]: {
+    titleKey: 'header.analyses.title',
+    subtitleKey: 'header.analyses.subtitle',
+  },
   [ROUTES.DE_IDENTIFY]: {
     titleKey: 'header.deIdentify.title',
     subtitleKey: 'header.deIdentify.subtitle',

@@ -139,6 +139,19 @@ declare module '@mui/material/styles' {
     dark: string;
     backdrop: string;
     greenOpacity: string;
+
+    charts: {
+      compliance: {
+        hipaa: string;
+        gdpr: string;
+        ukDpi: string;
+        swissFadp: string;
+      };
+      deIdentification: string;
+      entityBar: string;
+      grid: string;
+    };
+
     whiteOpacity: {
       8: string;
       38: string;
@@ -154,11 +167,28 @@ declare module '@mui/material/styles' {
       successBg: string;
       errorBg: string;
     };
+    status: {
+      configured: string;
+    };
   }
+
   interface PaletteOptions {
     accent?: PaletteOptions['primary'];
     neutral?: PaletteOptions['primary'];
     dark?: string;
+
+    charts?: {
+      compliance?: {
+        hipaa?: string;
+        gdpr?: string;
+        ukDpi?: string;
+        swissFadp?: string;
+      };
+      deIdentification?: string;
+      entityBar?: string;
+      grid?: string;
+    };
+
     backdrop?: string;
     greenOpacity?: string;
     whiteOpacity?: {
@@ -175,6 +205,9 @@ declare module '@mui/material/styles' {
       successBorder?: string;
       successBg?: string;
       errorBg?: string;
+    };
+    status?: {
+      configured?: string;
     };
   }
   interface PaletteColor {
@@ -270,6 +303,9 @@ const BRAND = {
     dark: '#0D47A1',
     contrastText: WHITE,
   },
+  status: {
+    configured: '#8B5CF6',
+  },
   state: {
     successBorder: '#16A34A99',
     successBg: '#16A34A05',
@@ -333,6 +369,19 @@ const BRAND = {
     800: '#1E293B',
     900: '#0F172A',
   },
+  charts: {
+    compliance: {
+      hipaa: '#01132F',
+      gdpr: '#1B3A6B',
+      ukDpi: '#00BFA5',
+      swissFadp: '#008C78',
+    },
+
+    deIdentification: '#00BFA5',
+    entityBar: '#1B3A6B',
+
+    grid: '#E5E7EB',
+  },
 };
 
 export const theme = createTheme({
@@ -355,8 +404,10 @@ export const theme = createTheme({
     entities: BRAND.entities,
     success: BRAND.success,
     warning: BRAND.warning,
+    status: BRAND.status,
     info: BRAND.info,
     error: BRAND.error,
+    charts: BRAND.charts,
     background: {
       default: BRAND.grey[50],
       paper: WHITE,
