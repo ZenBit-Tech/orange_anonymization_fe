@@ -110,7 +110,7 @@ const Dashboard: React.FC = () => {
         <MetricCard
           icon={<VerifiedIcon />}
           label={t('dashboard.metrics.anonymizationRate')}
-          value={`${metrics?.anonymizationRate ?? 0}%`}
+          value={`${metrics?.anonymizationRate ?? 0}${t('common.percent')}`}
           state={state}
         />
         <MetricCard

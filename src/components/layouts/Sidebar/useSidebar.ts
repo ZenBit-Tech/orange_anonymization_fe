@@ -27,7 +27,12 @@ export function useSidebar(onNavigate?: () => void) {
   const dispatch = useAppDispatch();
   const currentJobId = useAppSelector((state) => state.jobs.currentJob?.id);
 
-  const isActive = (path: string): boolean => location.pathname === path;
+  const isActive = (path: string): boolean => {
+    const regexPath = path.replace(/:[^/]+/g, '[^/]+');
+    const regex = new RegExp(`^${regexPath}$`);
+
+    return regex.test(location.pathname);
+  };
 
   const handleNavigate = (path: string) => {
     if (path === ROUTES.SYNTHETIC_DATA && currentJobId) {

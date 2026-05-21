@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getStats } from '@/services/dashboard/dashboardService';
 import type { DashboardData } from '@/services/dashboard/types';
 
-const DASHBOARD_FETCH_ERROR = 'Failed to fetch dashboard data';
+const DASHBOARD_FETCH_ERROR = 'errors.generic';
 
 interface DashboardState {
   data: DashboardData | null;
