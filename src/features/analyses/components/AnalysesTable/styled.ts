@@ -8,6 +8,10 @@ export const BodyCell = styled(TableCell)(({ theme }) => ({
   maxWidth: 0,
 }));
 
+export const TableWrapper = styled(Box)(() => ({
+  marginTop: 0,
+}));
+
 export const CellContent = styled(Box)(({ theme }) => ({
   ...theme.typography.labelMd,
   minWidth: 0,

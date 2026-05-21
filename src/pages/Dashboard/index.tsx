@@ -47,6 +47,7 @@ import {
   NewAnalysisButton,
   PageWrapper,
   RecentActivityCard,
+  RecentActivityTableWrapper,
   SectionDivider,
   SectionSubtitle,
   SectionTitle,
@@ -200,7 +201,9 @@ const Dashboard: React.FC = () => {
           </Link>
         </ChartHeaderRow>
 
-        <RecentActivityTable rows={recentActivity.slice(0, 5)} />
+        <RecentActivityTableWrapper>
+          <RecentActivityTable rows={recentActivity.slice(0, 5)} />
+        </RecentActivityTableWrapper>
       </RecentActivityCard>
     </PageWrapper>
   );

@@ -340,8 +340,7 @@
       "hipaa": "HIPAA",
       "gdpr": "EU GDPR",
       "ukDpi": "UK DPI",
-      "swissFadp": "Swiss FADP",
-      "custom": "Custom"
+      "swissFadp": "Swiss FADP"
     },
     "chart": {
       "activityTitle": "Processing Activity",

@@ -115,7 +115,7 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
               {isDashboard && isAnalysesPage && (
                 <List
                   sx={{
-                    pl: 3,
+                    pl: 4,
                     mb: 0.5,
                   }}
                 >
@@ -124,7 +124,6 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      minHeight: 32,
                       borderRadius: 1,
                       py: 0.5,
                       gap: 1.5,
@@ -141,7 +140,7 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
                         color: theme.palette.accent[400],
                       })}
                     >
-                      <FormatListBulletedIcon sx={{ fontSize: 16 }} />
+                      <FormatListBulletedIcon sx={(theme) => ({ fontSize: theme.spacing(2) })} />
                     </Box>
 
                     <Box

@@ -126,7 +126,14 @@ export const BottomGrid = styled(Box)(({ theme }) => ({
 export const RecentActivityCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2, 3, 0),
   borderRadius: theme.shape.lg,
-  border: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
+  borderTop: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
   boxShadow: theme.customShadows.sm,
   backgroundColor: theme.palette.common.white,
+}));
+
+export const RecentActivityTableWrapper = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  borderTop: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
+  marginInline: theme.spacing(-3),
+  paddingInline: theme.spacing(3),
 }));
