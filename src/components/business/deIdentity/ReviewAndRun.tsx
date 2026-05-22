@@ -1,4 +1,4 @@
-import {
+﻿import {
   JobStatus,
   type EntityDetection,
   type IJob,
@@ -731,9 +731,9 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
                 bgcolor: 'neutral.50',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
                 px: '24px',
-                pt: '96px',
+                pt: 0,
                 textAlign: 'center',
               }}
             >
@@ -745,6 +745,7 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
                   justifyContent: 'center',
                   gap: '12px',
                   maxWidth: '280px',
+                  textAlign: 'center',
                 }}
               >
                 <Box
