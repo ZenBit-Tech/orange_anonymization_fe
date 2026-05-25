@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { AUTH_SESSION_MAX_AGE_MS, AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
 
-const WARNING_THRESHOLD_MS = 59 * 60 * 1000;
-const CRITICAL_THRESHOLD_MS = 58 * 60 * 1000;
+const WARNING_THRESHOLD_MS = 10 * 60 * 1000;
+const CRITICAL_THRESHOLD_MS = 2 * 60 * 1000;
 const TICK_MS = 1000;
 
 type SessionExpirationState = {
