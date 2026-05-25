@@ -98,6 +98,8 @@ const Header = ({ userEmail, isMobile, onMenuOpen }: HeaderProps) => {
               gap: 0.75,
               px: 1.25,
               py: 0.5,
+              width: 75,
+              height: 25,
               borderRadius: 9999,
               border: '1px solid',
               borderColor: isCritical ? theme.palette.error.main : theme.palette.warning.main,
