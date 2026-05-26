@@ -5,40 +5,32 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
+import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
+import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
+import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
+import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
 import AnalyticsIcon from '@/assets/icons/dashboard/MetricCard/analytics.svg?react';
 import DescriptionIcon from '@/assets/icons/dashboard/MetricCard/description.svg?react';
 import ManageSearchIcon from '@/assets/icons/dashboard/MetricCard/manage_search.svg?react';
 import VerifiedIcon from '@/assets/icons/dashboard/MetricCard/verified.svg?react';
-
-import DeIdentificationIcon from '@/assets/icons/dashboard/EmptyStateCard/de-identification.svg?react';
-import EntityIcon from '@/assets/icons/dashboard/EmptyStateCard/entity.svg?react';
-import FrameworkIcon from '@/assets/icons/dashboard/EmptyStateCard/framework.svg?react';
-
-import InfoIcon from '@/assets/icons/dashboard/info.svg?react';
-
 import { ROUTES } from '@/constants';
-
 import { EmptyStateCard } from '@/pages/Dashboard/components/EmptyStateCard';
 import { MetricCard } from '@/pages/Dashboard/components/MetricCard';
 import { RecentActivityTable } from '@/pages/Dashboard/components/RecentActivityTable';
 
 import { ActivityChart } from './components/ActivityChart';
 import { ChartControls } from './components/ActivityChart/ChartControls';
-
 import {
   CHART_RANGES,
   CHART_TYPES,
   type ChartType,
   type Range,
 } from './components/ActivityChart/types';
-
 import { DashboardFilters } from './components/DashboardFilters';
 import { FRAMEWORK_VALUES, type FrameworkValue } from './components/DashboardFilters/types';
-
 import { ComplianceChart } from './components/DistributionCharts/ComplianceChart';
 import { DeIdentificationChart } from './components/DistributionCharts/DeIdentificationChart';
 import { EntityTypesChart } from './components/DistributionCharts/EntityTypesChart';
-
 import {
   BottomGrid,
   Card,
@@ -57,10 +49,13 @@ import {
   WelcomeText,
   WelcomeTitle,
 } from './styled';
-
 import { useDashboard } from './useDashboard';
 
 const Dashboard: React.FC = () => {
+  const [chartType, setChartType] = useState<ChartType>(CHART_TYPES.DOCUMENTS);
+  const [range, setRange] = useState<Range>(CHART_RANGES.DAYS_7);
+  const [framework, setFramework] = useState<FrameworkValue>(FRAMEWORK_VALUES.ALL);
+
   const {
     metrics,
     chartData,
@@ -69,16 +64,12 @@ const Dashboard: React.FC = () => {
     entitiesDistribution,
     recentActivity,
     state,
-  } = useDashboard();
+    startDate,
+    endDate,
+  } = useDashboard({ range, framework });
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const [chartType, setChartType] = useState<ChartType>(CHART_TYPES.DOCUMENTS);
-
-  const [range, setRange] = useState<Range>(CHART_RANGES.DAYS_7);
-
-  const [framework, setFramework] = useState<FrameworkValue>(FRAMEWORK_VALUES.ALL);
 
   return (
     <PageWrapper>
@@ -89,7 +80,6 @@ const Dashboard: React.FC = () => {
 
             <Box>
               <WelcomeTitle>{t('dashboard.welcomeTitle')}</WelcomeTitle>
-
               <WelcomeSubtitle>{t('dashboard.welcomeSubtitle')}</WelcomeSubtitle>
             </Box>
           </WelcomeText>
@@ -114,21 +104,18 @@ const Dashboard: React.FC = () => {
           value={metrics?.totalDocuments ?? 0}
           state={state}
         />
-
         <MetricCard
           icon={<ManageSearchIcon />}
           label={t('dashboard.metrics.entitiesDetected')}
           value={metrics?.entitiesDetected ?? 0}
           state={state}
         />
-
         <MetricCard
           icon={<VerifiedIcon />}
           label={t('dashboard.metrics.anonymizationRate')}
           value={`${metrics?.anonymizationRate ?? 0}${t('common.percent')}`}
           state={state}
         />
-
         <MetricCard
           icon={<AnalyticsIcon />}
           label={t('dashboard.metrics.syntheticRecords')}
@@ -141,7 +128,6 @@ const Dashboard: React.FC = () => {
         <ChartHeaderRow>
           <Box>
             <SectionTitle>{t('dashboard.chart.activityTitle')}</SectionTitle>
-
             <SectionSubtitle>{t('dashboard.chart.activitySubtitle')}</SectionSubtitle>
           </Box>
 
@@ -150,7 +136,13 @@ const Dashboard: React.FC = () => {
 
         <SectionDivider />
 
-        <ActivityChart chartData={chartData} chartType={chartType} range={range} state={state} />
+        <ActivityChart
+          chartData={chartData}
+          chartType={chartType}
+          startDate={startDate}
+          endDate={endDate}
+          state={state}
+        />
       </Card>
 
       <BottomGrid>
@@ -192,7 +184,6 @@ const Dashboard: React.FC = () => {
         <ChartHeaderRow>
           <Box>
             <SectionTitle>{t('dashboard.recentActivity.title')}</SectionTitle>
-
             <SectionSubtitle>{t('dashboard.recentActivity.subtitle')}</SectionSubtitle>
           </Box>
 

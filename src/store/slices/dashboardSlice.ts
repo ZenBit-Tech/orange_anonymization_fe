@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { getStats } from '@/services/dashboard/dashboardService';
+import { getStats, type DashboardFiltersParams } from '@/services/dashboard/dashboardService';
+
 import type { DashboardData } from '@/services/dashboard/types';
 
 const DASHBOARD_FETCH_ERROR = 'errors.generic';
@@ -17,17 +18,19 @@ const initialState: DashboardState = {
   error: null,
 };
 
-export const fetchDashboardData = createAsyncThunk<DashboardData, void, { rejectValue: string }>(
-  'dashboard/fetchData',
-  async (_, { rejectWithValue }) => {
-    try {
-      return await getStats();
-    } catch (error) {
-      const message = error instanceof Error ? error.message : DASHBOARD_FETCH_ERROR;
-      return rejectWithValue(message);
-    }
-  },
-);
+export const fetchDashboardData = createAsyncThunk<
+  DashboardData,
+  DashboardFiltersParams | undefined,
+  { rejectValue: string }
+>('dashboard/fetchData', async (params, { rejectWithValue }) => {
+  try {
+    return await getStats(params);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : DASHBOARD_FETCH_ERROR;
+
+    return rejectWithValue(message);
+  }
+});
 
 const dashboardSlice = createSlice({
   name: 'dashboard',
