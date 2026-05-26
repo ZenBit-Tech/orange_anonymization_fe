@@ -58,6 +58,7 @@ import { getUniqueEntities, presidioToHipaaMap } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { REVIEW_AND_RUN_CONSTANTS } from './reviewAndRunConstants';
 import noEntitiesIcon from '@/assets/icons/noEntities.png';
+import { useSessionExpiration } from '@/components/layouts/useSessionExpiration';
 
 const getEntityColor = (type: string) => {
   const map: Record<string, string> = {
@@ -160,10 +161,13 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const [selectedOptionId, setSelectedOptionId] = useState('confidence_asc');
   const [selectedEntityTypes, setSelectedEntityTypes] = useState<string[]>([]);
   const [isToggling, setIsToggling] = useState(false);
+  const [isWarningBannerDismissed, setIsWarningBannerDismissed] = useState(false);
+  const [isCriticalBannerDismissed, setIsCriticalBannerDismissed] = useState(false);
 
   const localOriginalText = useAppSelector((state) => state.jobs.localOriginalTexts[jobId]);
   const { currentJob } = useAppSelector((state) => state.jobs);
   const dispatch = useAppDispatch();
+  const { isWarning, isCritical } = useSessionExpiration(true);
 
   const textToDisplay = localOriginalText || '';
   const detectedEntities = results?.entityTable ?? [];
@@ -172,6 +176,13 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
   const processedCount = noIdentifiersDetected ? 0 : (results?.stats.processed ?? 0);
   const allEntitiesExcluded =
     detectedEntities.length > 0 && detectedEntities.every((entity) => entity.isExcluded);
+  const showWarningBanner = isWarning && !isWarningBannerDismissed;
+  const showCriticalBanner = isCritical && !isCriticalBannerDismissed;
+  const activeSessionBanner = showCriticalBanner
+    ? 'critical'
+    : showWarningBanner
+      ? 'warning'
+      : null;
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -398,6 +409,26 @@ const ReviewAndRun: FC<IProps> = ({ jobId }) => {
 
   return (
     <Box sx={{ mx: REVIEW_AND_RUN_CONSTANTS.spacing.md }}>
+      {activeSessionBanner && (
+        <Alert
+          severity={activeSessionBanner === 'critical' ? 'error' : 'warning'}
+          variant="outlined"
+          sx={{ mb: '16px', alignItems: 'center' }}
+          closeText={t('common.close')}
+          onClose={() => {
+            if (activeSessionBanner === 'critical') {
+              setIsCriticalBannerDismissed(true);
+            } else {
+              setIsWarningBannerDismissed(true);
+            }
+          }}
+        >
+          {activeSessionBanner === 'critical'
+            ? t('deIdentify.results.sessionCritical')
+            : t('deIdentify.results.sessionWarning')}
+        </Alert>
+      )}
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box sx={{ mb: '24px' }}>
           <Typography
