@@ -858,6 +858,10 @@
       "excluded": "Excluded",
       "included": "Included",
       "toggling": "Toggling...",
+      "noIdentifiersDetected": "No identifiable patient data was found in this document.",
+      "noIdentifiersDetectedPanel": "No entities detected.",
+      "noIdentifiersDetectedPanelDetail": "The document appears to contain no identifiable patient data.",
+      "allEntitiesExcluded": "All detected entities are excluded. The de-identified version will be identical to the original document.",
       "noEntitiesFound": "No entities found",
       "redacted": "REDACTED",
       "entityColumns": {
