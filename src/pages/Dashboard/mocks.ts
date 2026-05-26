@@ -36,48 +36,33 @@ export const MOCK_DASHBOARD_DATA: DashboardData = {
     },
   ],
 
-  recentActivity: [
-    {
-      id: '1',
-      fileName: 'patients_data.csv',
-      framework: 'hipaa',
-      status: 'succeeded',
-      entitiesCount: 15,
-      createdAt: '2026-05-20T10:00:00Z',
-    },
-    {
-      id: '2',
-      fileName: 'clinical_notes.txt',
-      framework: 'gdpr',
-      status: 'failed',
-      entitiesCount: 8,
-      createdAt: '2026-05-19T10:00:00Z',
-    },
-    {
-      id: '3',
-      fileName: 'insurance_records.pdf',
-      framework: 'swiss_fadp',
-      status: 'queued',
-      entitiesCount: 22,
-      createdAt: '2026-05-18T10:00:00Z',
-    },
-    {
-      id: '4',
-      fileName: 'uk_citizens_registry.xlsx',
-      framework: 'uk_dpi',
-      status: 'processing',
-      entitiesCount: 31,
-      createdAt: '2026-05-17T10:00:00Z',
-    },
-    {
-      id: '5',
-      fileName: 'draft_document.docx',
-      framework: null,
-      status: 'draft',
-      entitiesCount: null,
-      createdAt: '2026-05-16T10:00:00Z',
-    },
-  ],
+  recentActivity: Array.from({ length: 157 }, (_, index) => ({
+    id: String(index + 1),
+    fileName:
+      index % 5 === 0
+        ? 'extremely_long_document_name_to_test_overflow_behaviorrrrrrrrrrrrrrrrrrrrrrrrrrr.pdf'
+        : `document_${index + 1}.pdf`,
+    framework:
+      index % 4 === 0
+        ? 'hipaa'
+        : index % 4 === 1
+          ? 'gdpr'
+          : index % 4 === 2
+            ? 'swiss_fadp'
+            : 'uk_dpi',
+    status:
+      index % 5 === 0
+        ? 'succeeded'
+        : index % 5 === 1
+          ? 'failed'
+          : index % 5 === 2
+            ? 'queued'
+            : index % 5 === 3
+              ? 'processing'
+              : 'draft',
+    entitiesCount: index % 5 === 4 ? null : Math.floor(Math.random() * 100) + 1,
+    createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString(),
+  })),
 
   strategiesDistribution: [
     { key: 'Redact', count: 230 },

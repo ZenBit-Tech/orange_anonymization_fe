@@ -1,5 +1,4 @@
 import { Box, TextField } from '@mui/material';
-
 import { styled } from '@mui/material/styles';
 
 import { BORDERS } from '@/theme';
@@ -41,6 +40,7 @@ export const FiltersRow = styled(Box)(({ theme }) => ({
 }));
 
 export const SearchInput = styled(TextField)(({ theme }) => ({
+  ...theme.typography.bodyMd,
   minWidth: SEARCH_INPUT_MIN_WIDTH,
   maxWidth: SEARCH_INPUT_MAX_WIDTH,
   width: '100%',
@@ -50,7 +50,15 @@ export const SearchInput = styled(TextField)(({ theme }) => ({
     borderRadius: theme.shape.sm,
     backgroundColor: theme.palette.common.white,
 
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.neutral[200],
+    },
+
     '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: theme.palette.primary[500],
+    },
+
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: theme.palette.primary[500],
     },
   },

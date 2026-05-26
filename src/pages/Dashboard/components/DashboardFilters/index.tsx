@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@/assets/icons/dashboard/add.svg?react';
 import { ROUTES } from '@/constants';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { CHART_RANGES, type Range } from '@/pages/Dashboard/components/ActivityChart/types';
 import { NewAnalysisButton } from '@/pages/Dashboard/styled';
@@ -41,7 +42,11 @@ export const DashboardFilters: React.FC<DashboardFiltersProps> = ({
   return (
     <FiltersContainer>
       <FiltersRow>
-        <FilterSelect value={framework} onChange={handleFrameworkChange}>
+        <FilterSelect
+          value={framework}
+          onChange={handleFrameworkChange}
+          IconComponent={KeyboardArrowDownIcon}
+        >
           {FRAMEWORK_OPTIONS.map((option) => (
             <FilterMenuItem key={option.value} value={option.value}>
               {t(option.translationKey)}
@@ -49,7 +54,11 @@ export const DashboardFilters: React.FC<DashboardFiltersProps> = ({
           ))}
         </FilterSelect>
 
-        <FilterSelect value={range} onChange={handleRangeChange}>
+        <FilterSelect
+          value={range}
+          onChange={handleRangeChange}
+          IconComponent={KeyboardArrowDownIcon}
+        >
           <FilterMenuItem value={CHART_RANGES.TODAY}>{t('dashboard.filters.today')}</FilterMenuItem>
 
           <FilterMenuItem value={CHART_RANGES.YESTERDAY}>

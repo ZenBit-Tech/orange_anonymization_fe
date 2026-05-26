@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const formatFramework = (value: string): string => {
   if (!value) return '';
 
@@ -19,6 +21,9 @@ export const formatDate = (date: string): string =>
     day: 'numeric',
     year: 'numeric',
   });
+
+export const formatDateRangeLabel = (date: Date): string => dayjs(date).format('DD MMM');
+export const formatDateInput = (date: Date): string => dayjs(date).format('D/MM/YYYY');
 
 const capitalizeWords = (str: string) =>
   str
