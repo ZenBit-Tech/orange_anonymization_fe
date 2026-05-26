@@ -23,9 +23,10 @@ export const ShowMoreButton = styled(Button)(({ theme }) => ({
   minWidth: 'unset',
   color: theme.palette.accent.main,
   textTransform: 'none',
+  transition: 'opacity 0.2s ease',
 
   '&:hover': {
-    background: 'transparent',
+    opacity: 0.6,
   },
 
   '& .MuiButton-endIcon': {

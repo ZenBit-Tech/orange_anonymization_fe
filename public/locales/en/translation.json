@@ -319,8 +319,31 @@
     "analyses": {
       "filters": {
         "allStatuses": "All statuses",
-        "searchByFilename": "Search by filename..."
-      }
+        "searchByFilename": "Search by filename...",
+        "date": "Date",
+        "from": "From",
+        "to": "To",
+        "selectDateRange": "Select date range",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "cancel": "Cancel",
+        "apply": "Apply",
+        "months": {
+          "january": "January",
+          "february": "February",
+          "march": "March",
+          "april": "April",
+          "may": "May",
+          "june": "June",
+          "july": "July",
+          "august": "August",
+          "september": "September",
+          "october": "October",
+          "november": "November",
+          "december": "December"
+        }
+      },
+      "exportCsv": "Export CSV"
     },
     "welcomeTitle": "Welcome to De-ID Studio",
     "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",

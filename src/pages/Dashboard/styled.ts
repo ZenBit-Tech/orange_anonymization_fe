@@ -94,9 +94,10 @@ export const ViewAllButton = styled(Button)(({ theme }) => ({
   color: theme.palette.accent[400],
   minWidth: 'auto',
   padding: 0,
+  transition: 'opacity 0.2s ease',
 
   '&:hover': {
-    color: theme.palette.accent[200],
+    opacity: 0.6,
   },
 }));
 

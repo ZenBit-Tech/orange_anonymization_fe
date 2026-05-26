@@ -1,6 +1,7 @@
 import React from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { InputAdornment } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
@@ -13,14 +14,32 @@ import AddIcon from '@/assets/icons/dashboard/add.svg?react';
 import { ROUTES } from '@/constants';
 
 import { FRAMEWORK_OPTIONS } from '@/pages/Dashboard/components/DashboardFilters/constants';
-
-import { FilterMenuItem, FilterSelect } from '@/pages/Dashboard/components/DashboardFilters/styled';
-
 import type { FrameworkValue } from '@/pages/Dashboard/components/DashboardFilters/types';
+import { FilterMenuItem, FilterSelect } from '@/pages/Dashboard/components/DashboardFilters/styled';
 
 import { NewAnalysisButton } from '@/pages/Dashboard/styled';
 
+import { DateRangeFilter } from '@/pages/Analyses/components/DateRangeFilter';
+
 import { FiltersContainer, FiltersRow, SearchInput } from './styled';
+
+interface DateRange {
+  start: Date | null;
+  end: Date | null;
+}
+
+interface AnalysesFiltersProps {
+  search: string;
+  framework: FrameworkValue;
+  status: string;
+
+  setSearch: (value: string) => void;
+  setFramework: (value: FrameworkValue) => void;
+  setStatus: (value: string) => void;
+
+  dateRange: DateRange;
+  setDateRange: (value: DateRange) => void;
+}
 
 const STATUS_OPTIONS = [
   {
@@ -53,24 +72,18 @@ const STATUS_OPTIONS = [
   },
 ] as const;
 
-interface Props {
-  search: string;
-  framework: FrameworkValue;
-  status: string;
-  setSearch: (value: string) => void;
-  setFramework: (value: FrameworkValue) => void;
-  setStatus: (value: string) => void;
-}
-
-export const AnalysesFilters: React.FC<Props> = ({
+export const AnalysesFilters: React.FC<AnalysesFiltersProps> = ({
   search,
   framework,
   status,
   setSearch,
   setFramework,
   setStatus,
+  dateRange,
+  setDateRange,
 }) => {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const handleFrameworkChange = (event: SelectChangeEvent) => {
@@ -97,7 +110,11 @@ export const AnalysesFilters: React.FC<Props> = ({
           }}
         />
 
-        <FilterSelect value={framework} onChange={handleFrameworkChange}>
+        <FilterSelect
+          value={framework}
+          onChange={handleFrameworkChange}
+          IconComponent={KeyboardArrowDownIcon}
+        >
           {FRAMEWORK_OPTIONS.map((option) => (
             <FilterMenuItem key={option.value} value={option.value}>
               {t(option.translationKey)}
@@ -105,7 +122,13 @@ export const AnalysesFilters: React.FC<Props> = ({
           ))}
         </FilterSelect>
 
-        <FilterSelect value={status} onChange={handleStatusChange}>
+        <DateRangeFilter dateRange={dateRange} setDateRange={setDateRange} />
+
+        <FilterSelect
+          value={status}
+          onChange={handleStatusChange}
+          IconComponent={KeyboardArrowDownIcon}
+        >
           {STATUS_OPTIONS.map((option) => (
             <FilterMenuItem key={option.value} value={option.value}>
               {t(option.translationKey)}

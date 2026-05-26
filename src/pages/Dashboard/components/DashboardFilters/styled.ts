@@ -34,13 +34,27 @@ export const FilterSelect = styled(Select<string>)(({ theme }) => ({
   height: FILTER_SELECT_SIZES.height,
   borderRadius: theme.shape.sm,
   color: theme.palette.neutral[700],
+  backgroundColor: theme.palette.common.white,
+
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.neutral[200],
+  },
 
   '&:hover .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.primary[500],
   },
 
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.primary[500],
+  },
+
   '& .MuiSelect-select': {
     padding: theme.spacing(0.75, 1.5),
+    color: theme.palette.neutral[700],
+  },
+
+  '& .MuiSelect-icon': {
+    color: theme.palette.neutral[700],
   },
 }));
 

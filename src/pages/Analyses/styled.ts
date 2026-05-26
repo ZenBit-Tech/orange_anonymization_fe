@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { BORDERS } from '@/theme';
 
 const ANALYSES_CARD_MARGIN_TOP = 24;
+const ANALYSES_CARD_MIN_HEIGHT = 320;
 
 export const PageWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.neutral[50],
@@ -17,4 +18,17 @@ export const AnalysesCard = styled(Box)(({ theme }) => ({
   border: `${BORDERS.card}px solid ${theme.palette.neutral[200]}`,
   boxShadow: theme.customShadows.sm,
   backgroundColor: theme.palette.common.white,
+}));
+
+export const AnalysesCardCenteredContent = styled(AnalysesCard)({
+  minHeight: ANALYSES_CARD_MIN_HEIGHT,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+export const AnalysesFooter = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(1, 2, 1, 0),
 }));
