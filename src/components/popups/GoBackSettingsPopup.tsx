@@ -10,8 +10,8 @@ import BasePopup from '@/components/popups/BasePopup';
 
 interface IProps {
   isVisible: boolean;
-  onClose: () => void; // Користувач передумав (Cancel)
-  onConfirm: () => void; // Користувач підтвердив, що хоче назад (Confirm)
+  onClose: () => void;
+  onConfirm: () => void;
 }
 
 const GoBackSettingsPopup: FC<IProps> = ({ isVisible, onClose, onConfirm }) => {
@@ -19,8 +19,9 @@ const GoBackSettingsPopup: FC<IProps> = ({ isVisible, onClose, onConfirm }) => {
 
   return (
     <BasePopup isVisible={isVisible} onClose={onClose}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
-        {/* Кнопка закриття (хрестик) — працює як скасування */}
+      <Box
+        sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center', p: 4, width: 520 }}
+      >
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
           <IconButton
             onClick={onClose}
@@ -30,59 +31,56 @@ const GoBackSettingsPopup: FC<IProps> = ({ isVisible, onClose, onConfirm }) => {
           </IconButton>
         </Box>
 
-        {/* Іконка попередження */}
         <WarningAmberIcon
-          sx={{ color: 'warning.main', mx: 'auto', height: '38px', width: '44px', mb: '30px' }}
+          sx={{ color: 'warning.main', mx: 'auto', height: 38, width: 44, mb: 3 }}
         />
 
-        {/* Заголовок модалки */}
         <Typography
           variant="h3"
           component="h2"
           align="center"
-          sx={{ color: 'neutral.900', fontWeight: 'fontWeightMedium', mb: '8px' }}
+          sx={{ color: 'neutral.900', fontWeight: 'fontWeightMedium', mb: 1 }}
         >
           {t('deidentify.reviewResults.goBackPopup.title')}
-          {/* Або прямий текст, якщо ще немає перекладів: "Go back to settings?" */}
         </Typography>
 
-        {/* Опис/Текст попередження */}
-        <Box sx={{ mb: '24px' }}>
-          <Typography variant="body2" align="center" sx={{ color: 'neutral.500' }}>
+        <Box sx={{ mb: 3 }}>
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{ color: 'neutral.500', maxWidth: 420, mx: 'auto' }}
+          >
             {t('deidentify.reviewResults.goBackPopup.message')}
-            {/* Наприклад: "Are you sure you want to go back? Your current review progress might be lost." */}
           </Typography>
         </Box>
 
-        <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.500', mb: '24px' }}></Box>
+        <Box sx={{ height: 1, width: '100%', bgcolor: 'neutral.200', mb: 3 }} />
 
-        {/* Кнопки дій */}
-        <Stack direction="row" spacing={2} justifyContent="center">
-          {/* Скасувати (Залишитися на екрані результатів) */}
-          <Button
-            onClick={onClose}
-            variant="outlined"
-            color="inherit"
-            sx={{
-              color: 'neutral.700',
-              borderColor: 'whiteOpacity.8',
-              fontWeight: 'fontWeightMedium',
-            }}
-          >
-            {t('common.cancel')}
-          </Button>
-
-          {/* Підтвердити (Повернутися на Крок 3) */}
+        <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
           <Button
             onClick={onConfirm}
-            variant="contained" // Змінив на contained, зазвичай головна дія зафарбована
-            color="warning" // або primary, залежно від Figma
+            variant="contained"
+            color="primary"
+            startIcon={<ArrowBackIcon />}
             sx={{
+              minWidth: 140,
+              textTransform: 'none',
               fontWeight: 'fontWeightMedium',
             }}
-            startIcon={<ArrowBackIcon />}
           >
-            {t('common.confirm')} {/* або t('deidentify.reviewResults.goBackPopup.confirmBtn') */}
+            {t('deidentify.reviewResults.goBackPopup.goBack')}
+          </Button>
+
+          <Button
+            onClick={onClose}
+            variant="text"
+            sx={{
+              color: (theme) => theme.palette.neutral[700],
+              textTransform: 'none',
+              fontWeight: 'fontWeightMedium',
+            }}
+          >
+            {t('deidentify.reviewResults.goBackPopup.stayOnReview')}
           </Button>
         </Stack>
       </Box>
