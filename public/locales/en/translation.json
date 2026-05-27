@@ -829,6 +829,15 @@
         }
       }
     },
+    "reviewResults": {
+      "goBackPopup": {
+        "title": "Go back to settings?",
+        "messageLine1": "Your current review progress will be lost.",
+        "messageLine2": "This includes any entity changes you made.",
+        "goBack": "Go back",
+        "stayOnReview": "Stay on review"
+      }
+    },
     "results": {
       "title": "De-Identification Results",
       "titleReview": "Review results",

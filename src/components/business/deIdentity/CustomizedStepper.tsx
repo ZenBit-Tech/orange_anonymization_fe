@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { jobsService } from '@/services/jobsService';
 import { setJobAC } from '@/store/slices/jobsSlice';
 import { ComplianceFramework, type IJob } from '@/pages/DeIdentify/types';
+import GoBackSettingsPopup from '@/components/popups/GoBackSettingsPopup';
 import { FONT_SIZES } from '@/constants';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -119,6 +120,8 @@ export default function CustomizedSteppers() {
     (state) => state.jobs.localOriginalTexts[currentJob?.id as string],
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showGoBackPopup, setShowGoBackPopup] = useState(false);
+  const [pendingStepIndex, setPendingStepIndex] = useState<number | null>(null);
 
   const steps = useMemo(
     () => [
@@ -261,6 +264,29 @@ export default function CustomizedSteppers() {
     }
   };
 
+  const handleStepClick = async (index: number) => {
+    if (activeStep === steps.length - 1 && index < activeStep) {
+      setPendingStepIndex(index);
+      setShowGoBackPopup(true);
+      return;
+    }
+
+    try {
+      const data: Partial<IJob> = {
+        wizardState: {
+          currentStep: index + 1,
+          frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
+          inputData: currentJob?.wizardState?.inputData || null,
+          configSettings: currentJob?.wizardState?.configSettings || {},
+        },
+      };
+
+      await updateJob(currentJob?.id as string, data);
+    } catch {
+      handleError('errors.updateFailed');
+    }
+  };
+
   return (
     <Stack
       sx={{
@@ -296,8 +322,8 @@ export default function CustomizedSteppers() {
           },
         }}
       >
-        {steps.map((label) => (
-          <Step key={label}>
+        {steps.map((label, index) => (
+          <Step key={label} onClick={() => handleStepClick(index)} sx={{ cursor: 'pointer' }}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
           </Step>
         ))}
@@ -414,6 +440,36 @@ export default function CustomizedSteppers() {
           {errorMessage}
         </Alert>
       </Snackbar>
+      <GoBackSettingsPopup
+        isVisible={showGoBackPopup}
+        onClose={() => {
+          setShowGoBackPopup(false);
+          setPendingStepIndex(null);
+        }}
+        onConfirm={async () => {
+          setShowGoBackPopup(false);
+          try {
+            if (pendingStepIndex !== null) {
+              const data: Partial<IJob> = {
+                wizardState: {
+                  currentStep: pendingStepIndex + 1,
+                  frameworkSelection: currentJob?.wizardState?.frameworkSelection || null,
+                  inputData: currentJob?.wizardState?.inputData || null,
+                  configSettings: currentJob?.wizardState?.configSettings || {},
+                },
+              };
+
+              await updateJob(currentJob?.id as string, data);
+            } else {
+              await handleBack();
+            }
+          } catch {
+            handleError('errors.updateFailed');
+          } finally {
+            setPendingStepIndex(null);
+          }
+        }}
+      />
     </Stack>
   );
 }
