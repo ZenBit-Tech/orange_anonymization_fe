@@ -1,6 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { AUTH_SESSION_MAX_AGE_MS, AUTH_SESSION_STARTED_AT_KEY, AUTH_TOKEN_KEY } from '@/constants';
+import {
+  AUTH_SESSION_MAX_AGE_MS,
+  AUTH_SESSION_STARTED_AT_KEY,
+  AUTH_TOKEN_KEY,
+  ROUTES,
+} from '@/constants';
 
 const WARNING_THRESHOLD_MS = 10 * 60 * 1000;
 const CRITICAL_THRESHOLD_MS = 2 * 60 * 1000;
@@ -43,6 +49,9 @@ const formatRemainingLabel = (remainingMs: number) => {
 
 export function useSessionExpiration(enabled = true): SessionExpirationState {
   const [now, setNow] = useState(() => Date.now());
+  const navigate = useNavigate();
+  const location = useLocation();
+  const hasRedirectedRef = useRef(false);
 
   useEffect(() => {
     if (!enabled) {
@@ -55,6 +64,32 @@ export function useSessionExpiration(enabled = true): SessionExpirationState {
 
     return () => window.clearInterval(intervalId);
   }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled) {
+      hasRedirectedRef.current = false;
+      return;
+    }
+
+    if (location.pathname === ROUTES.INACTIVITY) {
+      hasRedirectedRef.current = false;
+      return;
+    }
+
+    const remainingMs = getSessionRemainingMs(now);
+
+    if (remainingMs !== 0) {
+      hasRedirectedRef.current = false;
+      return;
+    }
+
+    if (hasRedirectedRef.current) {
+      return;
+    }
+
+    hasRedirectedRef.current = true;
+    navigate(ROUTES.INACTIVITY, { replace: true });
+  }, [enabled, location.pathname, navigate, now]);
 
   return useMemo(() => {
     if (!enabled) {
