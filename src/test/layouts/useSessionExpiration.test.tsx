@@ -23,7 +23,7 @@ describe('useSessionExpiration', () => {
       <MemoryRouter initialEntries={['/dashboard']}>
         <Routes>
           <Route path="/dashboard" element={<SessionExpirationProbe />} />
-          <Route path={ROUTES.INACTIVITY} element={<div>inactivity</div>} />
+          <Route path={ROUTES.SESSION_EXPIRED} element={<div>inactivity</div>} />
         </Routes>
       </MemoryRouter>,
     );

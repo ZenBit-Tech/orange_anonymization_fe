@@ -71,7 +71,7 @@ export function useSessionExpiration(enabled = true): SessionExpirationState {
       return;
     }
 
-    if (location.pathname === ROUTES.INACTIVITY) {
+    if (location.pathname === ROUTES.SESSION_EXPIRED) {
       hasRedirectedRef.current = false;
       return;
     }
@@ -88,7 +88,7 @@ export function useSessionExpiration(enabled = true): SessionExpirationState {
     }
 
     hasRedirectedRef.current = true;
-    navigate(ROUTES.INACTIVITY, { replace: true });
+    navigate(ROUTES.SESSION_EXPIRED, { replace: true });
   }, [enabled, location.pathname, navigate, now]);
 
   return useMemo(() => {
