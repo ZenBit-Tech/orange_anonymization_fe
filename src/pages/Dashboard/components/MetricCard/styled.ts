@@ -26,15 +26,30 @@ export const TopBar = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.primary[500],
 }));
 
-export const IconWrapper = styled(Box)(({ theme }) => ({
+export const IconWrapper = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'hasData',
+})<{ hasData: boolean }>(({ theme, hasData }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   width: LAYOUT.icon.md,
   height: LAYOUT.icon.md,
   borderRadius: theme.radius.circle,
-  backgroundColor: theme.palette.neutral[100],
   flexShrink: 0,
+
+  backgroundColor: hasData ? theme.palette.primary[50] : theme.palette.neutral[100],
+
+  color: hasData ? theme.palette.primary[500] : theme.palette.neutral[500],
+
+  '& svg': {
+    width: 24,
+    height: 24,
+    color: 'inherit',
+  },
+
+  '& svg path': {
+    fill: 'currentColor',
+  },
 }));
 
 export const Label = styled('div')(({ theme }) => ({
