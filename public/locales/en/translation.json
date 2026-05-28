@@ -19,6 +19,7 @@
     "or": "or",
     "copy": "Copy",
     "download": "Download",
+    "close": "Close",
     "retry": "Retry",
     "regenerate": "Regenerate",
     "continue": "Continue",
@@ -85,7 +86,8 @@
     "syntheticData": {
       "title": "Synthetic Data",
       "subtitle": "Generate synthetic datasets"
-    }
+    },
+    "sessionCountdownLabel": "Session expires in {{time}}"
   },
   "landing": {
     "nav": {
@@ -827,6 +829,15 @@
         }
       }
     },
+    "reviewResults": {
+      "goBackPopup": {
+        "title": "Go back to settings?",
+        "messageLine1": "Your current review progress will be lost.",
+        "messageLine2": "This includes any entity changes you made.",
+        "goBack": "Go back",
+        "stayOnReview": "Stay on review"
+      }
+    },
     "results": {
       "title": "De-Identification Results",
       "titleReview": "Review results",
@@ -862,6 +873,8 @@
       "noIdentifiersDetectedPanel": "No entities detected.",
       "noIdentifiersDetectedPanelDetail": "The document appears to contain no identifiable patient data.",
       "allEntitiesExcluded": "All detected entities are excluded. The de-identified version will be identical to the original document.",
+      "sessionWarning": "Your session expires in 10 minutes — save your work.",
+      "sessionCritical": "Session expiring soon — download your results now.",
       "noEntitiesFound": "No entities found",
       "redacted": "REDACTED",
       "entityColumns": {
