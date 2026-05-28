@@ -26,6 +26,7 @@
     "finish": "Finish",
     "analyze": "Analyze",
     "diIdFile": "De-id File",
+    "generateSyntheticData": "Generate Synthetic Data",
     "newAnalysis": "New Analysis",
     "view": "View",
     "copied": "Copied to clipboard",
@@ -38,7 +39,11 @@
     "high": "High",
     "good": "Good",
     "fair": "Fair",
-    "reduct": "Reduct"
+    "reduct": "Reduct",
+    "warning": "Warning",
+    "warningSyntheticMessage": "You can't generate synthetic data.",
+    "warningSyntheticMessage2": "Please go through the de-identification process first.",
+    "deIdentify": "De-Identify"
   },
   "nav": {
     "brand": "Clinical Data Studio",
@@ -1150,7 +1155,8 @@
           "dates": "Dates transformed",
           "freeText": "Free-text fields checked",
           "format": "Export format validated",
-          "synthetic": "Synthetic identifiers generated"
+          "synthetic": "Synthetic identifiers generated",
+          "direct": "Direct identifiers removed"
         },
         "warningReview": "{{count}} low-confidence fields may require review",
         "viewDetails": "View validation details"

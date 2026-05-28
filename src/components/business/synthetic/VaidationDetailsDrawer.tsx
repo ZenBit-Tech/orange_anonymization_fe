@@ -10,11 +10,13 @@ import {
   InfoOutlined as InfoOutlinedIcon,
   ArrowCircleDownOutlined as ArrowCircleDownOutlinedIcon,
 } from '@mui/icons-material';
+import type { SyntheticDataSummary } from '@/services/synthetic/types';
 
 interface IProps {
   drawerOpen: boolean;
   setDrawerOpen: (v: boolean) => void;
   onDownload: () => void;
+  data: SyntheticDataSummary;
 }
 
 interface ValidationRowProps {
@@ -31,7 +33,7 @@ const ValidationRow = ({ icon, label, status }: ValidationRowProps) => (
   </Box>
 );
 
-const ValidationDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen, onDownload }) => {
+const ValidationDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen, onDownload, data }) => {
   const { t } = useTranslation();
 
   const handleDownload = () => {
@@ -40,30 +42,17 @@ const ValidationDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen, onDown
   };
 
   const checkItems = [
-    'deIdentify.settings.identifiers.items.names',
-    'deIdentify.settings.identifiers.items.phone',
-    'deIdentify.settings.identifiers.items.email',
-    'deIdentify.settings.identifiers.items.medical',
-    'deIdentify.settings.identifiers.items.dates',
-    'deIdentify.settings.identifiers.items.geographic',
-    'dashboard.entityTypesChart.labels.FREE_TEXT',
-    'syntheticData.chooseFormat',
+    { key: 'dates', checked: data.compliance_validation_checks.dates_transformed },
+    { key: 'freeText', checked: data.compliance_validation_checks.free_text_fields_checked },
+    { key: 'format', checked: data.compliance_validation_checks.export_format_validated },
+    {
+      key: 'synthetic',
+      checked: data.compliance_validation_checks.synthetic_identifiers_generated,
+    },
+    { key: 'direct', checked: data.compliance_validation_checks.direct_identifiers_removed },
   ];
 
-  const warningItems = [
-    {
-      labelKey: 'syntheticData.results.drawers.validationDetails.Generated_note_text',
-      statusKey: 'syntheticData.results.drawers.validationDetails.values.mediumConfidence',
-    },
-    {
-      labelKey: 'syntheticData.results.drawers.validationDetails.Diagnosis_code',
-      statusKey: 'syntheticData.results.drawers.validationDetails.values.mediumConsistency',
-    },
-    {
-      labelKey: 'syntheticData.results.drawers.recordDetails.fields.providerType',
-      statusKey: 'syntheticData.results.drawers.validationDetails.values.mediumConfidence',
-    },
-  ];
+  const warningItems = data.data_quality.warnings;
 
   const renderDivider = () => (
     <Box sx={{ height: '1px', width: '100%', bgcolor: 'neutral.200', my: '20px' }}></Box>
@@ -99,7 +88,7 @@ const ValidationDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen, onDown
               {t('syntheticData.results.drawers.validationDetails.title')}
             </Typography>
             <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
-              {t('syntheticData.results.drawers.validationDetails.HIPAA')}
+              {data.compliance.framework}
             </Typography>
           </Box>
           <Button onClick={() => setDrawerOpen(false)} sx={{ minWidth: 'auto', p: 0 }}>
@@ -120,28 +109,45 @@ const ValidationDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen, onDown
 
         {renderSectionTitle('checks')}
 
-        {checkItems.map((itemKey) => (
+        {checkItems.map((item) => (
           <ValidationRow
-            key={itemKey}
-            icon={<CheckIcon sx={{ color: 'success.main' }} fontSize="small" />}
-            label={t(itemKey)}
-            status={t('syntheticData.results.drawers.validationDetails.values.removed')}
+            key={item.key}
+            icon={
+              <CheckIcon
+                sx={{ color: item.checked ? 'success.main' : 'neutral.300' }}
+                fontSize="small"
+              />
+            }
+            label={t(`syntheticData.syntheticResults.validation.checks.${item.key}`)}
+            status={
+              item.checked
+                ? t(
+                    'syntheticData.results.drawers.validationDetails.values.removed',
+                    'Valid / Removed',
+                  )
+                : t('common.failed', 'Failed')
+            }
           />
         ))}
 
         {renderDivider()}
 
-        <Box sx={{ mb: warningItems.length > 0 ? '32px' : 0 }}>
-          {renderSectionTitle('warnings')}
-          {warningItems.map((item) => (
-            <ValidationRow
-              key={item.labelKey}
-              icon={<WarningAmberIcon sx={{ color: 'warning.main' }} fontSize="small" />}
-              label={t(item.labelKey)}
-              status={t(item.statusKey)}
-            />
-          ))}
-        </Box>
+        {warningItems.length > 0 && (
+          <Box sx={{ mb: '32px' }}>
+            {renderSectionTitle('warnings')}
+            {warningItems.map((warningText, index) => (
+              <ValidationRow
+                key={index}
+                icon={<WarningAmberIcon sx={{ color: 'warning.main' }} fontSize="small" />}
+                label={warningText}
+                status={t(
+                  'syntheticData.results.drawers.validationDetails.values.mediumConfidence',
+                  'Review Required',
+                )}
+              />
+            ))}
+          </Box>
+        )}
 
         <Box
           sx={(theme) => ({

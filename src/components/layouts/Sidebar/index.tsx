@@ -18,6 +18,7 @@ import { useSidebar } from '@/components/layouts/Sidebar/useSidebar';
 import LogoutPopup from '@/components/popups/LogoutPopup';
 import GeneratedDataIcon from '@/assets/icons/generatedDataIcon.svg?react';
 import { ROUTES } from '@/constants';
+import { useAppSelector } from '@/store/store';
 
 export interface SidebarProps {
   isMobile: boolean;
@@ -28,6 +29,7 @@ export interface SidebarProps {
 const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
   const { t, navItems, isActive, handleNavigate, handleSignOut } = useSidebar(onDrawerClose);
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
+  const { data } = useAppSelector((state) => state.syntheticResult);
 
   return (
     <Box
@@ -207,44 +209,46 @@ const SidebarContent = ({ onDrawerClose }: { onDrawerClose?: () => void }) => {
                 />
               </ListItemButton>
 
-              <ListItemButton
-                onClick={() => handleNavigate(ROUTES.SYNTHETIC_RESULTS)}
-                sx={(theme) => ({
-                  borderRadius: 1,
-                  mb: 0.5,
-                  bgcolor: isResultsActive ? theme.palette.action.selected : 'transparent',
-                  '&:hover': {
-                    bgcolor: theme.palette.action.hover,
-                  },
-                })}
-              >
-                <ListItemIcon
+              {!!data && (
+                <ListItemButton
+                  onClick={() => handleNavigate(`/app/synthetic-data/${data.dataset_id}`)}
                   sx={(theme) => ({
-                    color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
-                    minWidth: LAYOUT.sidebar.iconMinWidth,
+                    borderRadius: 1,
+                    mb: 0.5,
+                    bgcolor: isResultsActive ? theme.palette.action.selected : 'transparent',
+                    '&:hover': {
+                      bgcolor: theme.palette.action.hover,
+                    },
                   })}
                 >
-                  <SvgIcon
-                    component={GeneratedDataIcon}
-                    inheritViewBox
-                    sx={(theme: Theme) => ({
+                  <ListItemIcon
+                    sx={(theme) => ({
                       color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
+                      minWidth: LAYOUT.sidebar.iconMinWidth,
                     })}
+                  >
+                    <SvgIcon
+                      component={GeneratedDataIcon}
+                      inheritViewBox
+                      sx={(theme: Theme) => ({
+                        color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
+                      })}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t('nav.syntheticGeneratedData')}
+                    primaryTypographyProps={{
+                      variant: 'caption',
+                      sx: (theme) => ({
+                        color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
+                        fontWeight: isResultsActive
+                          ? theme.typography.fontWeightMedium
+                          : theme.typography.fontWeightRegular,
+                      }),
+                    }}
                   />
-                </ListItemIcon>
-                <ListItemText
-                  primary={t('nav.syntheticGeneratedData')}
-                  primaryTypographyProps={{
-                    variant: 'caption',
-                    sx: (theme) => ({
-                      color: isResultsActive ? 'accent.500' : theme.palette.grey[400],
-                      fontWeight: isResultsActive
-                        ? theme.typography.fontWeightMedium
-                        : theme.typography.fontWeightRegular,
-                    }),
-                  }}
-                />
-              </ListItemButton>
+                </ListItemButton>
+              )}
             </List>
           );
         })}

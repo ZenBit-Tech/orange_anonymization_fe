@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { FONT_SIZES } from '@/constants';
 import { Box, Button, Drawer, Typography } from '@mui/material';
 import { Close as CloseIcon, Check as CheckIcon } from '@mui/icons-material';
+import type { SyntheticRecord, SyntheticComplianceChecks } from '@/services/synthetic/types';
 
 interface IProps {
   drawerOpen: boolean;
   setDrawerOpen: (v: boolean) => void;
+  record: SyntheticRecord | null;
+  complianceChecks: SyntheticComplianceChecks;
 }
 
 const rowBoxStyle = {
@@ -20,7 +23,11 @@ const rowBoxStyle = {
 const MetaRow = ({ label, value }: { label: string; value: string }) => (
   <Box sx={rowBoxStyle}>
     <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
-    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>{value}</Typography>
+    <Typography
+      sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900', fontWeight: 'fontWeightMedium' }}
+    >
+      {value}
+    </Typography>
   </Box>
 );
 
@@ -34,32 +41,31 @@ const GeneratedFieldRow = ({ label, value }: { label: string; value: string }) =
   </Box>
 );
 
-const ComplianceCheckRow = ({ label }: { label: string }) => (
+const ComplianceCheckRow = ({ label, checked }: { label: string; checked: boolean }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: '2px' }}>
-    <CheckIcon sx={{ color: 'success.main' }} fontSize="small" />
+    <CheckIcon sx={{ color: checked ? 'success.main' : 'neutral.300' }} fontSize="small" />
     <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
   </Box>
 );
 
-const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
+const RecordDetailsDrawer: FC<IProps> = ({
+  drawerOpen,
+  setDrawerOpen,
+  record,
+  complianceChecks,
+}) => {
   const { t } = useTranslation();
 
-  const generatedFields = [
-    { labelKey: 'ageRange', valueKey: '55-64' },
-    { labelKey: 'encounterDate', valueKey: '2025-04-14' },
-    { labelKey: 'category', valueKey: 'Endocrinology' },
-    { labelKey: 'diagnosis', valueKey: 'E11.9' },
-    { labelKey: 'dischargeStatus', valueKey: 'Follow-up' },
-    { labelKey: 'medication', valueKey: 'Metformin' },
-    { labelKey: 'providerType', valueKey: 'Endocrinologist' },
-  ];
+  if (!record) return null;
 
-  const complianceChecks = [
-    'noDirectIdentifiers',
-    'datesTransformed',
-    'fieldConfidenceHigh',
-    'syntheticIdentifiers',
-    'directIdentifiersRemoved',
+  const { record_id, docType, ...dynamicFields } = record;
+
+  const checksList = [
+    { key: 'noDirectIdentifiers', checked: complianceChecks.direct_identifiers_removed },
+    { key: 'datesTransformed', checked: complianceChecks.dates_transformed },
+    { key: 'fieldConfidenceHigh', checked: complianceChecks.free_text_fields_checked },
+    { key: 'syntheticIdentifiers', checked: complianceChecks.synthetic_identifiers_generated },
+    { key: 'directIdentifiersRemoved', checked: complianceChecks.direct_identifiers_removed },
   ];
 
   const renderDivider = () => (
@@ -96,7 +102,7 @@ const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
               {t('syntheticData.results.drawers.recordDetails.title')}
             </Typography>
             <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.400' }}>
-              {t('syntheticData.results.drawers.recordDetails.SYN-00041')}
+              {record_id || '—'}
             </Typography>
           </Box>
           <Button onClick={() => setDrawerOpen(false)} sx={{ minWidth: 'auto', p: 0 }}>
@@ -108,7 +114,7 @@ const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
 
         <MetaRow
           label={t('syntheticData.results.drawers.recordDetails.fields.documentType')}
-          value={t('syntheticData.results.drawers.recordDetails.Discharge_Summary')}
+          value={docType || '—'}
         />
         <MetaRow
           label={t('syntheticData.results.drawers.recordDetails.fields.compliance')}
@@ -118,23 +124,34 @@ const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
         {renderDivider()}
 
         {renderSectionTitle('generatedFields')}
-        {generatedFields.map((field) => (
+
+        {Object.entries(dynamicFields).map(([key, value]) => (
           <GeneratedFieldRow
-            key={field.labelKey}
-            label={t(`syntheticData.results.drawers.recordDetails.fields.${field.labelKey}`)}
-            value={t(
-              `syntheticData.results.drawers.recordDetails.values.${field.valueKey}`,
-              field.valueKey,
-            )}
+            key={key}
+            label={t(`syntheticData.syntheticResults.preview.columns.${key}`, key)}
+            value={value || '—'}
           />
         ))}
 
         {renderDivider()}
 
         {renderSectionTitle('clinicalNote')}
-        <Box sx={{ p: '12px', borderRadius: '8px', bgcolor: 'neutral.50' }}>
-          <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>
-            {t('syntheticData.results.drawers.recordDetails.values.notePlaceholder')}
+
+        <Box
+          sx={{
+            p: '12px',
+            borderRadius: '8px',
+            bgcolor: 'neutral.50',
+            maxHeight: '150px',
+            overflowY: 'auto',
+          }}
+        >
+          <Typography
+            sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.600', whiteSpace: 'pre-line' }}
+          >
+            {record.text ||
+              record.clinical_note ||
+              t('syntheticData.results.drawers.recordDetails.values.notePlaceholder')}
           </Typography>
         </Box>
 
@@ -142,10 +159,11 @@ const RecordDetailsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
 
         {renderSectionTitle('compliance')}
 
-        {complianceChecks.map((checkKey) => (
+        {checksList.map((check) => (
           <ComplianceCheckRow
-            key={checkKey}
-            label={t(`syntheticData.results.drawers.recordDetails.values.${checkKey}`)}
+            key={check.key}
+            label={t(`syntheticData.results.drawers.recordDetails.values.${check.key}`)}
+            checked={check.checked}
           />
         ))}
       </Box>
