@@ -15,10 +15,14 @@ import { useTranslation } from 'react-i18next';
 import StarIcon from '@mui/icons-material/Star';
 import { useSyntheticDataForm } from './useSyntheticDataForm';
 import synthetic from './styles';
+import type { SyntheticOutputFormat } from '@/services/synthetic/types';
+import { useMemo, useState } from 'react';
+import SyntheticWarningPopup from '@/components/popups/SyntheticWarningPopup';
 
 interface SyntheticDataFormProps {
   sourceJobId?: string;
 }
+
 const metrics = {
   estimateMultiplier: 2.3,
   kb: 1024,
@@ -29,7 +33,11 @@ const limits = {
   maxRecords: 100000,
 };
 
-const OUTPUT_FORMATS = [{ value: 'csv' }, { value: 'json' }, { value: 'xlsx' }];
+const OUTPUT_FORMATS: { value: SyntheticOutputFormat }[] = [
+  { value: 'CSV' },
+  { value: 'JSON' },
+  { value: 'XLSX' },
+];
 
 export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProps) {
   const { t } = useTranslation();
@@ -51,6 +59,15 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
     setError,
     setSuccess,
   } = useSyntheticDataForm(sourceJobId);
+
+  const [, setIsWarningVisible] = useState<boolean>(!deidentifiedPreview);
+
+  const showWarning = useMemo(() => {
+    if (deidentifiedPreview === null) {
+      return true;
+    }
+    return false;
+  }, [deidentifiedPreview]);
 
   return (
     <Box sx={synthetic.root}>
@@ -131,7 +148,7 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                 <FormControl fullWidth size="small">
                   <Select
                     value={outputFormat}
-                    onChange={(e) => setOutputFormat(String(e.target.value))}
+                    onChange={(e) => setOutputFormat(e.target.value as SyntheticOutputFormat)}
                     sx={(theme) => ({
                       backgroundColor: theme.palette.background.default,
                       '& .MuiOutlinedInput-notchedOutline': {
@@ -141,7 +158,7 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                   >
                     {OUTPUT_FORMATS.map((o) => (
                       <MenuItem key={o.value} value={o.value}>
-                        {t(`syntheticData.outputFormats.${o.value}`, o.value.toUpperCase())}
+                        {t(`syntheticData.outputFormats.${o.value.toLowerCase()}`, o.value)}
                       </MenuItem>
                     ))}
                   </Select>
@@ -179,7 +196,8 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
                 {t('syntheticData.estimatedOutput')}
               </Typography>
               <Typography sx={synthetic.footerValue}>
-                {(records * metrics.estimateMultiplier) / metrics.mbDivider} {t('common.mb')}
+                {((records * metrics.estimateMultiplier) / metrics.mbDivider).toFixed(2)}{' '}
+                {t('common.mb')}
               </Typography>
             </Box>
 
@@ -232,6 +250,8 @@ export default function SyntheticDataForm({ sourceJobId }: SyntheticDataFormProp
           {success}
         </Alert>
       </Snackbar>
+
+      <SyntheticWarningPopup isVisible={showWarning} onClose={() => setIsWarningVisible(false)} />
     </Box>
   );
 }

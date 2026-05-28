@@ -19,17 +19,23 @@ import {
   InfoOutlined as InfoOutlinedIcon,
 } from '@mui/icons-material';
 import BasePopup from '@/components/popups/BasePopup';
+import type { SyntheticDataSummary } from '@/services/synthetic/types';
 
 interface IProps {
   isVisible: boolean;
   onClose: () => void;
   onDownload: () => void;
+  data: SyntheticDataSummary;
 }
 
-const InfoRow = ({ label, value }: { label: string; value: string }) => (
+const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
     <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.500' }}>{label}</Typography>
-    <Typography sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900' }}>{value}</Typography>
+    <Typography
+      sx={{ fontSize: FONT_SIZES.xs, color: 'neutral.900', fontWeight: 'fontWeightMedium' }}
+    >
+      {value}
+    </Typography>
   </Box>
 );
 
@@ -54,17 +60,29 @@ const PopupCheckbox = ({
   />
 );
 
-const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) => {
+const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload, data }) => {
   const { t } = useTranslation();
 
   const infoItems = [
-    { labelKey: 'format', valueKey: 'syntheticData.syntheticResults.datasetSummary.formatTitle' },
-    { labelKey: 'records', valueKey: 'syntheticData.syntheticResults.datasetSummary.recordsTitle' },
-    { labelKey: 'fields', valueKey: 'syntheticData.syntheticResults.datasetSummary.fieldsTitle' },
-    { labelKey: 'framework', valueKey: 'syntheticData.results.drawers.validationDetails.HIPAA' },
+    {
+      labelKey: 'format',
+      value: data.export_summary.format,
+    },
+    {
+      labelKey: 'records',
+      value: data.export_summary.records_count,
+    },
+    {
+      labelKey: 'fields',
+      value: data.export_summary.fields_count,
+    },
+    {
+      labelKey: 'framework',
+      value: data.compliance.framework,
+    },
     {
       labelKey: 'validation',
-      valueKey: 'syntheticData.results.drawers.recordDetails.fields.compliance',
+      value: t('syntheticData.results.drawers.recordDetails.values.passed'),
     },
   ];
 
@@ -106,7 +124,7 @@ const SyntheticDownloadPopup: FC<IProps> = ({ isVisible, onClose, onDownload }) 
             <InfoRow
               key={item.labelKey}
               label={t(`syntheticData.results.downloadPopup.fields.${item.labelKey}`)}
-              value={t(item.valueKey)}
+              value={item.value}
             />
           ))}
         </Box>

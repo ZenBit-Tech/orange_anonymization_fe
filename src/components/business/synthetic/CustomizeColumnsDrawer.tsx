@@ -12,10 +12,13 @@ import {
   Typography,
 } from '@mui/material';
 import { Close as CloseIcon, InfoOutlined as InfoOutlinedIcon } from '@mui/icons-material';
+import { useState } from 'react';
 
 interface IProps {
   drawerOpen: boolean;
   setDrawerOpen: (v: boolean) => void;
+  selectedColumns: string[];
+  onApplyColumns: (columns: string[]) => void;
 }
 
 const formGroupStyle = {
@@ -26,60 +29,61 @@ const formGroupStyle = {
   },
 };
 
-interface CustomCheckboxFieldProps {
-  label: string;
-  defaultChecked?: boolean;
-}
+const BASE_COLUMNS = ['record_id', 'docType', 'age_range', 'date', 'quality'];
 
-const CustomCheckboxField = ({ label, defaultChecked = false }: CustomCheckboxFieldProps) => (
-  <FormControlLabel
-    control={
-      <Checkbox
-        defaultChecked={defaultChecked}
-        sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
-      />
-    }
-    label={label}
-    slotProps={{
-      typography: { fontSize: FONT_SIZES.xs },
-    }}
-  />
-);
-
-const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
+const CustomizeColumnsDrawer: FC<IProps> = ({
+  drawerOpen,
+  setDrawerOpen,
+  selectedColumns,
+  onApplyColumns,
+}) => {
   const { t } = useTranslation();
 
-  const baseFields = [
-    'syntheticData.results.drawers.customizeColumns.fields.recordId',
-    'syntheticData.results.drawers.customizeColumns.fields.documentType',
-    'syntheticData.results.drawers.customizeColumns.fields.ageRange',
-    'syntheticData.results.drawers.customizeColumns.fields.date',
-    'syntheticData.results.drawers.customizeColumns.fields.quality',
-  ];
-
   const additionalFieldsCol1 = [
-    { key: 'dashboard.entityTypesChart.labels.PERSON' },
-    { key: 'dashboard.entityTypesChart.labels.LOCATION' },
-    { key: 'dashboard.entityTypesChart.labels.DATE_TIME' },
-    { key: 'dashboard.entityTypesChart.labels.PHONE_NUMBER' },
-    { label: 'FAX' },
-    { key: 'dashboard.entityTypesChart.labels.EMAIL_ADDRESS' },
-    { key: 'dashboard.entityTypesChart.labels.US_SSN' },
-    { key: 'dashboard.entityTypesChart.labels.MEDICAL_RECORD_NUMBER' },
-    { label: 'BENEFICIARY' },
+    { id: 'PERSON', key: 'dashboard.entityTypesChart.labels.PERSON' },
+    { id: 'LOCATION', key: 'dashboard.entityTypesChart.labels.LOCATION' },
+    { id: 'DATE_TIME', key: 'dashboard.entityTypesChart.labels.DATE_TIME' },
+    { id: 'PHONE_NUMBER', key: 'dashboard.entityTypesChart.labels.PHONE_NUMBER' },
+    { id: 'FAX', label: 'FAX' },
+    { id: 'EMAIL_ADDRESS', key: 'dashboard.entityTypesChart.labels.EMAIL_ADDRESS' },
+    { id: 'US_SSN', key: 'dashboard.entityTypesChart.labels.US_SSN' },
+    { id: 'MEDICAL_RECORD_NUMBER', key: 'dashboard.entityTypesChart.labels.MEDICAL_RECORD_NUMBER' },
+    { id: 'BENEFICIARY', label: 'BENEFICIARY' },
   ];
 
   const additionalFieldsCol2 = [
-    { key: 'dashboard.entityTypesChart.labels.IBAN_CODE' },
-    { label: 'LICENSE' },
-    { key: 'dashboard.entityTypesChart.labels.US_PASSPORT' },
-    { key: 'dashboard.entityTypesChart.labels.DEVICE_ID' },
-    { key: 'dashboard.entityTypesChart.labels.URL' },
-    { key: 'dashboard.entityTypesChart.labels.IP_ADDRESS' },
-    { key: 'dashboard.entityTypesChart.labels.BIOMETRIC' },
-    { key: 'dashboard.entityTypesChart.labels.PHOTO' },
-    { label: 'OTHER' },
+    { id: 'IBAN_CODE', key: 'dashboard.entityTypesChart.labels.IBAN_CODE' },
+    { id: 'LICENSE', label: 'LICENSE' },
+    { id: 'US_PASSPORT', key: 'dashboard.entityTypesChart.labels.US_PASSPORT' },
+    { id: 'DEVICE_ID', key: 'dashboard.entityTypesChart.labels.DEVICE_ID' },
+    { id: 'URL', key: 'dashboard.entityTypesChart.labels.URL' },
+    { id: 'IP_ADDRESS', key: 'dashboard.entityTypesChart.labels.IP_ADDRESS' },
+    { id: 'BIOMETRIC', key: 'dashboard.entityTypesChart.labels.BIOMETRIC' },
+    { id: 'PHOTO', key: 'dashboard.entityTypesChart.labels.PHOTO' },
+    { id: 'OTHER', label: 'OTHER' },
   ];
+
+  const allFieldsCount =
+    BASE_COLUMNS.length + additionalFieldsCol1.length + additionalFieldsCol2.length;
+
+  const [localSelected, setLocalSelected] = useState<string[]>(selectedColumns);
+
+  const handleCheckboxChange = (id: string, checked: boolean) => {
+    if (checked) {
+      setLocalSelected((prev) => [...prev, id]);
+    } else {
+      setLocalSelected((prev) => prev.filter((item) => item !== id));
+    }
+  };
+
+  const handleApply = () => {
+    onApplyColumns(localSelected);
+    setDrawerOpen(false);
+  };
+
+  const handleReset = () => {
+    setLocalSelected(BASE_COLUMNS);
+  };
 
   const getLabel = (field: { key?: string; label?: string }) =>
     field.key ? t(field.key) : field.label || '';
@@ -140,14 +144,27 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
           }}
         >
           {t('syntheticData.results.drawers.customizeColumns.selectedCount', {
-            selected: 5,
-            total: 23,
+            selected: localSelected.length,
+            total: allFieldsCount,
           })}
         </Typography>
 
         <FormGroup sx={formGroupStyle}>
-          {baseFields.map((fieldKey) => (
-            <CustomCheckboxField key={fieldKey} label={t(fieldKey)} defaultChecked />
+          {BASE_COLUMNS.map((id) => (
+            <FormControlLabel
+              key={id}
+              control={
+                <Checkbox
+                  checked={localSelected.includes(id)}
+                  onChange={(e) => handleCheckboxChange(id, e.target.checked)}
+                  sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
+                />
+              }
+              label={t(
+                `syntheticData.results.drawers.customizeColumns.fields.${id === 'record_id' ? 'recordId' : id === 'docType' ? 'documentType' : id === 'age_range' ? 'ageRange' : id}`,
+              )}
+              slotProps={{ typography: { fontSize: FONT_SIZES.xs } }}
+            />
           ))}
         </FormGroup>
 
@@ -166,14 +183,36 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
 
         <Box sx={{ display: 'flex', gap: '16px' }}>
           <FormGroup sx={formGroupStyle}>
-            {additionalFieldsCol1.map((field, index) => (
-              <CustomCheckboxField key={field.key || index} label={getLabel(field)} />
+            {additionalFieldsCol1.map((field) => (
+              <FormControlLabel
+                key={field.id}
+                control={
+                  <Checkbox
+                    checked={localSelected.includes(field.id)}
+                    onChange={(e) => handleCheckboxChange(field.id, e.target.checked)}
+                    sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
+                  />
+                }
+                label={getLabel(field)}
+                slotProps={{ typography: { fontSize: FONT_SIZES.xs } }}
+              />
             ))}
           </FormGroup>
 
           <FormGroup sx={formGroupStyle}>
-            {additionalFieldsCol2.map((field, index) => (
-              <CustomCheckboxField key={field.key || index} label={getLabel(field)} />
+            {additionalFieldsCol2.map((field) => (
+              <FormControlLabel
+                key={field.id}
+                control={
+                  <Checkbox
+                    checked={localSelected.includes(field.id)}
+                    onChange={(e) => handleCheckboxChange(field.id, e.target.checked)}
+                    sx={{ '&.Mui-checked': { color: 'primary.500' }, color: 'neutral.400' }}
+                  />
+                }
+                label={getLabel(field)}
+                slotProps={{ typography: { fontSize: FONT_SIZES.xs } }}
+              />
             ))}
           </FormGroup>
         </Box>
@@ -182,11 +221,13 @@ const CustomizeColumnsDrawer: FC<IProps> = ({ drawerOpen, setDrawerOpen }) => {
 
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Button
+            onClick={handleReset}
             sx={{ color: 'primary.500', fontSize: FONT_SIZES.md, fontWeight: 'fontWeightMedium' }}
           >
             {t('syntheticData.results.drawers.customizeColumns.resetToDefault')}
           </Button>
           <Button
+            onClick={handleApply}
             sx={{
               color: 'common.white',
               fontSize: FONT_SIZES.md,
