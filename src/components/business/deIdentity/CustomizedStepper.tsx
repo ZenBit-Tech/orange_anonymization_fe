@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import {
   Stack,
@@ -20,7 +20,7 @@ import {
   PostAdd as PostAddIcon,
   ArrowForward as ArrowForwardIcon,
   ArrowBack as ArrowBackIcon,
-  ArrowCircleDownOutlined as ArrowCircleDownOutlinedIcon,
+  Star as StarIcon,
   Add as AddIcon,
 } from '@mui/icons-material';
 import { type StepIconProps } from '@mui/material/StepIcon';
@@ -139,6 +139,7 @@ export default function CustomizedSteppers() {
     [currentJob],
   );
   const text = useMemo(() => localOriginalText, [localOriginalText]);
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
@@ -222,6 +223,7 @@ export default function CustomizedSteppers() {
 
   const handleNext = async () => {
     if (activeStep === steps.length - 1) {
+      navigate(`/app/synthetic-data?jobId=${currentJob?.id}`);
       return;
     }
 
@@ -406,16 +408,10 @@ export default function CustomizedSteppers() {
                   background: (theme) => theme.palette.primary[500],
                   '&:hover': { opacity: 0.9 },
                 }}
-                endIcon={
-                  activeStep === steps.length - 1 ? (
-                    <ArrowCircleDownOutlinedIcon />
-                  ) : (
-                    <ArrowForwardIcon />
-                  )
-                }
+                endIcon={activeStep === steps.length - 1 ? <StarIcon /> : <ArrowForwardIcon />}
               >
                 {activeStep === steps.length - 1
-                  ? t('common.diIdFile')
+                  ? t('common.generateSyntheticData')
                   : activeStep === 2
                     ? t('common.analyze')
                     : t('common.continue')}

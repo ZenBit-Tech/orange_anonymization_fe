@@ -19,7 +19,7 @@ export const ROUTES = {
   ANALYSES: '/analyses',
   DE_IDENTIFY: '/app/de-identify',
   SYNTHETIC_DATA: '/app/synthetic-data',
-  SYNTHETIC_RESULTS: '/app/synthetic-data/:syntheticId',
+  SYNTHETIC_RESULTS: '/app/synthetic-data/:datasetId',
 } as const;
 
 export const FONT_SIZES = {
