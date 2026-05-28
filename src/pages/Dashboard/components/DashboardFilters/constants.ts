@@ -14,11 +14,11 @@ export const FRAMEWORK_OPTIONS = [
     translationKey: 'dashboard.filters.gdpr',
   },
   {
-    value: FRAMEWORK_VALUES.FADP,
-    translationKey: 'dashboard.filters.fadp',
-  },
-  {
     value: FRAMEWORK_VALUES.UK_DPI,
     translationKey: 'dashboard.filters.ukDpi',
+  },
+  {
+    value: FRAMEWORK_VALUES.FADP,
+    translationKey: 'dashboard.filters.fadp',
   },
 ] as const;

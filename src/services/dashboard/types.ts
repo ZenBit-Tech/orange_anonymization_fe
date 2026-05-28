@@ -39,3 +39,10 @@ export interface DashboardData {
   endDate?: string;
   message?: string;
 }
+
+export interface AnalysesResponse {
+  data: RecentActivity[];
+  total: number;
+  page: number;
+  limit: number;
+}

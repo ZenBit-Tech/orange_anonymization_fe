@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { CircularProgress, useTheme } from '@mui/material';
-import { eachDayOfInterval, format, startOfDay, subDays, subMonths } from 'date-fns';
+import { eachDayOfInterval, format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import {
   Area,
@@ -13,30 +13,30 @@ import {
   YAxis,
 } from 'recharts';
 
-import type { ChartData } from '@/services/dashboard/types';
 import type { DashboardState } from '@/pages/Dashboard/types';
+import type { ChartData } from '@/services/dashboard/types';
 
 import { CHART_CONSTANTS } from './constants';
-
 import {
   CHART_MARGIN,
   ChartEmptyState,
   ChartErrorState,
-  ChartWrapper,
   ChartLoaderWrapper,
+  ChartWrapper,
   getGridStyles,
   getTooltipStyles,
   getXAxisLine,
   getXAxisTickStyles,
   getYAxisTickStyles,
 } from './styled';
-import { CHART_RANGES, CHART_TYPES, type ChartType, type Range } from './types';
+import { CHART_TYPES, type ChartType } from './types';
 import { formatChartDate } from './utils';
 
 interface ActivityChartProps {
   chartData: ChartData[];
   chartType: ChartType;
-  range?: Range;
+  startDate: Date;
+  endDate: Date;
   state: DashboardState;
 }
 
@@ -48,7 +48,8 @@ interface DotProps {
 export const ActivityChart: React.FC<ActivityChartProps> = ({
   chartData,
   chartType,
-  range = CHART_CONSTANTS.DEFAULT_RANGE,
+  startDate,
+  endDate,
   state,
 }) => {
   const { t } = useTranslation();
@@ -57,118 +58,48 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   const strokeColor = isDocuments ? theme.palette.primary[500] : theme.palette.accent[400];
   const dataKey = isDocuments ? CHART_TYPES.DOCUMENTS : CHART_TYPES.ENTITIES;
 
-  const { from, to } = useMemo(() => {
-    const now = new Date();
-
-    switch (range) {
-      case CHART_RANGES.TODAY:
-        return {
-          from: startOfDay(now),
-          to: startOfDay(now),
-        };
-      case CHART_RANGES.YESTERDAY: {
-        const yesterday = startOfDay(subDays(now, 1));
-        return {
-          from: yesterday,
-          to: yesterday,
-        };
-      }
-      case CHART_RANGES.DAYS_14:
-        return {
-          from: subDays(now, 13),
-          to: now,
-        };
-      case CHART_RANGES.DAYS_30:
-        return {
-          from: subDays(now, 29),
-          to: now,
-        };
-      case CHART_RANGES.MONTHS_3:
-        return {
-          from: subMonths(now, 3),
-          to: now,
-        };
-      case CHART_RANGES.MONTHS_6:
-        return {
-          from: subMonths(now, 6),
-          to: now,
-        };
-      case CHART_RANGES.CUSTOM:
-        return {
-          from: subDays(now, 6),
-          to: now,
-        };
-      case CHART_RANGES.DAYS_7:
-      default:
-        return {
-          from: subDays(now, 6),
-          to: now,
-        };
-    }
-  }, [range]);
-
   const dataMap = useMemo(() => {
     const map = new Map<string, ChartData>();
 
-    chartData.forEach((item) => {
+    for (const item of chartData) {
       map.set(item.date, item);
-    });
+    }
 
     return map;
   }, [chartData]);
 
   const normalizedData = useMemo(() => {
     const days = eachDayOfInterval({
-      start: from,
-      end: to,
+      start: startDate,
+      end: endDate,
     });
 
     return days.map((day) => {
-      const formattedDate = format(day, CHART_CONSTANTS.DATE_FORMAT);
-      const existingData = dataMap.get(formattedDate);
+      const key = format(day, CHART_CONSTANTS.DATE_FORMAT);
+      const existing = dataMap.get(key);
 
       return {
-        date: formattedDate,
-        documents: existingData?.documents ?? 0,
-        entities: existingData?.entities ?? 0,
+        date: key,
+        documents: existing?.documents ?? 0,
+        entities: existing?.entities ?? 0,
       };
     });
-  }, [dataMap, from, to]);
+  }, [dataMap, startDate, endDate]);
 
   const xAxisTicks = useMemo(() => {
-    const data = normalizedData;
-    const total = data.length;
+    const total = normalizedData.length;
+    const step = total <= 7 ? 1 : total <= 14 ? 2 : total <= 30 ? 4 : 7;
 
-    if (range === CHART_RANGES.DAYS_7 || range === CHART_RANGES.DAYS_14) {
-      return data.map((item) => item.date);
-    }
-
-    if (range === CHART_RANGES.DAYS_30) {
-      const step = Math.ceil(total / 8);
-      return data.filter((_, index) => index % step === 0).map((item) => item.date);
-    }
-
-    if (range === CHART_RANGES.MONTHS_3) {
-      const step = Math.ceil(total / 10);
-      return data.filter((_, index) => index % step === 0).map((item) => item.date);
-    }
-
-    if (range === CHART_RANGES.MONTHS_6) {
-      const step = Math.ceil(total / 12);
-      return data.filter((_, index) => index % step === 0).map((item) => item.date);
-    }
-
-    return data.map((item) => item.date);
-  }, [normalizedData, range]);
+    return normalizedData.filter((_, i) => i % step === 0).map((d) => d.date);
+  }, [normalizedData]);
 
   const isEmptyChart = useMemo(() => {
-    return normalizedData.every((item) => (item[dataKey] ?? 0) === 0);
+    return normalizedData.every((i) => (i[dataKey] ?? 0) === 0);
   }, [normalizedData, dataKey]);
 
   const maxValue = useMemo(() => {
-    const values = normalizedData.map((item) => item[dataKey] ?? 0);
-    return Math.max(...values, 1);
-  }, [dataKey, normalizedData]);
+    return Math.max(...normalizedData.map((i) => i[dataKey] ?? 0), 1);
+  }, [normalizedData, dataKey]);
 
   const normalizedMax = useMemo(() => {
     return Math.max(
@@ -180,9 +111,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   const renderChartDot =
     (innerRadius: number, opacity: number) =>
     ({ cx, cy }: DotProps) => {
-      if (cx == null || cy == null) {
-        return null;
-      }
+      if (cx == null || cy == null) return null;
 
       return (
         <g>

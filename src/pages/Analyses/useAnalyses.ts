@@ -1,13 +1,54 @@
-import { MOCK_DASHBOARD_DATA } from '@/pages/Dashboard/mocks';
+import { useEffect, useRef } from 'react';
 
-export const useAnalyses = () => {
-  const isLoading = false;
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { fetchAnalyses } from '@/store/slices/analysesSlice';
 
-  const error = null;
+interface Params {
+  page: number;
+  limit: number;
+  search?: string;
+  framework?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
+}
 
-  return {
-    rows: MOCK_DASHBOARD_DATA.recentActivity,
-    isLoading,
-    error,
-  };
+export const useAnalyses = ({
+  page,
+  limit,
+  search,
+  framework,
+  status,
+  startDate,
+  endDate,
+}: Params) => {
+  const dispatch = useAppDispatch();
+  const analyses = useAppSelector((state) => state.analyses);
+
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    abortRef.current?.abort();
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    dispatch(
+      fetchAnalyses({
+        page,
+        limit,
+        search,
+        framework,
+        status,
+        startDate,
+        endDate,
+      }),
+    );
+
+    return () => {
+      controller.abort();
+    };
+  }, [dispatch, page, limit, search, framework, status, startDate, endDate]);
+
+  return analyses;
 };

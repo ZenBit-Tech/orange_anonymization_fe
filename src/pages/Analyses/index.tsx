@@ -1,26 +1,39 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { AnalysesTable } from '@/features/analyses/components/AnalysesTable';
+import { useDebounce } from '@/features/analyses/hooks/useDebounce';
 import { exportAnalysesToCsv } from '@/features/analyses/utils/exportCsv';
-import { isWithinDateRange } from '@/features/analyses/utils/dateFilter';
 
 import {
+  FRAMEWORK_API_VALUES,
   FRAMEWORK_VALUES,
   type FrameworkValue,
 } from '@/pages/Dashboard/components/DashboardFilters/types';
 
-import { useAnalyses } from './useAnalyses';
+import { getAllAnalyses } from '@/services/dashboard/analysesService';
 
-import { AnalysesCard, AnalysesCardCenteredContent, AnalysesFooter, PageWrapper } from './styled';
+import { useAnalyses } from './useAnalyses';
 
 import { AnalysesFilters } from './components/AnalysesFilters';
 import { AnalysesPagination } from './components/AnalysesPagination';
 import { ExportCsvButton } from './components/ExportCsvButton';
 
+import {
+  PageWrapper,
+  AnalysesCard,
+  AnalysesCardCenteredContent,
+  AnalysesFooter,
+  TableContainer,
+  LoadingOverlay,
+  FooterLeft,
+  FooterRight,
+} from './styled';
+
 const ROWS_PER_PAGE = 10;
+const SEARCH_DEBOUNCE_DELAY = 300;
 
 interface DateRange {
   start: Date | null;
@@ -29,8 +42,10 @@ interface DateRange {
 
 const Analyses: React.FC = () => {
   const { t } = useTranslation();
-  const { rows, isLoading, error } = useAnalyses();
+
   const tableRef = useRef<HTMLDivElement>(null);
+  const shouldScrollRef = useRef(false);
+
   const [search, setSearch] = useState('');
   const [framework, setFramework] = useState<FrameworkValue>(FRAMEWORK_VALUES.ALL);
   const [status, setStatus] = useState<string>('all');
@@ -41,61 +56,57 @@ const Analyses: React.FC = () => {
     end: null,
   });
 
+  const debouncedSearch = useDebounce(search, SEARCH_DEBOUNCE_DELAY);
+
+  const { rows, total, loading, error } = useAnalyses({
+    page,
+    limit: ROWS_PER_PAGE,
+    search: debouncedSearch.trim() || undefined,
+    framework: FRAMEWORK_API_VALUES[framework],
+    status: status === 'all' ? undefined : status,
+    startDate: dateRange.start?.toISOString(),
+    endDate: dateRange.end?.toISOString(),
+  });
+
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto',
-    });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
 
-  const filteredRows = useMemo(() => {
-    return rows.filter((row) => {
-      const matchesSearch = row.fileName?.toLowerCase().includes(search.toLowerCase());
+  useEffect(() => {
+    if (!loading && shouldScrollRef.current) {
+      shouldScrollRef.current = false;
 
-      const matchesFramework =
-        framework === FRAMEWORK_VALUES.ALL ||
-        row.framework?.toLowerCase() === framework.toLowerCase();
+      requestAnimationFrame(() => {
+        tableRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
+    }
+  }, [loading]);
 
-      const matchesStatus = status === 'all' || row.status?.toLowerCase() === status.toLowerCase();
-      const matchesDate = isWithinDateRange(row.createdAt, dateRange.start, dateRange.end);
-
-      return matchesSearch && matchesFramework && matchesStatus && matchesDate;
-    });
-  }, [rows, search, framework, status, dateRange]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredRows.length / ROWS_PER_PAGE));
-  const safePage = Math.min(page, totalPages);
-
-  const paginatedRows = useMemo(() => {
-    const startIndex = (safePage - 1) * ROWS_PER_PAGE;
-
-    return filteredRows.slice(startIndex, startIndex + ROWS_PER_PAGE);
-  }, [filteredRows, safePage]);
+  const totalPages = Math.max(1, Math.ceil(total / ROWS_PER_PAGE));
 
   const handlePageChange = (newPage: number) => {
+    shouldScrollRef.current = true;
     setPage(newPage);
+  };
 
-    requestAnimationFrame(() => {
-      tableRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+  const handleExportCsv = async () => {
+    try {
+      const allRows = await getAllAnalyses({
+        search: debouncedSearch.trim() || undefined,
+        framework: FRAMEWORK_API_VALUES[framework],
+        status: status === 'all' ? undefined : status,
+        startDate: dateRange.start?.toISOString(),
+        endDate: dateRange.end?.toISOString(),
       });
-    });
-  };
 
-  const handleExportCsv = () => {
-    exportAnalysesToCsv(filteredRows);
+      exportAnalysesToCsv(allRows);
+    } catch (error) {
+      console.error('Failed to export analyses:', error);
+    }
   };
-
-  if (isLoading) {
-    return (
-      <PageWrapper>
-        <AnalysesCardCenteredContent>
-          <CircularProgress />
-        </AnalysesCardCenteredContent>
-      </PageWrapper>
-    );
-  }
 
   if (error) {
     return (
@@ -135,22 +146,26 @@ const Analyses: React.FC = () => {
       />
 
       <AnalysesCard ref={tableRef}>
-        <AnalysesTable rows={paginatedRows} />
+        <TableContainer loading={loading}>
+          {loading && (
+            <LoadingOverlay>
+              <CircularProgress />
+            </LoadingOverlay>
+          )}
+
+          <AnalysesTable rows={rows} />
+        </TableContainer>
 
         <AnalysesFooter>
-          <Box sx={{ flex: 1 }}>
+          <FooterLeft>
             {totalPages > 1 && (
-              <AnalysesPagination
-                page={safePage}
-                totalPages={totalPages}
-                onChange={handlePageChange}
-              />
+              <AnalysesPagination page={page} totalPages={totalPages} onChange={handlePageChange} />
             )}
-          </Box>
+          </FooterLeft>
 
-          <Box sx={{ marginLeft: 'auto' }}>
+          <FooterRight>
             <ExportCsvButton onClick={handleExportCsv} />
-          </Box>
+          </FooterRight>
         </AnalysesFooter>
       </AnalysesCard>
     </PageWrapper>
