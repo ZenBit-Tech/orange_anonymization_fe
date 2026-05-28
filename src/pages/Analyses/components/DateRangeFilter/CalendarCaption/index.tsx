@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useDayPicker } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';

@@ -10,9 +10,7 @@ export interface DashboardFiltersParams {
 }
 
 export const getStats = async (params?: DashboardFiltersParams): Promise<DashboardData> => {
-  const { data } = await api.get<DashboardData>(API_ROUTES.DASHBOARD, {
-    params,
-  });
+  const { data } = await api.get<DashboardData>(API_ROUTES.DASHBOARD_OVERVIEW, { params });
 
   return data;
 };

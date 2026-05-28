@@ -29,6 +29,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiError>) => {
+    if (error.code === 'ERR_CANCELED') {
+      return Promise.reject(error);
+    }
+
     const status = error.response?.status;
     const requestUrl = error.config?.url;
     const isVerifyRequest = requestUrl?.includes(API_ROUTES.AUTH_VERIFY);
