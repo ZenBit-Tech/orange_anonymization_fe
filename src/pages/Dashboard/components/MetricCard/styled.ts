@@ -42,8 +42,6 @@ export const IconWrapper = styled(Box, {
   color: hasData ? theme.palette.primary[500] : theme.palette.neutral[500],
 
   '& svg': {
-    width: 24,
-    height: 24,
     color: 'inherit',
   },
 
