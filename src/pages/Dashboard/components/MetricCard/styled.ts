@@ -56,7 +56,9 @@ export const Label = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(0.5),
 }));
 
-export const Value = styled('div')(({ theme }) => ({
+export const Value = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'isError',
+})<{ isError?: boolean }>(({ theme, isError }) => ({
   ...theme.typography.h4,
-  color: theme.palette.neutral[900],
+  color: isError ? theme.palette.error.main : theme.palette.neutral[900],
 }));

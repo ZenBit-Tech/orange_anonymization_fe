@@ -25,7 +25,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({ icon, label, value, stat
     }
 
     if (state === 'error') {
-      return <Value>—</Value>;
+      return <Value isError>—</Value>;
     }
 
     return <Value>{value}</Value>;
