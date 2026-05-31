@@ -7,6 +7,7 @@ export const CardWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'start',
+  minHeight: 430,
   padding: theme.spacing(2),
   backgroundColor: theme.palette.common.white,
   borderRadius: theme.shape.lg,
@@ -17,11 +18,17 @@ export const Title = styled('div')(({ theme }) => ({
   ...theme.typography.h5,
   color: theme.palette.neutral[900],
   marginBottom: theme.spacing(0.5),
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 }));
 
 export const Subtitle = styled('div')(({ theme }) => ({
   ...theme.typography.labelSm,
   color: theme.palette.neutral[500],
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 }));
 
 export const SectionDivider = styled(Box)(({ theme }) => ({

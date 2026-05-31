@@ -35,7 +35,7 @@ const ROW_HEIGHT = 32;
 const BAR_RADIUS: [number, number, number, number] = [0, 4, 4, 0];
 
 const CHART_MARGIN = {
-  top: 20,
+  top: 0,
   right: 0,
   left: -20,
   bottom: 0,

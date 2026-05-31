@@ -21,7 +21,7 @@ interface Props {
   data: DistributionData[];
 }
 
-const CHART_HEIGHT = 320;
+const CHART_HEIGHT = 323;
 const BAR_SIZE = 16;
 const BAR_GAP = 24;
 const MAX_DOMAIN = 250;
@@ -31,7 +31,7 @@ const BAR_RADIUS: [number, number, number, number] = [0, 4, 4, 0];
 const Y_AXIS_WIDTH = 110;
 
 const CHART_MARGIN = {
-  top: 20,
+  top: 0,
   right: 0,
   left: -20,
   bottom: 0,
