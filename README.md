@@ -4,13 +4,13 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
 
 ## 🚀 Features
 
-- **Automated PII Detection:** Real-time identification of sensitive entities including names, dates, SSNs, locations, and email addresses.
-- **Advanced Anonymization:** Securely mask or de-identify sensitive data using customizable strategies.
-- **Synthetic Data Generation:** Create privacy-preserving synthetic datasets that maintain the statistical properties of the original data without compromising privacy.
-- **Analytics Dashboard:** Comprehensive visualization of anonymization trends, entity distributions, and processing metrics using interactive charts.
-- **Audit & Compliance:** Detailed tracking of data processing activities to ensure regulatory compliance.
-- **Multi-language Support:** Fully internationalized interface supporting multiple locales via i18next.
-- **Responsive Design:** A modern, polished UI built with Material UI and Tailwind CSS, optimized for all device sizes.
+- **Landing and auth flows:** Public landing, contact, login, token, and inactivity pages.
+- **Protected dashboard:** Analytics overview with metrics, activity chart, filters, and recent activity table.
+- **De-identification workflow:** UI for running anonymization jobs and reviewing results.
+- **Synthetic data workflow:** Create synthetic datasets and inspect generated output.
+- **Analyses view:** Browse, filter, and export analysis history.
+- **Internationalization:** Locale-aware UI with `i18next`.
+- **Responsive interface:** Built with Material UI, custom styling, and reusable layout components.
 
 ## 🛠️ Tech Stack
 
@@ -28,16 +28,16 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
 
 ## 📋 Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18.0.0 or higher)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
 
 ## ⚙️ Getting Started
 
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/your-repo/orange-anonymization-fe.git
-    cd orange-anonymization-fe
+    git clone <your-repo-url>
+    cd orange_anonymization_fe
     ```
 
 2.  **Install dependencies:**
@@ -47,13 +47,13 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
     ```
 
 3.  **Set up environment variables (optional for local development):**
-    Create a `.env` file in the root directory to override the API base URL:
+    Create a `.env.local` file in the root directory to override the API base URL:
 
     ```env
     VITE_API_BASE_URL=http://localhost:3000/api
     ```
 
-    In production, API calls default to `/api` (same-origin relative path), so no env var is needed when NestJS serves the SPA. In local development, the Vite dev server proxies `/api` requests to `localhost:3000` automatically.
+    In production, API calls default to `/api` (same-origin relative path), so no env var is needed when the frontend is served from the same origin as the backend. In local development, the Vite dev server proxies `/api` requests to `http://localhost:3000` automatically.
 
 4.  **Run the development server:**
     ```bash
@@ -65,27 +65,37 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
 
 ```text
 src/
-├── assets/         # Static assets (images, icons, etc.)
-├── components/     # Reusable UI components
-├── constants/      # App-wide constants and route definitions
-├── hooks/          # Custom React hooks
-├── i18n.ts         # Internationalization setup
-├── layouts/        # Page layout wrappers (Main, Auth)
-├── pages/          # Full page components (Landing, Dashboard, etc.)
-├── routes/         # Route configuration and guards
-├── services/       # API service layers
-├── store/          # Redux store and slices
-├── styles/         # Global styles and theme configuration
-├── types/          # TypeScript interfaces and types
-└── utils/          # Helper functions and utilities
+├── App.tsx
+├── assets/
+├── components/
+│   ├── common/
+│   ├── layouts/
+│   ├── popups/
+│   └── UI/
+├── constants/
+├── features/
+├── i18n.ts
+├── index.css
+├── main.tsx
+├── pages/
+├── routes/
+├── services/
+├── store/
+├── test/
+├── theme.ts
+└── utils/
 ```
 
 ## 📜 Available Scripts
 
-- `npm run dev`: Starts the development server with HMR.
-- `npm run build`: Compiles the application for production.
-- `npm run lint`: Runs ESLint for code quality checks.
+- `npm run dev`: Starts the Vite development server.
+- `npm run build`: Type-checks and builds the app for production.
+- `npm run lint`: Runs ESLint.
+- `npm run format`: Formats the codebase with Prettier.
 - `npm run preview`: Locally previews the production build.
+- `npm run test`: Runs Vitest in watch mode.
+- `npm run test:run`: Runs Vitest once.
+- `npm run test:ui`: Opens the Vitest UI.
 
 ## 📄 License
 
