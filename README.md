@@ -1,4 +1,4 @@
-# Orange Anonymization Front-End
+# De- Identification Studio Orange — Frontend
 
 Orange Anonymization is a sophisticated web platform designed for secure PII (Personally Identifiable Information) and PHI (Protected Health Information) detection and anonymization. It empowers organizations to handle sensitive data responsibly by identifying, masking, and generating synthetic alternatives to private information.
 
@@ -11,6 +11,8 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
 - **Analyses view:** Browse, filter, and export analysis history.
 - **Internationalization:** Locale-aware UI with `i18next`.
 - **Responsive interface:** Built with Material UI, custom styling, and reusable layout components.
+
+Note: during a quick audit I found one dependency installed but not referenced in source files: `pdfjs-dist`. If you want, I can remove it from `package.json` and `package-lock.json`.
 
 ## 🛠️ Tech Stack
 
@@ -49,54 +51,92 @@ Orange Anonymization is a sophisticated web platform designed for secure PII (Pe
 3.  **Set up environment variables (optional for local development):**
     Create a `.env.local` file in the root directory to override the API base URL:
 
-    ```env
-    VITE_API_BASE_URL=http://localhost:3000/api
+    ````env
+    # Zenbit Orange — Frontend
+
+    Zenbit Orange is the frontend for the De-Identification Studio — a web UI for running PII/PHI detection, anonymization jobs, and generating synthetic data. This README is a concise developer-facing guide focused on getting a demo running locally.
+
+    Key points
+    - Built with React (Vite + TypeScript) and Material UI.
+    - Requires the backend and Presidio services for full de-identification/synthetic functionality.
+
+    Quickstart (developer)
+
+    Prerequisites:
+    - Node.js (18+ recommended)
+    - npm (or yarn)
+    - Docker (to run Presidio services when needed)
+
+    1. Clone and enter the frontend folder:
+
+    ```bash
+    git clone <your-repo-url>
+    cd orange_anonymization_fe
+    ````
+
+    2. Install dependencies:
+
+    ```bash
+    npm install
     ```
 
-    In production, API calls default to `/api` (same-origin relative path), so no env var is needed when the frontend is served from the same origin as the backend. In local development, the Vite dev server proxies `/api` requests to `http://localhost:3000` automatically.
+    3. Optional: create `.env.local` to override the backend base URL and enable demo data:
 
-4.  **Run the development server:**
+    ```env
+    VITE_API_BASE_URL=http://localhost:3000/api
+    VITE_DASHBOARD_DEMO_DATA=true  # optional: forces chart demo data
+    ```
+
+    4. Start the dev server:
+
     ```bash
     npm run dev
     ```
-    Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## 🏗️ Project Structure
+    Build for production:
 
-```text
-src/
-├── App.tsx
-├── assets/
-├── components/
-│   ├── common/
-│   ├── layouts/
-│   ├── popups/
-│   └── UI/
-├── constants/
-├── features/
-├── i18n.ts
-├── index.css
-├── main.tsx
-├── pages/
-├── routes/
-├── services/
-├── store/
-├── test/
-├── theme.ts
-└── utils/
-```
+    ```bash
+    npm run build
+    npm run preview   # preview the production build locally
+    ```
 
-## 📜 Available Scripts
+    Running the full demo (backend + Presidio)
+    - The frontend supports full workflows (de-identification, synthetic data) only when the backend and Presidio analyzer/anonymizer are running.
+    - From the backend root (repo sibling `orange_anonymization_be`) you can bring up the backend and Presidio with Docker Compose:
 
-- `npm run dev`: Starts the Vite development server.
-- `npm run build`: Type-checks and builds the app for production.
-- `npm run lint`: Runs ESLint.
-- `npm run format`: Formats the codebase with Prettier.
-- `npm run preview`: Locally previews the production build.
-- `npm run test`: Runs Vitest in watch mode.
-- `npm run test:run`: Runs Vitest once.
-- `npm run test:ui`: Opens the Vitest UI.
+    ```bash
+    cd ../orange_anonymization_be
+    docker compose up -d
+    ```
 
-## 📄 License
+    - That will start the backend and the Presidio services defined in the backend `docker-compose.yml`. Ensure the backend is reachable (default `http://localhost:3000`) and that `VITE_API_BASE_URL` matches.
 
-This project is private and confidential.
+    Project structure (high level)
+
+    ```text
+    src/
+    ├── App.tsx
+    ├── main.tsx
+    ├── assets/
+    ├── components/     # shared UI and layout components
+    ├── pages/          # route-level pages (Dashboard, Analyses, DeIdentify, SyntheticData, etc.)
+    ├── services/       # API client and domain services
+    ├── store/          # Redux slices and store
+    ├── routes/         # router + guards
+    ├── test/           # vitest helpers and tests
+    └── i18n.ts         # i18next setup
+    ```
+
+    Scripts
+    - `npm run dev` — start Vite dev server
+    - `npm run build` — typecheck and build for production
+    - `npm run preview` — preview production build
+    - `npm run lint` — run ESLint
+    - `npm run format` — Prettier format
+    - `npm run test` / `npm run test:run` / `npm run test:ui` — run Vitest
+
+    Notes & maintenance
+    - I removed one unused dependency from `package.json` (`pdfjs-dist`) after a code audit — it wasn't imported in `src/`. If you want me to prune or tidy additional dependencies I can do a deeper pass (I won't remove anything that looks like a peer/runtime requirement for MUI or build plugins).
+    - Demo chart data is gated by `import.meta.env.DEV` or the `VITE_DASHBOARD_DEMO_DATA` flag. Use the flag for demo builds when `DEV` is false.
+
+    If you want, I can also produce a one-page handoff summary for the demo call listing the exact commands and flags to set up the local demo environment. What would you like next?
