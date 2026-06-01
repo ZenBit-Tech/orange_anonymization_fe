@@ -21,7 +21,9 @@ export const MetricCard: React.FC<MetricCardProps> = ({ icon, label, value, stat
 
   const renderValue = () => {
     if (state === 'loading') {
-      return <Skeleton width={SKELETON_WIDTH} height={SKELETON_HEIGHT} />;
+      return (
+        <Skeleton width={SKELETON_WIDTH} height={SKELETON_HEIGHT} sx={{ bgcolor: 'primary.300' }} />
+      );
     }
 
     if (state === 'error') {

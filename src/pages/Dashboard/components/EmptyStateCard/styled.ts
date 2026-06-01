@@ -48,11 +48,17 @@ export const EmptyBody = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  flex: 1,
   padding: theme.spacing(4.7, 0),
   gap: theme.spacing(1.25),
 }));
 
 export const EmptyLabel = styled('div')(({ theme }) => ({
   ...theme.typography.labelSm,
-  color: theme.palette.neutral[900],
+  color: theme.palette.neutral[500],
+}));
+
+export const ErrorLabel = styled('div')(({ theme }) => ({
+  ...theme.typography.labelMd,
+  color: theme.palette.error.main,
 }));
