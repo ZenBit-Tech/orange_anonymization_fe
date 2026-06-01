@@ -398,7 +398,8 @@
     },
     "errors": {
       "failedToLoadProcessingActivity": "Failed to load processing activity",
-      "failedToLoadAnalysesActivity": "Failed to load analyses activity"
+      "failedToLoadAnalysesActivity": "Failed to load analyses activity",
+      "failedToExportAnalyses": "Failed to export analyses"
     },
     "emptyState": {
       "noAnalysesFound": "No analyses found",
