@@ -450,7 +450,10 @@
         "BIOMETRIC": "Bio. Data",
         "PHOTO": "Photo/Image",
         "FREE_TEXT": "Free Text PHI",
-        "URL": "URL"
+        "URL": "URL",
+        "US_DRIVER_LICENSE": "Driver license",
+        "VEHICLE": "Vehicle ID",
+        "HEALTH_PLAN": "Health plan"
       },
       "showLess": "Show less",
       "showAll": "Show all {{count}} entity types"
