@@ -54,7 +54,7 @@ export const EmptyBody = styled(Box)(({ theme }) => ({
 }));
 
 export const EmptyLabel = styled('div')(({ theme }) => ({
-  ...theme.typography.labelSm,
+  ...theme.typography.labelMd,
   color: theme.palette.neutral[500],
 }));
 

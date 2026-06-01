@@ -365,13 +365,13 @@
       "subtitle": "Last 5 analyses across all compliance frameworks",
       "viewAll": "View all",
       "noActivity": "No recent activity",
+      "error": "Failed to load recent activity",
       "columns": {
         "document": "Document",
         "status": "Status",
         "framework": "Framework",
         "entities": "Entities",
-        "date": "Date",
-        "action": "Action"
+        "date": "Date"
       },
       "status": {
         "succeeded": "Succeeded",

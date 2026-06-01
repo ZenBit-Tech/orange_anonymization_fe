@@ -14,6 +14,10 @@ export const formatFramework = (value: string): string => {
     swiss_fadp: 'Swiss FADP',
   };
 
+  if (normalized === 'custom') {
+    return '–';
+  }
+
   return map[normalized] ?? capitalizeWords(value);
 };
 
