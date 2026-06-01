@@ -47,8 +47,8 @@ const BOTTOM_EXTRA_LINE_LENGTH = 30;
 const TEXT_GAP = 4;
 
 const PIE_CHART_MARGIN = {
-  top: 0,
-  right: 0,
+  top: 20,
+  right: 20,
   bottom: 0,
   left: 0,
 };

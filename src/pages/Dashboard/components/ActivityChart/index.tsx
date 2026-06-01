@@ -59,7 +59,9 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   const theme = useTheme();
   const isDocuments = chartType === CHART_TYPES.DOCUMENTS;
   const strokeColor = isDocuments ? theme.palette.primary[500] : theme.palette.accent[400];
-  const dataKey = isDocuments ? CHART_TYPES.DOCUMENTS : CHART_TYPES.ENTITIES;
+  const dataKey: 'documents' | 'entities' = isDocuments
+    ? CHART_TYPES.DOCUMENTS
+    : CHART_TYPES.ENTITIES;
 
   const dataMap = useMemo(() => {
     const map = new Map<string, ChartData>();
@@ -94,7 +96,7 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
   }, [normalizedData, dataKey]);
 
   const visibleChartData = useMemo(() => {
-    if (firstDataIndex <= 0) {
+    if (firstDataIndex === -1) {
       return normalizedData;
     }
 
@@ -143,19 +145,15 @@ export const ActivityChart: React.FC<ActivityChartProps> = ({
         return null;
       }
 
-      const pointValue =
-        typeof value === 'number' ? value : Number(payload[dataKey as keyof ChartData] ?? 0);
+      const pointValue = typeof value === 'number' ? value : Number(payload[dataKey] ?? 0);
 
       const hasValue = pointValue > 0;
       const isVisibleTick = visibleTicksSet.has(payload.date);
       const previousPoint = visibleChartData[index - 1];
       const nextPoint = visibleChartData[index + 1];
 
-      const previousValue = previousPoint
-        ? Number(previousPoint[dataKey as keyof ChartData] ?? 0)
-        : 0;
-
-      const nextValue = nextPoint ? Number(nextPoint[dataKey as keyof ChartData] ?? 0) : 0;
+      const previousValue = previousPoint ? Number(previousPoint[dataKey] ?? 0) : 0;
+      const nextValue = nextPoint ? Number(nextPoint[dataKey] ?? 0) : 0;
 
       const isTransitionPoint =
         (pointValue === 0 && previousValue > 0) || (pointValue === 0 && nextValue > 0);

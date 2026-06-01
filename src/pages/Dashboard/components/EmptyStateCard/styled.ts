@@ -12,6 +12,10 @@ export const CardWrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.common.white,
   borderRadius: theme.shape.lg,
   boxShadow: theme.customShadows.sm,
+
+  [theme.breakpoints.down('md')]: {
+    minHeight: 'auto',
+  },
 }));
 
 export const Title = styled('div')(({ theme }) => ({
