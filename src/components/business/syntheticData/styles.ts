@@ -210,8 +210,8 @@ export const synthetic = {
     border: `2px solid ${GENERATE_BUTTON.borderColor}`,
     boxShadow: 'none',
     '&:hover': {
-      background: GENERATE_BUTTON.backgroundColor,
-      borderColor: GENERATE_BUTTON.borderColor,
+      background: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
       boxShadow: 'none',
     },
     ...theme.typography.button,
