@@ -1,84 +1,43 @@
-## Summary
+## Describe your changes
 
-## Type of Change
+## Issue ticket code (and/or) and link
 
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Breaking change
-- [ ] Refactor
-- [ ] Documentation update
-- [ ] Dependency update
+### **General**
 
-## Changes Made
+- [ ] Assigned myself to the PR
+- [ ] Assigned the appropriate labels to the PR
+- [ ] Assigned the appropriate reviewers to the PR
+- [ ] Updated the documentation
+- [ ] Performed a self-review of my code
+- [ ] Types for input and output parameters
+- [ ] Don't have "any" on my code
+- [ ] Used the try/catch pattern for error handling
+- [ ] Don't have magic numbers
+- [ ] Compare only with constants not with strings
+- [ ] No ternary operator inside the ternary operator
+- [ ] Don't have commented code
+- [ ] No links in the code, env links should be in env file (for example: server url), constant links (for example default avatar URL) should be in constant file
+- [ ] Used camelCase for variables and functions
+- [ ] Date and time formats are on the constants
+- [ ] Functions are public only if it's used outside the class
+- [ ] No hardcoded values
+- [ ] Covered by tests
+- [ ] Check your commit messages meet the [conventional commit format](https://www.conventionalcommits.org/en/v1.0.0/)
 
----
+### Frontend
 
-## PII / PHI Considerations
+- [ ] Components and business logic are separated
+- [ ] Colors, Font Size, and Font Name is on the theme or in the constants
+- [ ] No text in the components, use i18n approach
+- [ ] No inline styles
+- [ ] Imports are absolute
+- [ ] Attach a screenshot if PR has visual changes
 
-Does this PR touch code that processes, stores, or transmits patient data?
+### Backend
 
-- [ ] This PR does not handle PHI/PII
-- [ ] This PR handles PHI/PII — safeguards described below:
-
----
-
-## General Checklist
-
-- [ ] Assigned myself + appropriate labels + reviewers
-- [ ] Self-reviewed the diff
-- [ ] No `any` in TypeScript (enforced by ESLint + strict mode)
-- [ ] No `console.log` left in code
-- [ ] No commented-out code
-- [ ] No magic numbers — values are in constants
-- [ ] No hardcoded strings (env vars in `.env`, config in constants)
-- [ ] `.env` is in `.gitignore`; `.env.example` updated if new vars added
-- [ ] Imports ordered: `node_modules` → absolute (`@/`) → relative
-- [ ] camelCase for variables and functions
-- [ ] Date/time formats defined in constants, not inline
-- [ ] No nested ternary operators
-- [ ] Try/catch used in all async functions that can throw
-- [ ] Functions/methods are `public` only if used outside the class
-- [ ] Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-
----
-
-## Frontend Checklist
-
-- [ ] Business logic extracted to custom hook (no logic inline in JSX)
-- [ ] All user-facing strings in `locales/en/translation.json` (no hardcoded text)
-- [ ] No inline styles — colors, fonts, spacing come from MUI theme / constants
-- [ ] Absolute imports used (`@/components/...` not `../../../components/...`)
-- [ ] Screenshot attached below if there are visual changes
-- [ ] Components covered by tests
-
----
-
-## Backend Checklist
-
-- [ ] Swagger `@ApiOperation` + `@ApiResponse` (2xx, 4xx, 5xx) on every endpoint
-- [ ] `ConfigService` used instead of `process.env` directly
-- [ ] UUID primary keys on new entities
-- [ ] `@Index` added to columns used in `WHERE` / `JOIN` clauses
-- [ ] Database mutations across multiple tables wrapped in a transaction
-- [ ] DTOs have `class-validator` decorators; `forbidNonWhitelisted: true` respected
-- [ ] NestJS ESLint rules respected (`.eslintrc.js`)
-- [ ] REST API naming convention followed (`GET /resources`, `POST /resources`, etc.)
-- [ ] Unit tests added / updated (`npm test`)
-
----
-
-## Testing
-
-- [ ] Unit tests pass: `npm test` (backend) / `npm test` (frontend)
-- [ ] Smoke tests pass against running server: `npm run test:smoke`
-- [ ] Manual testing performed
-
-**Manual test steps:**
-
-1.
-2.
-3.
-
----
-
-## Screenshots / Recordings
+- [ ] Swagger documentation updated
+- [ ] Database requests are optimized and not redundant
+- [ ] Unit tests written
+- [ ] Use ConfigService instead of process.env
+- [ ] Use transactions if there is a call chain that mutates data in different tables
+- [ ] Use @index decorator for frequently requested data

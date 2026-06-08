@@ -5,6 +5,7 @@
     "success": "Success",
     "save": "Save",
     "cancel": "Cancel",
+    "replace": "Replace",
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
@@ -14,10 +15,39 @@
     "search": "Search",
     "noData": "No data available",
     "required": "This field is required",
-    "invalidEmail": "Please enter a valid email address"
+    "invalidEmail": "Please enter a valid email address",
+    "or": "or",
+    "copy": "Copy",
+    "download": "Download",
+    "close": "Close",
+    "retry": "Retry",
+    "regenerate": "Regenerate",
+    "continue": "Continue",
+    "finish": "Finish",
+    "analyze": "Analyze",
+    "diIdFile": "De-id File",
+    "generateSyntheticData": "Generate Synthetic Data",
+    "newAnalysis": "New Analysis",
+    "view": "View",
+    "copied": "Copied to clipboard",
+    "mb": "MB",
+    "s": "s",
+    "percent": "%",
+    "na": "N/A",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "good": "Good",
+    "fair": "Fair",
+    "reduct": "Reduct",
+    "warning": "Warning",
+    "warningSyntheticMessage": "You can't generate synthetic data.",
+    "warningSyntheticMessage2": "Please go through the de-identification process first.",
+    "deIdentify": "De-Identify"
   },
   "nav": {
     "brand": "Clinical Data Studio",
+    "landing-brand": "De-ID Studio",
     "solutions": "Solutions",
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
@@ -26,93 +56,159 @@
     "deIdentify": "De-Identify",
     "syntheticData": "Synthetic Data",
     "settings": "Settings",
+    "syntheticDataGenerationSettings": "Generation Settings",
+    "syntheticGeneratedData": "Generated Data",
     "logout": "Logout",
+    "logoutDialog": {
+      "title": "Sign out?",
+      "message": "You will be signed out of your account.",
+      "reassurance": "You can sign back in at any time.",
+      "cancel": "Cancel",
+      "confirm": "Sign out"
+    },
     "menuOpen": "Open navigation menu",
     "menuClose": "Close navigation menu"
   },
-  "landing": {
-    "hero": {
-      "badge": "HIPAA & GDPR Compliant",
-      "title": "Protect Patient Privacy with Intelligent De-Identification",
-      "subtitle": "Transform clinical text containing sensitive patient data into fully anonymized, HIPAA-compliant records — powered by Microsoft Presidio.",
-      "cta": {
-        "primary": "Start De-Identifying",
-        "secondary": "View Documentation"
-      },
-      "codeChrome": "clinical_note.txt → presidio analyzer"
+  "sidebar": {
+    "brand": "De-ID Studio",
+    "brandSubtitle": "De-ID & Synthesis",
+    "allAnalyses": "All Analyses",
+    "signOut": "Sign out"
+  },
+  "header": {
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Track your de-identification activity"
     },
-    "trust": {
-      "title": "Trusted by Healthcare Organizations",
-      "hipaa": {
-        "label": "HIPAA Compliant",
-        "description": "Full HIPAA Safe Harbor compliance"
-      },
-      "gdpr": {
-        "label": "GDPR Certified",
-        "description": "EU data protection standards"
-      },
-      "accuracy": {
-        "label": "99.9% Accuracy",
-        "description": "Industry-leading PII detection"
-      },
-      "uptime": {
-        "label": "99.99% Uptime",
-        "description": "Enterprise-grade reliability"
+    "analyses": {
+      "title": "All Analyses",
+      "subtitle": "Complete history of de-identification jobs"
+    },
+    "deIdentify": {
+      "title": "New Analysis",
+      "subtitle": "Configure your anonymization pipeline"
+    },
+    "syntheticData": {
+      "title": "Synthetic Data",
+      "subtitle": "Generate synthetic datasets"
+    },
+    "sessionCountdownLabel": "Session expires in {{time}}"
+  },
+  "landing": {
+    "nav": {
+      "brand": "De-ID Studio",
+      "solutions": "Solutions",
+      "contactUs": "Contact Us",
+      "getStarted": "Get started"
+    },
+    "hero": {
+      "title": "Clinical Data De-Identification & Synthesis Studio",
+      "subtitle": "Enterprise-grade PII detection and anonymization for healthcare organizations",
+      "cta": "Get started",
+      "trustBadges": {
+        "hipaa": "HIPAA Compliant",
+        "gdpr": "GDPR Certified",
+        "accuracy": "99.9% Accuracy"
       }
     },
+    "stats": {
+      "accuracy": { "value": "99.9%", "label": "Detection Accuracy" },
+      "identifiers": { "value": "18", "label": "HIPAA Identifiers Covered" },
+      "processingTime": { "value": "< 1 min", "label": "Average Processing Time" },
+      "compliance": { "value": "100%", "label": "Compliance Coverage" }
+    },
     "features": {
-      "title": "Protect Patient Privacy",
-      "subtitle": "Enterprise-grade tools for healthcare data anonymization",
+      "title": "Protect Patient Privacy Without Compromising Data Value",
+      "subtitle": "Comprehensive tools for healthcare organizations to securely manage clinical data",
       "cards": {
         "detection": {
-          "title": "Intelligent PII Detection",
-          "description": "Automatically detect names, SSNs, addresses, diagnoses, and 20+ other PII entity types using Microsoft Presidio's ML-powered analyzer."
-        },
-        "anonymization": {
-          "title": "Flexible Anonymization",
-          "description": "Replace, redact, hash, or encrypt sensitive entities. Configure anonymization strategies per entity type for granular control."
+          "title": "Deep Signal Detection",
+          "description": "Align with global regulations through a single adaptive compliance layer."
         },
         "synthetic": {
-          "title": "Synthetic Data Generation",
-          "description": "Generate realistic replacement data that preserves statistical properties of the original dataset for research and testing."
+          "title": "Synthetic Intelligence Layer",
+          "description": "Generate high-fidelity synthetic datasets that preserve patterns — without exposing real identities."
         },
-        "audit": {
-          "title": "Full Audit Trail",
-          "description": "Every de-identification operation is logged with timestamps, user details, and transformation records for compliance reporting."
+        "compliance": {
+          "title": "Unified Compliance Engine",
+          "description": "Align with global regulations through a single adaptive compliance layer."
+        },
+        "privacy": {
+          "title": "Adaptive Privacy Shield",
+          "description": "Continuously anonymize and protect data while maintaining analytical value."
         }
       }
     },
-    "compliance": {
+    "dataIntelligence": {
+      "title": "From Data Intelligence to Compliance",
+      "subtitle": "Seamlessly transition from data intelligence to regulatory compliance with built-in frameworks tailored to your industry."
+    },
+    "complianceFrameworks": {
       "title": "Built for Compliance",
-      "subtitle": "Meet the strictest healthcare data regulations",
-      "hipaa": {
-        "title": "HIPAA Safe Harbor",
-        "description": "Remove all 18 HIPAA identifiers automatically. Our system maps directly to PHI categories defined in 45 CFR § 164.514(b)."
-      },
-      "gdpr": {
-        "title": "GDPR Article 89",
-        "description": "Pseudonymization and anonymization techniques aligned with GDPR research exemptions and data minimization principles."
-      },
-      "hitech": {
-        "title": "HITECH Act",
-        "description": "Breach notification compliance and enhanced privacy protections for electronic health information."
+      "subtitle": "Choose from industry-standard regulatory frameworks or create your own custom compliance profile",
+      "frameworks": {
+        "gdpr": {
+          "badge": "EU GDPR",
+          "title": "General Data Protection Regulation",
+          "entities": "11 entity types"
+        },
+        "hipaa": {
+          "badge": "HIPAA",
+          "title": "Health Insurance Portability and Accountability Act",
+          "entities": "17 entity types"
+        },
+        "ukDpa": {
+          "badge": "UK DPA",
+          "title": "UK Data Protection and Investigatory Powers",
+          "entities": "9 entity types"
+        },
+        "swissDsg": {
+          "badge": "Swiss DSG",
+          "title": "Swiss Federal Act on Data Protection",
+          "entities": "8 entity types"
+        }
       }
     },
-    "about": {
-      "title": "About Clinical Data Studio",
-      "subtitle": "Built by healthcare data engineers, for healthcare data engineers",
-      "description": "Clinical Data Studio solves the real challenge of working with sensitive patient data in research and development environments. We combine the power of Microsoft Presidio with an intuitive interface to make HIPAA compliance achievable for every healthcare organization.",
-      "stats": {
-        "documents": "Documents Processed",
-        "entities": "PII Entities Detected",
-        "organizations": "Organizations Trust Us",
-        "compliance": "Compliance Rate"
+    "cta": {
+      "title": "Ready to Protect Your Clinical Data?",
+      "subtitle": "Start de-identifying and synthesizing healthcare data in minutes with our enterprise-grade platform",
+      "button": "Get started"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Got questions? We've got answers. Find everything you need to know about using our platform, plans, and features.",
+      "items": {
+        "industries": {
+          "question": "Do you have GDPR complience?",
+          "answer": "Yes. Clinical Data Studio fully supports GDPR requirements for personal data protection. Our platform automatically detects and anonymizes PII according to GDPR standards, ensuring your organization meets EU data protection obligations while maintaining full data utility for analysis and research."
+        },
+        "customSolutions": {
+          "question": "Do you have HIPPA complience?",
+          "answer": "Yes. We provide full HIPAA compliance support with two de-identification methods: Safe Harbor (removing all 18 PHI identifiers) and Expert Determination (statistical risk-based approach with justification). Both methods produce audit-ready compliance reports accepted by healthcare regulatory bodies."
+        },
+        "support": {
+          "question": "Can I export the anonymized or synthetic data after processing?",
+          "answer": "Yes. After processing, you can download your anonymized or synthetic data in PDF format. A compliance report with full audit trail is also available for download directly from the results screen."
+        },
+        "implementation": {
+          "question": "What are the pricing plans?",
+          "answer": "We offer a free trial so you can explore the platform before purchasing. For enterprise pricing and volume-based plans, reach out to our team and we'll find the best option for your organization."
+        }
       }
     },
     "contact": {
       "title": "Contact Us",
       "subtitle": "Have questions? We'd love to hear from you.",
+      "info": {
+        "question": "Have questions about data anonymization or compliance?",
+        "hereToHelp": "We're here to help.",
+        "description": "Our team of experts is ready to help you navigate HIPAA, GDPR, and other privacy regulations.",
+        "responseTime": "We respond within 24 hours",
+        "email": "info@deid.studio"
+      },
       "form": {
+        "title": "Send us a message",
+        "description": "We'll get back to you within 24 hours",
         "firstName": "First Name",
         "lastName": "Last Name",
         "email": "Email Address",
@@ -121,7 +217,10 @@
         "messagePlaceholder": "Tell us about your use case...",
         "submit": "Send Message",
         "submitting": "Sending...",
-        "success": "Thank you! We'll be in touch soon.",
+        "success": "Thank you for reaching out",
+        "sent": "Message sent!",
+        "successSubtitle": "We'll get back to you within 24 hours.",
+        "backToForm": "Back to form",
         "validation": {
           "firstNameRequired": "First name is required",
           "lastNameRequired": "Last name is required",
@@ -133,33 +232,128 @@
       }
     },
     "footer": {
-      "copyright": "© {{year}} Clinical Data Studio. All rights reserved.",
+      "copyright": "© 2026 Clinical Data Studio. All rights reserved.",
+      "description": "Enterprise-grade clinical data de-identification and synthetic data generation platform",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "sections": {
+        "product": "PRODUCT",
+        "resources": "RESOURCES",
+        "company": "COMPANY"
+      },
+      "links": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "integrations": "Integrations",
+        "documentation": "Documentation",
+        "guides": "Guides",
+        "blog": "Blog",
+        "support": "Support",
+        "about": "About",
+        "careers": "Careers",
+        "contact": "Contact",
+        "legal": "Legal"
+      }
     }
   },
   "auth": {
-    "title": "Welcome Back",
-    "subtitle": "Sign in to Clinical Data Studio",
-    "email": "Email Address",
-    "emailPlaceholder": "you@organization.com",
+    "title": "Sign in to De-ID Studio",
+    "subtitle": "Enter your email to receive a sign-in link",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
     "requestLink": "Send Magic Link",
     "requesting": "Sending...",
-    "checkEmail": "Check your email",
-    "linkSent": "We've sent a magic link to {{email}}. Click the link to sign in.",
+    "checkEmail": "Check your inbox",
+    "linkSent": "We sent a sign-in link to <email>{{email}}</email>",
+    "didntReceive": "Didn't receive it? Check spam or",
     "resend": "Resend link",
+    "backToSignIn": "Back to Sign in",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis"
+    },
+    "back": "Back",
     "validation": {
-      "emailRequired": "Email address is required",
-      "emailInvalid": "Please enter a valid email address"
+      "emailRequired": "Enter valid email"
     },
     "errors": {
       "requestFailed": "Failed to send magic link. Please try again.",
       "verifyFailed": "Invalid or expired magic link."
     }
   },
+  "inactivity": {
+    "title": "Your session has expired",
+    "descriptionLineOne": "Your session timed out due to inactivity.",
+    "descriptionLineTwo": "Please sign in again to continue.",
+    "signInAgain": "Sign in again",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis",
+      "logoAlt": "De-ID Studio logo",
+      "illustrationAlt": "Session expired"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or may have been moved.",
+    "home": "Go to home",
+    "branding": {
+      "name": "De-ID Studio",
+      "tagline": "De-ID & Synthesis",
+      "logoAlt": "De-ID Studio logo",
+      "illustrationAlt": "404"
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Overview of your de-identification activity",
+    "newAnalysis": "New analysis",
+    "filters": {
+      "allFrameworks": "All frameworks",
+      "hipaa": "HIPAA",
+      "euGdpr": "EU GDPR",
+      "ukGdpr": "UK GDPR",
+      "fadp": "Swiss FADP",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7Days": "Last 7 days",
+      "last14Days": "Last 14 days",
+      "last30Days": "Last 30 days",
+      "last3Months": "Last 3 months",
+      "last6Months": "Last 6 months",
+      "customRange": "Custom range..."
+    },
+    "analyses": {
+      "filters": {
+        "allStatuses": "All statuses",
+        "searchByFilename": "Search by filename...",
+        "date": "Date",
+        "from": "From",
+        "to": "To",
+        "selectDateRange": "Select date range",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "cancel": "Cancel",
+        "apply": "Apply",
+        "months": {
+          "january": "January",
+          "february": "February",
+          "march": "March",
+          "april": "April",
+          "may": "May",
+          "june": "June",
+          "july": "July",
+          "august": "August",
+          "september": "September",
+          "october": "October",
+          "november": "November",
+          "december": "December"
+        }
+      },
+      "exportCsv": "Export CSV"
+    },
+    "welcomeTitle": "Welcome to De-ID Studio",
+    "welcomeSubtitle": "Run your first analysis to see activity and statistics here.",
     "metrics": {
       "totalDocuments": "Total Documents",
       "entitiesDetected": "Entities Detected",
@@ -168,75 +362,531 @@
     },
     "recentActivity": {
       "title": "Recent Activity",
+      "subtitle": "Last 5 analyses across all compliance frameworks",
+      "viewAll": "View all",
       "noActivity": "No recent activity",
+      "error": "Failed to load recent activity",
       "columns": {
         "document": "Document",
         "status": "Status",
+        "framework": "Framework",
         "entities": "Entities",
         "date": "Date"
+      },
+      "status": {
+        "succeeded": "Succeeded",
+        "failed": "Failed",
+        "queued": "Queued",
+        "processing": "Processing",
+        "draft": "Draft",
+        "configured": "Configured"
       }
     },
+    "frameworks": {
+      "hipaa": "HIPAA",
+      "gdpr": "EU GDPR",
+      "ukDpi": "UK DPI",
+      "swissFadp": "Swiss FADP"
+    },
     "chart": {
-      "activityTitle": "Processing Activity (Last 30 Days)",
+      "activityTitle": "Processing Activity",
+      "activitySubtitle": "Based on selected date range",
       "entityDistribution": "Entity Type Distribution",
       "documents": "Documents",
-      "entities": "Entities"
+      "entities": "Entities",
+      "empty": "No processing activity yet"
+    },
+    "errors": {
+      "failedToLoadProcessingActivity": "Failed to load processing activity",
+      "failedToLoadAnalysesActivity": "Failed to load analyses activity",
+      "failedToExportAnalyses": "Failed to export analyses"
+    },
+    "emptyState": {
+      "noAnalysesFound": "No analyses found",
+      "deIdentification": {
+        "title": "De-Identification Method Usage",
+        "subtitle": "Methods will appear after your first analysis",
+        "contentSubtitle": "Popular methods applied to detected entities"
+      },
+      "compliance": {
+        "title": "Compliance Framework Usage",
+        "subtitle": "Framework distribution will appear after your first analysis",
+        "contentSubtitle": "Distribution of frameworks applied across analyses"
+      },
+      "entityTypes": {
+        "title": "Entity Types Detected",
+        "subtitle": "Entity breakdown will appear after your first analysis",
+        "contentSubtitle": "Distribution of PII entities found in documents"
+      }
+    },
+    "deIdentificationChart": {
+      "strategies": {
+        "redact": "Redact",
+        "replace": "Replace",
+        "mask": "Mask",
+        "hash": "Hash",
+        "synthetic": "Synthetic",
+        "generalise": "Generalise",
+        "pseudonymise": "Pseudonymise",
+        "nlp": "NLP redaction"
+      }
+    },
+    "entityTypesChart": {
+      "labels": {
+        "PERSON": "Person",
+        "DATE_TIME": "Date / Time",
+        "EMAIL_ADDRESS": "Email",
+        "PHONE_NUMBER": "Phone",
+        "LOCATION": "Location",
+        "US_SSN": "SSN",
+        "MEDICAL_RECORD_NUMBER": "MRN",
+        "ORGANIZATION": "Organisation",
+        "IP_ADDRESS": "IP Address",
+        "DEVICE_ID": "Device ID",
+        "US_PASSPORT": "Passport",
+        "NATIONAL_ID": "National ID",
+        "CREDIT_CARD": "Credit Card",
+        "IBAN_CODE": "Bank Account",
+        "GEOPOINT": "Geopoint",
+        "BIOMETRIC": "Bio. Data",
+        "PHOTO": "Photo/Image",
+        "FREE_TEXT": "Free Text PHI",
+        "URL": "URL",
+        "US_DRIVER_LICENSE": "Driver license",
+        "VEHICLE": "Vehicle ID",
+        "HEALTH_PLAN": "Health plan"
+      },
+      "showLess": "Show less",
+      "showAll": "Show all {{count}} entity types"
     }
   },
   "deIdentify": {
     "title": "De-Identify Clinical Text",
     "subtitle": "Detect and anonymize PII in clinical documents",
+    "languageSelect": {
+      "placeholder": "Select language",
+      "search": "Search language...",
+      "recentlyUsed": "RECENTLY USED",
+      "allLanguages": "ALL LANGUAGES",
+      "noLanguages": "No languages found",
+      "autoDetected": "Auto-detected"
+    },
     "steps": {
-      "selectFramework": "Select Framework",
-      "inputText": "Input Text",
-      "settings": "Settings",
-      "results": "Results"
+      "compliance": "Compliance",
+      "dataInput": "Data Input",
+      "configuration": "Configuration",
+      "reviewAndRun": "Review & Run"
     },
     "framework": {
-      "title": "Choose Compliance Framework",
+      "title": "Select Compliance Framework",
+      "subtitle": "Ensure all data handling meets regulatory requirements.",
       "hipaa": {
-        "label": "HIPAA Safe Harbor",
-        "description": "Remove all 18 HIPAA PHI identifiers"
+        "title": "HIPAA",
+        "description": "Safe Harbor / Expert Determination",
+        "tag": "US Healthcare"
       },
-      "gdpr": {
-        "label": "GDPR Anonymization",
-        "description": "EU-compliant anonymization for research"
+      "euGdpr": {
+        "title": "EU GDPR",
+        "description": "General Data Protection Regulation",
+        "tag": "European Union"
       },
-      "custom": {
-        "label": "Custom Entity Selection",
-        "description": "Choose specific entity types to detect"
+      "ukGdpr": {
+        "title": "UK GDPR",
+        "description": "UK General Data Protection Regulation",
+        "tag": "United Kingdom"
+      },
+      "swissFadp": {
+        "title": "Swiss FADP",
+        "description": "Federal Act on Data Protection",
+        "tag": "Switzerland"
       }
     },
     "input": {
-      "title": "Enter Clinical Text",
+      "title": "Enter Your Data",
+      "subtitle": "Paste text or upload a file to anonymize",
       "label": "Clinical Text",
-      "placeholder": "Paste clinical notes, discharge summaries, or any clinical text containing patient information...",
+      "placeholder": "Paste your text here — minimum 50 characters required",
       "sampleText": "Load Sample Text",
-      "characterCount": "{{count}} characters",
+      "characterCount": "{{count}} / 5,000 characters",
+      "tabs": {
+        "text": "Enter Text",
+        "file": "Upload File"
+      },
+      "upload": {
+        "title": "Upload your file",
+        "dragDrop": "Drag & drop",
+        "replace": "Replace file",
+        "browse": "Browse file",
+        "supported": "Supported formats: .txt, .pdf — max 5 MB",
+        "required": "Upload a file to continue"
+      },
       "validation": {
         "required": "Please enter clinical text to analyze",
-        "minLength": "Text must be at least 50 characters"
+        "minLength": "Text must be at least 50 characters",
+        "tooLong": "Text cannot exceed 5000 characters",
+        "unsupportedFormat": "Unsupported format. Please upload .txt or .pdf",
+        "fileTooLarge": "File is too large. Max size is 5 MB"
+      },
+      "replaceDialog": {
+        "title": "Replace the current text?",
+        "message": "You already have text in the editor. Uploading a new file will replace it with the parsed file content.",
+        "reassurance": "You can continue editing the new text after it is inserted.",
+        "cancel": "Keep current text",
+        "confirm": "Replace text"
       }
     },
     "settings": {
-      "title": "Anonymization Settings",
-      "strategy": "Strategy",
-      "strategies": {
-        "replace": "Replace with placeholder",
-        "redact": "Redact (remove entirely)",
-        "hash": "Replace with hash",
-        "encrypt": "Encrypt value",
-        "synthetic": "Replace with synthetic data"
+      "title": "Configure De-Identification",
+      "subtitle": "Choose how patient data will be anonymized under HIPAA",
+      "subtitleStandard": "Select a privacy risk level or customize how each entity type is handled",
+      "sections": {
+        "method": "1. Choose Method",
+        "identifiers": "2. Applied Identifiers",
+        "output": "3. Output Settings",
+        "privacyRisk": "1. Choose privacy risk level",
+        "entityConfiguration": "2. Entity Configuration"
       },
+      "method": {
+        "safeHarbor": {
+          "title": "Safe Harbor",
+          "description": "Automatically removes all 18 HIPAA identifiers",
+          "comment": "Best for standard HIPAA workflows"
+        },
+        "expertDetermination": {
+          "title": "Expert Determination",
+          "description": "Customize which identifiers to remove",
+          "comment": "Requires expert validation before use"
+        },
+        "recommended": "Recommended"
+      },
+      "detection": {
+        "title": "Detection sensitivity",
+        "subtitle": "Controls how carefully the system detects sensitive data.",
+        "recommended": "Recommended",
+        "recommendedNote": "Balanced is recommended for most documents.",
+        "thresholds": {
+          "conservative": {
+            "title": "Conservative",
+            "description": "Fewer false alerts",
+            "info": "Detects only obvious identifiers. Best for structured data."
+          },
+          "balanced": {
+            "title": "Balanced",
+            "description": "Recommended for most documents",
+            "info": "Detects most sensitive entities while keeping false positives manageable."
+          },
+          "aggressive": {
+            "title": "Aggressive",
+            "description": "Catches potentially sensitive data",
+            "info": "Catches potentially sensitive data — may include false positives"
+          },
+          "low": {
+            "title": "Low",
+            "description": "Minimal anonymization. Higher data utility."
+          },
+          "medium": {
+            "title": "Medium",
+            "description": "Balanced privacy and utility. Meets standard GDPR guidelines."
+          },
+          "high": {
+            "title": "High",
+            "description": "Maximum anonymization. Reduced data usability."
+          }
+        }
+      },
+      "howItWorks": {
+        "title": "How this configuration works",
+        "viewLogic": "View logic"
+      },
+      "frameworkInfo": {
+        "euGdpr": {
+          "description": "Methods are automatically selected based on GDPR risk guidelines and entity sensitivity levels. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data. Biological data and photos will still be removed (Art. 9)."
+        },
+        "ukGdpr": {
+          "description": "Methods are automatically selected based on UK GDPR guidelines and entity sensitivity levels. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data. Biological data and photos will still be removed (UK GDPR Art. 9)."
+        },
+        "swissFadp": {
+          "description": "Methods are automatically selected based on Swiss FADP guidelines and entity sensitivity levels. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data. Biological data and photos will still be removed (FADP Art. 5)."
+        },
+        "default": {
+          "description": "Methods are automatically selected based on regulatory guidelines. You can review or override any setting below.",
+          "warning": "Low risk may not fully protect sensitive health data."
+        }
+      },
+      "entityConfig": {
+        "title": "Entity configuration",
+        "autoConfigured": "{{count}} types · Auto-configured",
+        "resetToDefault": "Reset to default",
+        "customize": "Customize",
+        "sensitive": "Sensitive",
+        "chooseIdentifiers": "Choose which identifiers to remove from your document.",
+        "deselectedByDefault": "All categories are deselected by default",
+        "categories": {
+          "identity": "IDENTITY",
+          "datesLocation": "DATES & LOCATION",
+          "sensitiveIdentifiers": "SENSITIVE IDENTIFIERS",
+          "unstructuredData": "UNSTRUCTURED DATA",
+          "specialCategory": "SPECIAL CATEGORY"
+        }
+      },
+      "resetDialog": {
+        "title": "Reset to Medium defaults?",
+        "message": "Your custom settings will be lost.",
+        "confirm": "Reset"
+      },
+      "logicDrawer": {
+        "title": "Configuration Logic",
+        "subtitle": "Methods are automatically selected based on GDPR risk level. You can review how each entity is processed below.",
+        "sections": {
+          "identity": "Identity",
+          "datesLocation": "Dates & Location",
+          "sensitiveIdentifiers": "Sensitive identifiers",
+          "unstructuredData": "Unstructured data",
+          "specialCategory": "Special Category — "
+        },
+        "frameworks": {
+          "euGdpr": {
+            "label": "GDPR Art. 9",
+            "notice": "These entity types are legally protected under GDPR Article 9. Only Remove is permitted."
+          },
+          "ukGdpr": {
+            "label": "UK GDPR Art. 9",
+            "notice": "These entity types are legally protected under UK GDPR Article 9. Only Remove is permitted."
+          },
+          "swissFadp": {
+            "label": "FADP Art. 5",
+            "notice": "These entity types are legally protected under FADP Article 5. Only Remove is permitted."
+          },
+          "default": {
+            "notice": "These entity types are subject to strict legal protection. Only Remove is permitted."
+          }
+        },
+        "entities": {
+          "person": {
+            "title": "Person",
+            "method": "Replace with stable token",
+            "description": "Assigns a consistent token, allows re-linking if legally required"
+          },
+          "organization": {
+            "title": "Organization",
+            "method": "Mask",
+            "description": "Hides part of the value if organisation is considered sensitive"
+          },
+          "dateTime": {
+            "title": "Date/Time",
+            "method": "Generalise",
+            "description": "Converts DOB to age range (e.g. 40–50). Timestamps rounded to month or quarter"
+          },
+          "location": {
+            "title": "Location",
+            "method": "Generalise",
+            "description": "Reduces to region or 3-digit postcode. EDPB recommends geographic generalisation"
+          },
+          "ip": {
+            "title": "IP",
+            "method": "Generalise",
+            "description": "Last segment of the IP address is removed. Only the network range is kept."
+          },
+          "geopoint": {
+            "title": "Geopoint",
+            "method": "Generalise",
+            "description": "Exact coordinates rounded to city or regional centroid"
+          },
+          "nationalId": {
+            "title": "National_ID",
+            "method": "Remove",
+            "description": "One-way removal. No plaintext mapping stored in dataset"
+          },
+          "idNumber": { "title": "ID_Number" },
+          "passport": { "title": "Passport" },
+          "creditCard": {
+            "title": "Credit_Card",
+            "method": "Remove",
+            "description": "Removes full numbers. BIN or last 4 digits may be kept only if business-necessary."
+          },
+          "bankAccount": { "title": "Bank_Account" },
+          "email": {
+            "title": "Email",
+            "method": "Redact",
+            "description": "Full address and number removed. Domain may be preserved if business-necessary"
+          },
+          "phone": { "title": "Phone" },
+          "mrn": {
+            "title": "Medical_Record_Number",
+            "method": "Pseudonymise",
+            "description": "Stable token assigned. Mapping stored server-side under access control"
+          },
+          "deviceId": {
+            "title": "Device_ID",
+            "method": "Hash",
+            "description": "One-way encryption with salt. Keys stored under strict access control"
+          },
+          "freeText": {
+            "title": "Free_Text (PHI)",
+            "method": "NLP redaction",
+            "description": "NLP model scans unstructured text. Manual QA recommended before sharing"
+          },
+          "biologicalData": {
+            "title": "Biological_Data",
+            "method": "Remove",
+            "description": "Treated as highest-risk data. No alternative methods permitted"
+          },
+          "photo": {
+            "title": "Photo / Image",
+            "method": "Remove",
+            "description": "Biometric data. Removal mandatory under Art. 9"
+          }
+        }
+      },
+      "strategies": {
+        "title": "Strategy",
+        "categories": {
+          "remove": "REMOVE",
+          "replace": "REPLACE",
+          "protect": "PROTECT",
+          "transform": "TRANSFORM"
+        },
+        "redact": {
+          "title": "Redact — Remove entirely",
+          "description": "Replaces data with [REDACTED]"
+        },
+        "replace": {
+          "title": "Replace — Use placeholder",
+          "description": "Uses labels like [NAME], [DATE]"
+        },
+        "token": {
+          "title": "Replace with token — Stable pseudonym",
+          "description": "Assigns a consistent token, allows re-linking"
+        },
+        "synthetic": {
+          "title": "Synthetic — Generate fake values",
+          "description": "Generates realistic fake values"
+        },
+        "mask": {
+          "title": "Mask — Hide partially",
+          "description": "Hides parts of the value"
+        },
+        "hash": {
+          "title": "Hash — One-way encryption",
+          "description": "Converts to irreversible hash"
+        },
+        "generalise": {
+          "title": "Generalise — Reduce precision",
+          "description": "Converts to broader category or range"
+        },
+        "pseudonymise": {
+          "title": "Pseudonymise — Store mapping",
+          "description": "Replaces with token, mapping stored securely"
+        },
+        "nlp": {
+          "title": "NLP redaction — Free text PHI",
+          "description": "Applies NLP model to unstructured text"
+        }
+      },
+
       "entityTypes": "Entity Types to Detect",
       "confidence": "Minimum Confidence Score",
-      "language": "Language"
+      "language": "Language",
+      "languageSelect": {
+        "autoDetected": "Auto-detected",
+        "autoDetectedUnknown": "English",
+        "search": "Search language...",
+        "recentlyUsed": "RECENTLY USED",
+        "allLanguages": "ALL LANGUAGES",
+        "noLanguages": "No languages found"
+      },
+      "identifiers": {
+        "title": "All 18 HIPAA identifiers will be removed",
+        "description": "This includes names, dates, contact details, account numbers, medical identifiers, biometric data, and other HIPAA-defined identifiers.",
+        "customize": "Customize identifiers",
+        "fixed": "18 identifiers included",
+        "customizeSubtitle": "Select which identifiers you want to remove",
+        "fixedSubtitle": "All identifiers are fixed in Safe Harbor mode",
+        "expertTooltip": "Switch to Expert Determination to customize",
+        "groups": {
+          "personal": "PERSONAL INFORMATION",
+          "contact": "CONTACT INFORMATION",
+          "location": "LOCATION DATA",
+          "financial": "FINANCIAL INFORMATION",
+          "medical": "MEDICAL IDENTIFIERS",
+          "technical": "TECHNICAL IDENTIFIERS",
+          "biometric": "BIOMETRIC & UNIQUE"
+        },
+        "items": {
+          "names": "Names",
+          "dates": "Dates",
+          "fax": "Fax",
+          "email": "Email",
+          "phone": "Phone",
+          "address": "Address",
+          "geographic": "Geographic data",
+          "ssn": "SSN",
+          "account": "Account number",
+          "medical": "Medical record",
+          "health": "Health plan",
+          "beneficiary": "Beneficiary",
+          "ip": "IP address",
+          "device": "Device ID",
+          "url": "URL",
+          "fingerprints": "Fingerprints",
+          "photos": "Face photos",
+          "vehicle": "Vehicle ID",
+          "certificate": "Certificate"
+        }
+      }
+    },
+    "reviewResults": {
+      "goBackPopup": {
+        "title": "Go back to settings?",
+        "messageLine1": "Your current review progress will be lost.",
+        "messageLine2": "This includes any entity changes you made.",
+        "goBack": "Go back",
+        "stayOnReview": "Stay on review"
+      }
     },
     "results": {
       "title": "De-Identification Results",
+      "titleReview": "Review results",
+      "adjustSettings": "Adjust Settings",
+      "analyzing": "Analyzing...",
+      "analyzedAt": "Analyzed",
+      "failed": "Failed to generate de-identified version",
+      "failedToGenerate": "Something went wrong while processing the document. Please try again.",
+      "tryAgain": "Try again",
+      "noPreview": "No preview available",
+      "noTextAvailable": "The data has been removed due to personal safety.",
+      "retry": "Retry",
       "original": "Original Text",
+      "originalTab": "Original",
+      "originalSubtitle": "Original text with detected entities highlighted",
       "anonymized": "Anonymized Text",
+      "deIdentifiedTab": "De-identified",
+      "anonymizedSubtitle": "De-identified text",
       "entities": "Detected Entities",
+      "entitiesDetected": "Detected entities",
+      "entitiesProcessed": "Processed entities",
+      "avgConfidence": "Avg. confidence",
+      "processingTimeLabel": "Processing time",
+      "sortBy": "Sort by",
+      "sortOptions": {
+        "orderInDocument": "Order in document",
+        "confidence": "Confidence",
+        "type": "Type"
+      },
+      "excluded": "Excluded",
+      "included": "Included",
+      "toggling": "Toggling...",
+      "noIdentifiersDetected": "No identifiable patient data was found in this document.",
+      "noIdentifiersDetectedPanel": "No entities detected.",
+      "noIdentifiersDetectedPanelDetail": "The document appears to contain no identifiable patient data.",
+      "allEntitiesExcluded": "All detected entities are excluded. The de-identified version will be identical to the original document.",
+      "sessionWarning": "Your session expires in 10 minutes — save your work.",
+      "sessionCritical": "Session expiring soon — download your results now.",
+      "noEntitiesFound": "No entities found",
+      "redacted": "REDACTED",
       "entityColumns": {
         "type": "Entity Type",
         "text": "Original Value",
@@ -244,7 +894,8 @@
         "confidence": "Confidence",
         "position": "Position"
       },
-      "download": "Download Results",
+      "download": "Download",
+      "copy": "Copy",
       "processAnother": "Process Another Document",
       "stats": {
         "entitiesFound": "{{count}} entities found",
@@ -252,9 +903,87 @@
       }
     }
   },
+  "languages": {
+    "ar": "Arabic",
+    "bn": "Bengali",
+    "zh": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)",
+    "cs": "Czech",
+    "da": "Danish",
+    "nl": "Dutch",
+    "en": "English",
+    "fi": "Finnish",
+    "fr": "French",
+    "de": "German",
+    "el": "Greek",
+    "he": "Hebrew",
+    "hi": "Hindi",
+    "hu": "Hungarian",
+    "id": "Indonesian",
+    "it": "Italian",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "no": "Norwegian",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "sk": "Slovak",
+    "es": "Spanish",
+    "sv": "Swedish",
+    "th": "Thai",
+    "tr": "Turkish",
+    "uk": "Ukrainian",
+    "vi": "Vietnamese",
+    "english": "en"
+  },
   "syntheticData": {
-    "title": "Synthetic Data Generation",
-    "subtitle": "Generate realistic synthetic patient records",
+    "title": "Synthetic Data Generator",
+    "subtitle": "Generate realistic but completely fake clinical data for development",
+    "generationSettings": "Generation Settings",
+    "configureParameters": "Configure the synthetic data parameters",
+    "dataSource": "Data source",
+    "datasetType": "Dataset type",
+    "uploadYourFile": "Upload your file",
+    "or": "or",
+    "browseFile": "Browse file",
+    "supportedFormats": "Supported formats: .xlsx, .csv, .json — max 5 MB",
+    "useDeidentified": "Use de-identified data as source",
+    "usePreviouslyDeidentified": "Use previously de-identified data",
+    "passedFromCurrentSession": "Passed from current session",
+    "configuration": "Configuration",
+    "numberOfRecords": "Number of Records",
+    "maxRecords": "Max 100,000 records",
+    "chooseFramework": "Choose Framework",
+    "chooseFormat": "Choose Format",
+    "frameworks": {
+      "hipaa": {
+        "label": "HIPAA",
+        "desc": "Removes all 18 HIPAA identifiers (Safe Harbor)"
+      },
+      "eu-gdpr": {
+        "label": "EU GDPR",
+        "desc": "Applies GDPR risk-based anonymisation rules"
+      },
+      "swiss-fadp": {
+        "label": "Swiss FADP",
+        "desc": "Applies Swiss data protection rules (nDSG)"
+      },
+      "uk-gdpr": {
+        "label": "UK DPI",
+        "desc": "Applies UK GDPR anonymisation requirements"
+      }
+    },
+    "estimatedOutput": "Estimated output:",
+    "completeRequiredFields": "Complete required fields to generate dataset",
+    "generate": "Generate Synthetic Data",
+    "generatedSuccess": "Generated successfully",
+    "generating": "Generating...",
+    "tabs": {
+      "settings": "Settings",
+      "generated": "Generated Data"
+    },
+    "generatedPlaceholder": "Generated data will appear here.",
     "settings": {
       "title": "Generation Settings",
       "recordCount": "Number of Records",
@@ -286,7 +1015,157 @@
         "value": "Generated Value",
         "locale": "Locale"
       },
-      "noData": "No synthetic data generated yet"
+      "noData": "No synthetic data generated yet",
+      "downloadPopup": {
+        "title": "Download synthetic dataset",
+        "info": "Generated data will not be stored after this session.",
+        "includeValidation": "Include validation report",
+        "includeSchema": "Include schema summary",
+        "fields": {
+          "format": "Format",
+          "records": "Records",
+          "fields": "Fields",
+          "framework": "Framework",
+          "validation": "Validation"
+        }
+      },
+      "regeneratePopup": {
+        "title": "Regenerate dataset?",
+        "messageLine1": "Current data exists only in this session.",
+        "messageLine2": "Download before regenerating to avoid data loss."
+      },
+      "drawers": {
+        "customizeColumns": {
+          "title": "Customize columns",
+          "subtitle": "Choose fields to display",
+          "info": "This only affects the preview table. Downloaded dataset includes all 23 fields",
+          "selectedCount": "Selected {{selected}} of {{total}}",
+          "additionalFields": "ADDITIONAL FIELDS",
+          "resetToDefault": "Reset to default",
+          "apply": "Apply",
+          "fields": {
+            "recordId": "Record ID",
+            "documentType": "Document Type",
+            "ageRange": "Age Range",
+            "date": "Date",
+            "quality": "Quality"
+          }
+        },
+        "recordDetails": {
+          "title": "Record details",
+          "generatedFields": "GENERATED FIELDS",
+          "clinicalNote": "CLINICAL NOTE",
+          "compliance": "COMPLIANCE",
+          "SYN-00041": "SYN-00041",
+          "SYN-00042": "SYN-00041",
+          "SYN-00043": "SYN-00041",
+          "SYN-00044": "SYN-00041",
+          "SYN-00045": "SYN-00041",
+          "SYN-00046": "SYN-00041",
+          "SYN-00047": "SYN-00041",
+          "Discharge_Summary": "Discharge Summary",
+          "55-64": "55-64",
+          "2025-04-14": "2025-04-14",
+          "Endocrinology": "Endocrinology",
+          "Endocrinologist": "Endocrinologist",
+          "E11.9": "E11.9",
+          "Follow-up": "Follow-up",
+          "Metformin": "Metformin",
+          "fields": {
+            "documentType": "Document type",
+            "compliance": "Compliance",
+            "ageRange": "Age range",
+            "encounterDate": "Encounter date",
+            "category": "Category",
+            "diagnosis": "Diagnosis",
+            "dischargeStatus": "Discharge status",
+            "medication": "Medication",
+            "providerType": "Provider type"
+          },
+          "values": {
+            "passed": "Passed",
+            "notePlaceholder": "Patient presented for routine follow-up. Synthetic note generated for testing purposes. No direct identifiers detected.",
+            "noDirectIdentifiers": "No direct identifiers detected",
+            "datesTransformed": "Dates transformed",
+            "fieldConfidenceHigh": "Field confidence: High",
+            "syntheticIdentifiers": "Synthetic identifiers generated",
+            "directIdentifiersRemoved": "Direct identifiers removed"
+          }
+        },
+        "validationDetails": {
+          "title": "Validation Details",
+          "passed": "Passed with review notes",
+          "checks": "CHECKS",
+          "warnings": "WARNINGS",
+          "info": "Review warnings before using this dataset in regulated workflows",
+          "HIPAA": "HIPAA Safe Harbor",
+          "Generated_note_text": "Generated_note_text",
+          "Diagnosis_code": "Diagnosis code",
+          "values": {
+            "removed": "Removed",
+            "mediumConfidence": "Medium confidence",
+            "mediumConsistency": "Medium consistency"
+          }
+        }
+      }
+    },
+    "syntheticResults": {
+      "compliance": {
+        "title": "Compliance",
+        "framework": "Framework:",
+        "riskLevel": "Risk level:",
+        "directIdentifiers": "Direct identifiers:",
+        "values": {
+          "hipaaSh": "HIPAA SH"
+        }
+      },
+      "dataQuality": {
+        "title": "Data Quality",
+        "quality": "Quality:",
+        "consistency": "Consistency:",
+        "warnings": "Warnings:",
+        "lowConfidenceCount": "{{count}} low-confidence"
+      },
+      "export": {
+        "title": "Export",
+        "ready": "Ready to download",
+        "sessionNotice": "Session only — download before leaving"
+      },
+      "datasetSummary": {
+        "title": "Dataset Summary",
+        "format": "Format:",
+        "records": "Records:",
+        "fields": "Fields:",
+        "formatTitle": "CSV",
+        "recordsTitle": "1,000",
+        "fieldsTitle": "24"
+      },
+      "preview": {
+        "title": "Preview Records",
+        "showingCount": "Showing {{count}} of {{total}} records",
+        "columns": {
+          "recordId": "Record_ID",
+          "docType": "Doc Type",
+          "ageRange": "Age Range",
+          "date": "Date",
+          "quality": "Quality",
+          "action": "Action"
+        }
+      },
+      "validation": {
+        "title": "Compliance Validation",
+        "exportStatus": "Export status:",
+        "safeToDownload": "Safe to download",
+        "checks": {
+          "dates": "Dates transformed",
+          "freeText": "Free-text fields checked",
+          "format": "Export format validated",
+          "synthetic": "Synthetic identifiers generated",
+          "direct": "Direct identifiers removed"
+        },
+        "warningReview": "{{count}} low-confidence fields may require review",
+        "viewDetails": "View validation details"
+      }
     }
   },
   "errors": {
